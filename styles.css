@@ -34,69 +34,93 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* ENCABEZADOS INSTITUCIONALES (HEADER GENERAL Y PODIO) */
+/* ==========================================================================
+   ENCABEZADOS INSTITUCIONALES MODERNIZADOS (FLEXBOX RE-ALINEADO)
+   ========================================================================== */
 header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
     width: 100%;
-    padding: 18px 0;
+    padding: 14px 0;
     box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
     border-bottom: 5px solid var(--secondary-color);
     z-index: 10;
 }
 
 .header-container {
-    max-width: 600px;
+    max-width: 1100px; /* Expandido para dar espacio suficiente a títulos largos */
     width: 90%;
     margin: 0 auto;
-    display: block;
 }
 
 .header-flex {
-    display: table;
+    display: flex;
+    justify-content: space-between; /* Envía el logo a la izquierda y el título a la derecha */
+    align-items: center; /* Centra verticalmente ambos lados */
     width: 100%;
+    gap: 20px;
 }
 
 .brand-layout {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 0; /* Evita que el logo y nombre se compriman */
 }
 
 .brand-layout img {
-    height: 38px;
+    height: 42px;
     width: auto;
     object-fit: contain;
     border-radius: 6px;
-    vertical-align: middle;
-    margin-right: 10px;
 }
 
 .brand-layout span {
     font-weight: 900;
-    font-size: 1.25rem;
+    font-size: 1.3rem;
     letter-spacing: 0.5px;
-    vertical-align: middle;
 }
 
 .title-layout {
-    display: table-cell;
-    vertical-align: middle;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end; /* Alinea el texto a la derecha */
     text-align: right;
+    flex-grow: 1;
 }
 
 .title-layout h1 { 
     margin: 0; 
-    font-size: 1.35rem; 
+    font-size: 1.45rem; 
     font-weight: 900;
+    line-height: 1.2; /* Previene el colapso si el título se expande */
+    letter-spacing: -0.3px;
 }
  
 .title-layout p { 
-    margin: 3px 0 0 0; 
+    margin: 2px 0 0 0; 
     font-size: 0.85rem; 
     font-weight: 700;
     color: #cbd5e1; 
 }
+
+/* Ajustes de Responsividad para Celulares */
+@media (max-width: 768px) {
+    .header-flex {
+        flex-direction: column; /* Apila el contenido en pantallas chicas */
+        text-align: center;
+        gap: 10px;
+    }
+    .brand-layout {
+        justify-content: center;
+    }
+    .title-layout {
+        align-items: center;
+        text-align: center;
+    }
+}
+
+
 
 /* Estilos específicos para el segundo Header (Podio) */
 .header-podio {
@@ -342,9 +366,4 @@ h2 {
 }
 .error-msg { color: var(--error-color); }
 
-/* Ajustes Responsivos Básicos */
-@media (max-width: 480px) {
-    .header-flex { display: block; text-align: center; }
-    .brand-layout, .title-layout { display: block; text-align: center; width: 100%; }
-    .title-layout { margin-top: 10px; }
-}
+
