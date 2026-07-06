@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluaciones 2026 - ProfeDiego</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://merunaku.github.io/styles.css">
+
+    <script>
+        // Lógica de enrutamiento automático
+        var urlIncorrecta = window.location.href.toLowerCase();
+        if (urlIncorrecta.includes("calculadora")) {
+            window.location.replace("https://merunaku.github.io/calculadora2026/");
+        }
+        else if (urlIncorrecta.includes("instind")) {
+            window.location.replace("https://merunaku.github.io/InstInd2026/");
+        } 
+        else if (urlIncorrecta.includes("normativa")) {
+            window.location.replace("https://merunaku.github.io/Normativa2026/");
+        }
+    </script>
+</head>
+<body>
+
+<!-- Contenedor donde se inyectará el Header Dinámico -->
+<div id="global-header"></div>
+
+<!-- Llamada al script que lo renderiza -->
+<script src="https://merunaku.github.io/header.js"></script>
+
+    <main class="container">
+        <div class="card">
+            <h2>👋 ¡Te damos la bienvenida!</h2>
+            <p>Por favor, selecciona la asignatura o herramienta a la que deseas acceder para comenzar. ¡Mucho éxito en tus procesos académicos!</p>
+            
+            <div class="options-list">
+                <a href="https://merunaku.github.io/calculadora2026/" class="btn-link">
+                    📊 Calculadora de Notas 2026
+                </a>
+                <a href="https://merunaku.github.io/InstInd2026/" class="btn-link">
+                    ⚙️ Instrumentación Industrial 2026
+                </a>
+                <a href="https://merunaku.github.io/Normativa2026/" class="btn-link">
+                    📜 Normativa Industrial 2026
+                </a>
+            </div>
+
+            <a href="https://merunaku.github.io/ProfeDiego" class="btn-home">
+                🗂️ Volver al Portal General
+            </a>
+        </div>
+    </main>
+
+    <header class="header-podio">
+        <div class="podio-container">
+            <div class="podio-title-main">
+                <span>🏆 Tabla de Posiciones IPCHILE</span>
+            </div>
+            <div class="podio-subtitle-layout">
+                <h1>Podio</h1>
+                <p>Top 3 de Evaluaciones Simuladas &bull; 2026</p>
+            </div>
+        </div>
+    </header>
+
+    <div class="leaderboard-container">
+        <div class="leaderboard-grid">
+            
+            <div class="leaderboard-card">
+                <h2>📜 Normativa Industrial</h2>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 15%;">Pos</th>
+                            <th style="text-align: left; width: 45%;">Nombre Alumno</th>
+                            <th style="text-align: center; width: 13%;">Pts</th>
+                            <th style="text-align: center; width: 13%;">Nota</th>
+                            <th style="text-align: center; width: 14%;">Tiempo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="podio-normativa">
+                        <tr>
+                            <td colspan="5" class="loading">🔄 Cargando podio de normativa...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="leaderboard-card">
+                <h2>⚡ Instrumentación Industrial</h2>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 15%;">Pos</th>
+                            <th style="text-align: left; width: 45%;">Nombre Alumno</th>
+                            <th style="text-align: center; width: 13%;">Pts</th>
+                            <th style="text-align: center; width: 13%;">Nota</th>
+                            <th style="text-align: center; width: 14%;">Tiempo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="podio-instrumentacion">
+                        <tr>
+                            <td colspan="5" class="loading">🔄 Cargando podio de instrumentación...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        const URL_NORMATIVA = "https://script.google.com/macros/s/AKfycbxXuHwc-oPc9Sf3sXf2M9HCkLjiuEEn0uLmRVn3EzNvFtihGtrI8PgtlRP5FBLWaj4EWw/exec";
+        const URL_INSTRUMENTACION = "https://script.google.com/macros/s/AKfycbw46HZO4J-9mJonYU_qB_fkW27jjZs6F-TO67abPBwksyknCi8Yu-eNT9WZpNsrHhSG/exec";
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderPodio(URL_NORMATIVA, "podio-normativa");
+            renderPodio(URL_INSTRUMENTACION, "podio-instrumentacion");
+        });
+
+        function convertirTiempoASegundos(tiempoStr) {
+            if (!tiempoStr || !tiempoStr.includes(':')) return 999999;
+            const partes = tiempoStr.split(':');
+            const minutos = parseInt(partes[0], 10) || 0;
+            const segundos = parseInt(partes[1], 10) || 0;
+            return (minutos * 60) + segundos;
+        }
+
+        async function renderPodio(url, elementId) {
+            const container = document.getElementById(elementId);
+            try {
+                const response = await fetch(url);
+                if(!response.ok) throw new Error("Error de red");
+                
+                const data = await response.json();
+                container.innerHTML = "";
+
+                if (!data || data.length === 0) {
+                    container.innerHTML = `<tr><td colspan="5" class="loading">No hay registros aún.</td></tr>`;
+                    return;
+                }
+
+                data.sort((a, b) => {
+                    const notaA = parseFloat(String(a.nota).replace(',', '.'));
+                    const notaB = parseFloat(String(b.nota).replace(',', '.'));
+
+                    if (notaB !== notaA) {
+                        return notaB - notaA;
+                    } else {
+                        return convertirTiempoASegundos(a.tiempo) - convertirTiempoASegundos(b.tiempo);
+                    }
+                });
+
+                const top3 = data.slice(0, 3);
+
+                top3.forEach((alumno, index) => {
+                    let posicion = "";
+                    if (index === 0) posicion = "🥇";
+                    else if (index === 1) posicion = "🥈";
+                    else if (index === 2) posicion = "🥉";
+
+                    const fila = document.createElement('tr');
+                    fila.className = "leaderboard-row";
+                    
+                    const notaNumerica = parseFloat(String(alumno.nota).replace(',', '.'));
+                    const colorNota = notaNumerica >= 4.0 ? 'var(--success-color)' : 'var(--error-color)';
+
+                    fila.innerHTML = `
+                        <td style="text-align: center; font-weight: 900; font-size: 1.25rem;">${posicion}</td>
+                        <td style="color: #1e293b; font-weight: 700;">${alumno.nombre}</td>
+                        <td style="text-align: center; font-weight: 900; color: #2563eb;">${alumno.puntaje}</td>
+                        <td style="text-align: center; font-weight: 900; color: ${colorNota};">${alumno.nota}</td>
+                        <td style="text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 700;">⏱️ ${alumno.tiempo}</td>
+                    `;
+                    container.appendChild(fila);
+                });
+
+            } catch (err) {
+                console.error("Error al procesar el podio:", err);
+                container.innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error al conectar con la base de datos.</td></tr>`;
+            }
+        }
+    </script>
+</body>
+</html>
