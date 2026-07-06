@@ -1,0 +1,350 @@
+/* ==========================================================================
+   ESTILOS GLOBALES - PLATAFORMA PROFE DIEGO 2026
+   Centralizado para actualización simultánea en todo el sitio web.
+   ========================================================================== */
+
+:root {
+    /* COLORES INSTITUCIONALES OPTIMIZADOS */
+    --primary-color: #002b5c;
+    --primary-dark: #001a38;
+    --secondary-color: #f4b223;
+    --bg-color: #f7f9fc;
+    --card-bg: #ffffff;
+    --text-color: #2c3e50;
+    --success-color: #16a34a;
+    --error-color: #dc2626;
+}
+
+body {
+    font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
+    /* Fondo vivo con transición suave de colores */
+    background: linear-gradient(-45deg, #e0f2fe, #fef3c7, #e0e7ff, #f0fdf4);
+    background-size: 400% 400%;
+    animation: gradientBg 12s ease infinite;
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: block; /* Modificado de flex para evitar problemas de flujo */
+    min-height: 100vh;
+}
+
+@keyframes gradientBg {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* ENCABEZADOS INSTITUCIONALES (HEADER GENERAL Y PODIO) */
+header {
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: white;
+    width: 100%;
+    padding: 18px 0;
+    box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
+    border-bottom: 5px solid var(--secondary-color);
+    z-index: 10;
+}
+
+.header-container {
+    max-width: 600px;
+    width: 90%;
+    margin: 0 auto;
+    display: block;
+}
+
+.header-flex {
+    display: table;
+    width: 100%;
+}
+
+.brand-layout {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: left;
+}
+
+.brand-layout img {
+    height: 38px;
+    width: auto;
+    object-fit: contain;
+    border-radius: 6px;
+    vertical-align: middle;
+    margin-right: 10px;
+}
+
+.brand-layout span {
+    font-weight: 900;
+    font-size: 1.25rem;
+    letter-spacing: 0.5px;
+    vertical-align: middle;
+}
+
+.title-layout {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: right;
+}
+
+.title-layout h1 { 
+    margin: 0; 
+    font-size: 1.35rem; 
+    font-weight: 900;
+}
+ 
+.title-layout p { 
+    margin: 3px 0 0 0; 
+    font-size: 0.85rem; 
+    font-weight: 700;
+    color: #cbd5e1; 
+}
+
+/* Estilos específicos para el segundo Header (Podio) */
+.header-podio {
+    background: linear-gradient(135deg, #002b5c 0%, #001a38 100%);
+    color: white;
+    width: 100%;
+    padding: 22px 0;
+    box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
+    border-bottom: 5px solid #f4b223;
+    z-index: 10;
+    text-align: center;
+}
+
+.podio-container {
+    max-width: 1000px;
+    width: 90%;
+    margin: 0 auto;
+}
+
+.podio-title-main {
+    font-weight: 900;
+    font-size: 1.4rem;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+}
+
+.podio-subtitle-layout h1 {
+    margin: 0;
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+
+.podio-subtitle-layout p {
+    margin: 4px 0 0 0;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #cbd5e1;
+}
+
+/* CONTENEDOR CENTRAL (MENÚ DE ARRIBA) */
+.container {
+    width: 90%;
+    max-width: 550px;
+    margin: 20px auto;
+    padding: 20px 0;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 32px;
+    box-shadow: 0 25px 60px -15px rgba(0, 43, 92, 0.12), 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+    padding: 45px 35px;
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    animation: cardEntrance 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+@keyframes cardEntrance {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+h2 { 
+    color: var(--primary-color); 
+    margin-top: 0; 
+    font-size: 2rem;
+    font-weight: 900;
+    margin-bottom: 12px;
+    letter-spacing: -0.5px;
+}
+
+.card p {
+    color: #4b5563;
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.6;
+    margin-bottom: 35px;
+}
+
+/* LISTA DE BOTONES TOTALMENTE INTERACTIVOS */
+.options-list {
+    margin-bottom: 20px;
+}
+
+.btn-link {
+    display: block;
+    text-align: center;
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    border: 2px solid #e2e8f0;
+    padding: 16px 20px;
+    border-radius: 18px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-decoration: none;
+    color: var(--text-color);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    margin-bottom: 16px;
+}
+
+.btn-link:hover {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    border-color: var(--secondary-color);
+    color: var(--primary-color);
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 12px 20px rgba(244, 178, 35, 0.15);
+}
+
+/* RETORNO AL PORTAL ESTILO CÁPSULA DISCRETA */
+.btn-home {
+    display: inline-block;
+    margin-top: 20px;
+    color: #6b7280;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 0.95rem;
+    padding: 8px 18px;
+    border-radius: 50px;
+    transition: all 0.2s ease;
+    border: 1.5px solid transparent;
+}
+ 
+.btn-home:hover { 
+    color: var(--primary-color);
+    background-color: #f1f5f9;
+    border-color: #e2e8f0;
+}
+
+/* TABLA DE LÍDERES (EVITA COLISIONES) */
+.leaderboard-container {
+    width: 90%;
+    max-width: 1100px;
+    margin: 30px auto 50px auto;
+}
+
+/* Layout de dos columnas mediante tablas para máxima compatibilidad o bloques limpios */
+.leaderboard-grid {
+    display: block;
+    width: 100%;
+}
+
+.leaderboard-card {
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-radius: 24px;
+    box-shadow: 0 20px 50px -12px rgba(0, 43, 92, 0.1), 0 10px 25px -10px rgba(0, 0, 0, 0.04);
+    padding: 35px 25px;
+    box-sizing: border-box;
+    border: 3px solid rgba(255, 255, 255, 0.9);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+@media (min-width: 768px) {
+    /* En pantallas grandes simulamos las columnas de forma tradicional */
+    .leaderboard-card {
+        width: 48%;
+        float: left;
+        margin-right: 2%;
+    }
+    .leaderboard-card:nth-child(2n) {
+        margin-right: 0;
+    }
+    .leaderboard-container::after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.leaderboard-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+}
+
+.leaderboard-card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+}
+
+.leaderboard-table {
+    width: 100%; 
+    border-collapse: separate; 
+    border-spacing: 0 8px;
+    font-size: 0.95rem;
+}
+ 
+.leaderboard-table th {
+    background-color: #1e293b;
+    color: #f8fafc;
+    padding: 12px 10px;
+    font-weight: 700;
+}
+ 
+.leaderboard-table th:first-child { border-radius: 10px 0 0 10px; }
+.leaderboard-table th:last-child { border-radius: 0 10px 10px 0; }
+
+.leaderboard-row td {
+    padding: 14px 10px;
+    background: #f8fafc;
+    border-top: 1px solid #e2e8f0;
+    border-bottom: 1px solid #e2e8f0;
+    transition: transform 0.2s ease;
+}
+ 
+.leaderboard-row td:first-child { border-left: 1px solid #e2e8f0; border-radius: 14px 0 0 14px; }
+.leaderboard-row td:last-child { border-right: 1px solid #e2e8f0; border-radius: 0 14px 14px 0; }
+
+.leaderboard-row:hover td {
+    background: #ffffff;
+    transform: translateY(-1px);
+}
+
+.loading, .error-msg {
+    text-align: center;
+    padding: 30px;
+    font-weight: 700;
+    color: #64748b;
+}
+.error-msg { color: var(--error-color); }
+
+/* Ajustes Responsivos Básicos */
+@media (max-width: 480px) {
+    .header-flex { display: block; text-align: center; }
+    .brand-layout, .title-layout { display: block; text-align: center; width: 100%; }
+    .title-layout { margin-top: 10px; }
+}
