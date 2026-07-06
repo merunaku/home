@@ -13,12 +13,12 @@ document.addEventListener("DOMContentLoaded", () => {
     // Condicionales exactas para cada una de tus páginas
     if (currentURL.includes("normativa")) {
         tituloDinamico = "Normativa Eléctrica 2026";
-    } else if (currentURL.includes("instind") {
+    } else if (currentURL.includes("instind") || currentURL.includes("instrumentacion")) {
         tituloDinamico = "Instrumentación Eléctrica 2026";
     } else if (currentURL.includes("calculadora")) {
         tituloDinamico = "Calculadora de Notas 2026";
-    } else if (currentURL.includes("404") || currentURL.endsWith("github.io/")) {
-        tituloDinamico = "Plataforma de Estudios 2026 &bull; IPCHILE";
+    } else if (currentURL.includes("404") || currentURL.includes("home") || currentURL.endsWith("github.io/")) {
+        tituloDinamico = "Plataforma de Estudios 2026";
     }
 
     // Inyección del HTML en el contenedor correspondiente
@@ -27,8 +27,8 @@ document.addEventListener("DOMContentLoaded", () => {
         headerContainer.innerHTML = `
             <header>
                 <div class="header-container">
-                    <div class="brand-layout" style="cursor: pointer;" onclick="window.location.href='https://merunaku.github.io/404.html'">
-                        <img src="https://merunaku.github.io/ProfeDiego/logo.png" alt="Logo" onerror="this.style.display='none'">
+                    <div class="brand-layout" style="cursor: pointer;" onclick="window.location.href='https://merunaku.github.io/home/index.html'">
+                        <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
                         <span>ProfeDiego</span>
                     </div>
                     <div class="title-layout">
@@ -37,8 +37,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     </div>
                 </div>
             </header>
-                document.body.insertAdjacentHTML('afterbegin', headerHTML);
-
         `;
     }
 });
