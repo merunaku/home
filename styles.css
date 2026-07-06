@@ -48,7 +48,7 @@ header {
 }
 
 .header-container {
-    max-width: 1100px; /* Expandido para dar espacio suficiente a títulos largos */
+    max-width: 800px; /* Expandido para dar espacio suficiente a títulos largos */
     width: 90%;
     margin: 0 auto;
 }
