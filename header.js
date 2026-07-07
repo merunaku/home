@@ -27,6 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // Validamos que exista CONFIG para evitar errores si no se ha cargado el script
         const logoSrc = typeof CONFIG !== 'undefined' ? CONFIG.LOGO_URL : "logo.png";
         const nombreInstitucion = typeof CONFIG !== 'undefined' ? CONFIG.INSTITUCION : "IPCHILE";
+        const nombreProfesor = typeof CONFIG !== 'undefined' ? CONFIG.PROFESOR : "ProfeDiego";
 
         headerContainer.innerHTML = `
             <header>
@@ -35,7 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         <div class="brand-layout" style="cursor: pointer;" onclick="window.location.href='https://merunaku.github.io/home/index.html'">
                             <!-- Aquí se inyecta la ruta dinámica del config.js -->
                             <img src="${logoSrc}" alt="Logo" onerror="this.style.display='none'">
-                            <span>ProfeDiego</span>
+                            <span>${nombreProfesor}</span>
                         </div>
                         <div class="title-layout">
                             <h1>${tituloDinamico}</h1>
