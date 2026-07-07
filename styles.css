@@ -35,28 +35,28 @@ body {
 }
 
 /* ==========================================================================
-   ENCABEZADOS INSTITUCIONALES MODERNIZADOS (FLEXBOX RE-ALINEADO)
+   ENCABEZADOS INSTITUCIONALES - DISEÑO CORREGIDO Y BALANCEADO
    ========================================================================== */
 header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
     width: 100%;
-    padding: 14px 0;
+    padding: 20px 0; /* Un poco más de espacio arriba y abajo para que respire */
     box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
     border-bottom: 5px solid var(--secondary-color);
     z-index: 10;
 }
 
 .header-container {
-    max-width: 800px; /* Expandido para dar espacio suficiente a títulos largos */
+    max-width: 800px; /* Tu medida perfecta */
     width: 90%;
     margin: 0 auto;
 }
 
 .header-flex {
     display: flex;
-    justify-content: space-between; /* Envía el logo a la izquierda y el título a la derecha */
-    align-items: center; /* Centra verticalmente ambos lados */
+    justify-content: space-between; /* Mantiene la separación limpia en los extremos */
+    align-items: center; /* Centrado vertical absoluto: elimina los vacíos de arriba y abajo */
     width: 100%;
     gap: 20px;
 }
@@ -64,52 +64,53 @@ header {
 .brand-layout {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-shrink: 0; /* Evita que el logo y nombre se compriman */
+    gap: 12px;
+    flex-shrink: 0;
 }
 
 .brand-layout img {
-    height: 42px;
+    height: 45px; /* Un pelín más grande para equilibrar el peso visual del texto */
     width: auto;
     object-fit: contain;
-    border-radius: 6px;
+    border-radius: 8px;
 }
 
 .brand-layout span {
     font-weight: 900;
-    font-size: 1.3rem;
+    font-size: 1.4rem;
     letter-spacing: 0.5px;
 }
 
 .title-layout {
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Alinea el texto a la derecha */
+    align-items: flex-end; /* Alinea los textos al extremo derecho de forma ordenada */
     text-align: right;
     flex-grow: 1;
 }
 
 .title-layout h1 { 
     margin: 0; 
-    font-size: 1.45rem; 
+    font-size: 1.5rem; 
     font-weight: 900;
-    line-height: 1.2; /* Previene el colapso si el título se expande */
+    line-height: 1.1;
     letter-spacing: -0.3px;
 }
  
 .title-layout p { 
-    margin: 2px 0 0 0; 
+    margin: 5px 0 0 0; /* Espaciado fijo controlado para equilibrar la zona baja */
     font-size: 0.85rem; 
     font-weight: 700;
     color: #cbd5e1; 
+    letter-spacing: 0.3px;
 }
 
 /* Ajustes de Responsividad para Celulares */
 @media (max-width: 768px) {
     .header-flex {
-        flex-direction: column; /* Apila el contenido en pantallas chicas */
+        flex-direction: column; /* Se apila al centro solo en pantallas pequeñas */
         text-align: center;
-        gap: 10px;
+        gap: 12px;
     }
     .brand-layout {
         justify-content: center;
