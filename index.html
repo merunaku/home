@@ -24,14 +24,10 @@
 </head>
 <body>
 
-<!-- Contenedor donde se inyectará el Header Dinámico -->
-<div id="global-header"></div>
+    <div id="global-header"></div>
 
-<!-- PRIMERO: Cargamos el archivo de configuración global -->
-<script src="config.js"></script>
-
-<!-- SEGUNDO: Llamada al script que renderiza el header usando esa configuración -->
-<script src="header.js"></script>
+    <script src="config.js"></script>
+    <script src="header.js"></script>
 
     <main class="container">
         <div class="card">
@@ -56,7 +52,7 @@
         </div>
     </main>
 
-    <header class="header-podio">
+    <section class="header-podio">
         <div class="podio-container">
             <div class="podio-title-main">
                 <span>🏆 Tabla de Posiciones IPCHILE</span>
@@ -66,7 +62,7 @@
                 <p>Top 3 de Evaluaciones Simuladas &bull; 2026</p>
             </div>
         </div>
-    </header>
+    </section>
 
     <div class="leaderboard-container">
         <div class="leaderboard-grid">
@@ -115,12 +111,16 @@
     </div>
 
     <script>
-        const URL_NORMATIVA = "https://script.google.com/macros/s/AKfycbxXuHwc-oPc9Sf3sXf2M9HCkLjiuEEn0uLmRVn3EzNvFtihGtrI8PgtlRP5FBLWaj4EWw/exec";
-        const URL_INSTRUMENTACION = "https://script.google.com/macros/s/AKfycbw46HZO4J-9mJonYU_qB_fkW27jjZs6F-TO67abPBwksyknCi8Yu-eNT9WZpNsrHhSG/exec";
-
         window.addEventListener('DOMContentLoaded', () => {
-            renderPodio(URL_NORMATIVA, "podio-normativa");
-            renderPodio(URL_INSTRUMENTACION, "podio-instrumentacion");
+            // Verificamos que CONFIG exista antes de arrancar los fetchs del podio
+            if (typeof CONFIG !== 'undefined' && CONFIG.APIS) {
+                renderPodio(CONFIG.APIS.NORMATIVA, "podio-normativa");
+                renderPodio(CONFIG.APIS.INSTRUMENTACION, "podio-instrumentacion");
+            } else {
+                console.error("No se pudo cargar el objeto CONFIG global.");
+                document.getElementById("podio-normativa").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+                document.getElementById("podio-instrumentacion").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+            }
         });
 
         function convertirTiempoASegundos(tiempoStr) {
