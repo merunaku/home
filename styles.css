@@ -41,22 +41,22 @@ header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
     width: 100%;
-    padding: 20px 0; /* Un poco más de espacio arriba y abajo para que respire */
+    padding: 20px 0;
     box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
     border-bottom: 5px solid var(--secondary-color);
     z-index: 10;
 }
 
 .header-container {
-    max-width: 800px; /* Sincronizado para cuadrar perfecto con el podio inferior */
+    max-width: 600px; /* REVERTIDO: Tu tamaño original compacto y perfecto */
     width: 90%;
     margin: 0 auto;
 }
 
 .header-flex {
     display: flex !important;
-    justify-content: space-between; /* Mantiene la separación limpia en los extremos */
-    align-items: center; /* Centrado vertical absoluto: elimina los vacíos de arriba y abajo */
+    justify-content: space-between;
+    align-items: center;
     width: 100%;
     gap: 20px;
 }
@@ -69,7 +69,7 @@ header {
 }
 
 .brand-layout img {
-    height: 42px; /* Un pelín más grande para equilibrar el peso visual del texto */
+    height: 42px;
     width: auto;
     object-fit: contain;
     border-radius: 8px;
@@ -84,7 +84,7 @@ header {
 .title-layout {
     display: flex;
     flex-direction: column;
-    align-items: flex-end; /* Alinea los textos al extremo derecho de forma ordenada */
+    align-items: flex-end;
     text-align: right;
     flex-grow: 1;
 }
@@ -98,7 +98,7 @@ header {
 }
  
 .title-layout p { 
-    margin: 5px 0 0 0; /* Espaciado fijo controlado para equilibrar la zona baja */
+    margin: 5px 0 0 0;
     font-size: 0.85rem; 
     font-weight: 700;
     color: #cbd5e1; 
@@ -108,7 +108,7 @@ header {
 /* Ajustes de Responsividad para Celulares */
 @media (max-width: 768px) {
     .header-flex {
-        flex-direction: column !important; /* Se apila al centro solo en pantallas pequeñas */
+        flex-direction: column !important;
         text-align: center;
         gap: 12px;
     }
@@ -134,7 +134,7 @@ header {
 }
 
 .podio-container {
-    max-width: 800px; /* Sincronizado para unificar anchos con todo el ecosistema */
+    max-width: 1100px; /* REVERTIDO: Tu tamaño original amplio para el podio */
     width: 90%;
     margin: 0 auto;
 }
@@ -265,36 +265,34 @@ h2 {
 }
 
 /* ==========================================================================
-   TABLA DE LÍDERES - CORRECCIÓN DE ASIMETRÍA CRÍTICA (FLEXBOX SIMÉTRICO)
+   TABLA DE LÍDERES - ANCHURA OPTIMIZADA (MÁXIMO ESPACIO Y SIMETRÍA)
    ========================================================================== */
 .leaderboard-container {
     width: 90%;
-    max-width: 800px; /* Clavado con la misma anchura del header para simetría visual total */
+    max-width: 1100px; /* MODIFICADO: Expandido al máximo para que las tablas sean anchas */
     margin: 30px auto 50px auto;
 }
 
-/* CORREGIDO: Cambiado de bloque tradicional a Flexbox horizontal estricto */
 .leaderboard-grid {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 20px;
+    gap: 2%; /* Pequeño espacio para maximizar el ancho de las tarjetas */
     width: 100%;
 }
 
-/* CORREGIDO: Forzamos un ancho exacto del 50% de la pantalla para espejo absoluto */
 .leaderboard-card {
     background-color: rgba(255, 255, 255, 0.96);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: 24px;
     box-shadow: 0 20px 50px -12px rgba(0, 43, 92, 0.1), 0 10px 25px -10px rgba(0, 0, 0, 0.04);
-    padding: 30px 20px;
+    padding: 35px 25px;
     box-sizing: border-box;
     border: 3px solid rgba(255, 255, 255, 0.9);
     position: relative;
     overflow: hidden;
-    width: 50%; /* Fuerza que ambos lados del podio midan idéntico */
+    width: 49%; /* MODIFICADO: Casi el 50% exacto para cada lado aprovechando el ancho */
     display: flex;
     flex-direction: column;
 }
@@ -310,27 +308,23 @@ h2 {
 }
 
 .leaderboard-card h2 {
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     margin-top: 0;
     margin-bottom: 20px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis; /* Evita que títulos largos empujen las celdas de la tabla */
 }
 
-/* CORREGIDO: Activamos el ajuste estricto de celdas */
 .leaderboard-table {
     width: 100%; 
     border-collapse: separate; 
     border-spacing: 0 8px;
-    font-size: 0.9rem;
-    table-layout: fixed; /* OBLIGA al navegador a usar los porcentajes indicados en el HTML */
+    font-size: 0.95rem;
+    table-layout: fixed; /* Mantiene la cuadratura y simetría estricta de las columnas */
 }
  
 .leaderboard-table th {
     background-color: #1e293b;
     color: #f8fafc;
-    padding: 12px 8px;
+    padding: 12px 10px;
     font-weight: 700;
 }
  
@@ -338,14 +332,14 @@ h2 {
 .leaderboard-table th:last-child { border-radius: 0 10px 10px 0; }
 
 .leaderboard-row td {
-    padding: 12px 8px;
+    padding: 14px 10px;
     background: #f8fafc;
     border-top: 1px solid #e2e8f0;
     border-bottom: 1px solid #e2e8f0;
     transition: transform 0.2s ease;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Si un alumno se pone un nombre kilométrico, no deforma la fila */
+    text-overflow: ellipsis; /* Protección anti-deformación de filas */
 }
  
 .leaderboard-row td:first-child { border-left: 1px solid #e2e8f0; border-radius: 14px 0 0 14px; }
@@ -367,9 +361,9 @@ h2 {
 /* Ajustes Responsivos Completos para Celulares */
 @media (max-width: 768px) {
     .leaderboard-grid {
-        flex-direction: column; /* Cambia a vertical de forma nativa en smartphones */
+        flex-direction: column;
     }
     .leaderboard-card {
-        width: 100%; /* Toma todo el ancho en móviles */
+        width: 100%;
     }
 }
