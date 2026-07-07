@@ -27,13 +27,15 @@ document.addEventListener("DOMContentLoaded", () => {
         headerContainer.innerHTML = `
             <header>
                 <div class="header-container">
-                    <div class="brand-layout" style="cursor: pointer;" onclick="window.location.href='https://merunaku.github.io/home/index.html'">
-                        <img src="logo.png" alt="Logo" onerror="this.style.display='none'">
-                        <span>ProfeDiego</span>
-                    </div>
-                    <div class="title-layout">
-                        <h1>${tituloDinamico}</h1>
-                        <p>Herramientas del Estudiante &bull; IPCHILE</p>
+                    <div class="header-flex">
+                        <div class="brand-layout" style="cursor: pointer;" onclick="window.location.href='https://merunaku.github.io/home/index.html'">
+                            <img src="<img src="https://merunaku.github.io/logo.png" alt="Logo" onerror="this.style.display='none'">" alt="Logo" onerror="this.style.display='none'">
+                            <span>ProfeDiego</span>
+                        </div>
+                        <div class="title-layout">
+                            <h1>${tituloDinamico}</h1>
+                            <p>Herramientas del Estudiante &bull; IPCHILE</p>
+                        </div>
                     </div>
                 </div>
             </header>
