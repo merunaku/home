@@ -6,6 +6,7 @@ const CONFIG = {
     // 1. Identificación Institucional
     INSTITUCION: "IPCHILE",
     PROFESOR: "ProfeDiego",
+    ANIO: "2026",
     URL_BASE: "https://merunaku.github.io/404.html",
     
     // 2. Parámetros Generales de Evaluación
@@ -24,6 +25,9 @@ const CONFIG = {
         NORMATIVA: "preguntasnormativa.csv",
         INSTRUMENTACION: "preguntasinstind.csv"
     }
+
+    // Agregamos la ruta absoluta del logo aquí:
+    LOGO_URL: "https://merunaku.github.io/home/logo.png"
 };
 
 // Congelamos el objeto para evitar modificaciones accidentales en tiempo de ejecución
