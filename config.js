@@ -14,7 +14,6 @@ const CONFIG = {
     TOTAL_PREGUNTAS: 20,
     
     // 3. Conexiones con Google Sheets (Web Apps de Apps Script)
-    // Reemplaza estas URLs con los scripts correspondientes a cada hoja
     APIS: {
         NORMATIVA: "https://script.google.com/macros/s/AKfycbxXuHwc-oPc9Sf3sXf2M9HCkLjiuEEn0uLmRVn3EzNvFtihGtrI8PgtlRP5FBLWaj4EWw/exec",
         INSTRUMENTACION: "https://script.google.com/macros/s/AKfycbw46HZO4J-9mJonYU_qB_fkW27jjZs6F-TO67abPBwksyknCi8Yu-eNT9WZpNsrHhSG/exec",
@@ -24,9 +23,9 @@ const CONFIG = {
     REPOSITORIO_CSV: {
         NORMATIVA: "preguntasnormativa.csv",
         INSTRUMENTACION: "preguntasinstind.csv"
-    }
+    }, // <-- ¡AQUÍ FALTABA ESTA COMA!
 
-    // Agregamos la ruta absoluta del logo aquí:
+    // 5. Ruta absoluta del logo:
     LOGO_URL: "https://merunaku.github.io/home/logo.png"
 };
 
