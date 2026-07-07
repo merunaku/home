@@ -24,17 +24,22 @@ document.addEventListener("DOMContentLoaded", () => {
     // Inyección del HTML en el contenedor correspondiente
     const headerContainer = document.getElementById("global-header");
     if (headerContainer) {
+        // Validamos que exista CONFIG para evitar errores si no se ha cargado el script
+        const logoSrc = typeof CONFIG !== 'undefined' ? CONFIG.LOGO_URL : "logo.png";
+        const nombreInstitucion = typeof CONFIG !== 'undefined' ? CONFIG.INSTITUCION : "IPCHILE";
+
         headerContainer.innerHTML = `
             <header>
                 <div class="header-container">
                     <div class="header-flex">
                         <div class="brand-layout" style="cursor: pointer;" onclick="window.location.href='https://merunaku.github.io/home/index.html'">
-                            <img src="<img src="https://merunaku.github.io/logo.png" alt="Logo" onerror="this.style.display='none'">" alt="Logo" onerror="this.style.display='none'">
+                            <!-- Aquí se inyecta la ruta dinámica del config.js -->
+                            <img src="${logoSrc}" alt="Logo" onerror="this.style.display='none'">
                             <span>ProfeDiego</span>
                         </div>
                         <div class="title-layout">
                             <h1>${tituloDinamico}</h1>
-                            <p>Herramientas del Estudiante &bull; IPCHILE</p>
+                            <p>Herramientas del Estudiante &bull; ${nombreInstitucion}</p>
                         </div>
                     </div>
                 </div>
