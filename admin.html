@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Configuración 2026 - ProfeDiego</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Ajustes específicos para el formulario administrativo */
+        .admin-container {
+            width: 95%;
+            max-width: 750px;
+            margin: 30px auto 60px auto;
+        }
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: var(--primary-color);
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            box-sizing: border-box;
+            background-color: #f8fafc;
+        }
+        .form-group input:focus {
+            border-color: var(--secondary-color);
+            outline: none;
+            background-color: #fff;
+        }
+        .row-grid {
+            display: flex;
+            gap: 15px;
+        }
+        .row-grid .form-group {
+            flex: 1;
+        }
+        .output-box {
+            background-color: #1e293b;
+            color: #f8fafc;
+            padding: 20px;
+            border-radius: 16px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9rem;
+            text-align: left;
+            white-space: pre-wrap;
+            overflow-x: auto;
+            margin-top: 25px;
+            border: 2px solid #334155;
+        }
+        .btn-action {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 14px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: all 0.2s ease;
+        }
+        .btn-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 15px rgba(0, 43, 92, 0.2);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="global-header"></div>
+
+    <script src="config.js"></script>
+    <script src="header.js"></script>
+
+    <main class="admin-container">
+        <div class="card" style="max-width: 100%; padding: 35px 30px;">
+            <h2>⚙️ Panel de Configuración Global</h2>
+            <p>Modifica los parámetros interactivos abajo. Al finalizar, copia el código generado y reemplázalo en tu archivo <b>config.js</b>.</p>
+            
+            <form id="configForm">
+                <div class="row-grid">
+                    <div class="form-group">
+                        <label>🏫 Institución</label>
+                        <input type="text" id="inst" required>
+                    </div>
+                    <div class="form-group">
+                        <label>👨‍🏫 Nombre Profesor</label>
+                        <input type="text" id="prof" required>
+                    </div>
+                </div>
+
+                <div class="row-grid">
+                    <div class="form-group">
+                        <label>📅 Año Plataforma</label>
+                        <input type="text" id="anio" required>
+                    </div>
+                    <div class="form-group">
+                        <label>🔗 URL Base (404)</label>
+                        <input type="url" id="urlBase" required>
+                    </div>
+                </div>
+
+                <div class="row-grid">
+                    <div class="form-group">
+                        <label>🎯 Exigencia Mínima (Ej: 0.6 para 60%)</label>
+                        <input type="number" id="exigencia" step="0.01" min="0" max="1" required>
+                    </div>
+                    <div class="form-group">
+                        <label>📝 Total de Preguntas Simulador</label>
+                        <input type="number" id="preguntas" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🌐 Web App API - Normativa Industrial</label>
+                    <input type="url" id="apiNorm" required>
+                </div>
+                <div class="form-group">
+                    <label>🌐 Web App API - Instrumentación Industrial</label>
+                    <input type="url" id="apiInst" required>
+                </div>
+
+                <div class="row-grid">
+                    <div class="form-group">
+                        <label>📂 Archivo CSV Normativa</label>
+                        <input type="text" id="csvNorm" required>
+                    </div>
+                    <div class="form-group">
+                        <label>📂 Archivo CSV Instrumentación</label>
+                        <input type="text" id="csvInst" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>🖼️ URL Absoluta del Logotipo</label>
+                    <input type="url" id="logoUrl" required>
+                </div>
+
+                <button type="button" class="btn-action" onclick="generarConfig()">⚡ Generar nuevo config.js</button>
+            </form>
+
+            <div id="resultadoZona" style="display:none; margin-top:30px;">
+                <h3 style="color:var(--primary-color); text-align:left; margin-bottom:5px;">📋 Archivo Generado:</h3>
+                <div class="output-box" id="codigoOutput"></div>
+                <button class="btn-action" style="background:#16a34a; margin-top:15px;" onclick="copiarCodigo()">📄 Copiar al Portapapeles</button>
+            </div>
+        </div>
+
+        <a href="index.html" class="btn-home" style="margin-top:25px;">🗂️ Volver al Portal General</a>
+    </main>
+
+    <script>
+        // Al cargar la página, leemos los datos que ya existen en tu config.js actual
+        window.addEventListener('DOMContentLoaded', () => {
+            if (typeof CONFIG !== 'undefined') {
+                document.getElementById('inst').value = CONFIG.INSTITUCION || '';
+                document.getElementById('prof').value = CONFIG.PROFESOR || '';
+                document.getElementById('anio').value = CONFIG.ANIO || '';
+                document.getElementById('urlBase').value = CONFIG.URL_BASE || '';
+                document.getElementById('exigencia').value = CONFIG.EXIGENCIA_MINIMA || 0.6;
+                document.getElementById('preguntas').value = CONFIG.TOTAL_PREGUNTAS || 20;
+                document.getElementById('apiNorm').value = CONFIG.APIS?.NORMATIVA || '';
+                document.getElementById('apiInst').value = CONFIG.APIS?.INSTRUMENTACION || '';
+                document.getElementById('csvNorm').value = CONFIG.REPOSITORIO_CSV?.NORMATIVA || '';
+                document.getElementById('csvInst').value = CONFIG.REPOSITORIO_CSV?.INSTRUMENTACION || '';
+                document.getElementById('logoUrl').value = CONFIG.LOGO_URL || '';
+            }
+        });
+
+        function generarConfig() {
+            const inst = document.getElementById('inst').value;
+            const prof = document.getElementById('prof').value;
+            const anio = document.getElementById('anio').value;
+            const urlBase = document.getElementById('urlBase').value;
+            const exigencia = document.getElementById('exigencia').value;
+            const preguntas = document.getElementById('preguntas').value;
+            const apiNorm = document.getElementById('apiNorm').value;
+            const apiInst = document.getElementById('apiInst').value;
+            const csvNorm = document.getElementById('csvNorm').value;
+            const csvInst = document.getElementById('csvInst').value;
+            const logoUrl = document.getElementById('logoUrl').value;
+
+            // Construimos la estructura idéntica con saltos de línea y comentarios institucionales
+            const template = `// ==========================================
+// CONFIGURACIÓN GLOBAL DE LAS PLATAFORMAS 2026
+// Generado dinámicamente mediante el Panel Administrativo
+// ==========================================
+
+const CONFIG = {
+    // 1. Identificación Institucional
+    INSTITUCION: "${inst}",
+    PROFESOR: "${prof}",
+    ANIO: "${anio}",
+    URL_BASE: "${urlBase}",
+    
+    // 2. Parámetros Generales de Evaluación
+    EXIGENCIA_MINIMA: ${exigencia}, // % para nota 4.0
+    TOTAL_PREGUNTAS: ${preguntas},
+    
+    // 3. Conexiones con Google Sheets (Web Apps de Apps Script)
+    APIS: {
+        NORMATIVA: "${apiNorm}",
+        INSTRUMENTACION: "${apiInst}"
+    },
+    
+    // 4. Origen de los archivos de preguntas (CSVs en GitHub)
+    REPOSITORIO_CSV: {
+        NORMATIVA: "${csvNorm}",
+        INSTRUMENTACION: "${csvInst}"
+    },
+
+    // 5. Ruta absoluta del logo:
+    LOGO_URL: "${logoUrl}"
+};
+
+// Congelamos el objeto para evitar modificaciones accidentales en tiempo de ejecución
+Object.freeze(CONFIG);`;
+
+            document.getElementById('codigoOutput').innerText = template;
+            document.getElementById('resultadoZona').style.display = 'block';
+            
+            // Auto scroll hacia la zona del código
+            document.getElementById('resultadoZona').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function copiarCodigo() {
+            const codigo = document.getElementById('codigoOutput').innerText;
+            navigator.clipboard.writeText(codigo).then(() => {
+                alert("¡Código copiado con éxito! Ahora pégalo dentro de tu archivo config.js");
+            }).catch(err => {
+                alert("No se pudo copiar automáticamente, por favor selecciónalo manualmente.");
+            });
+        }
+    </script>
+</body>
+</html>
