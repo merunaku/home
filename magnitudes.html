@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Calibración 2026 - ProfeDiego</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --success-color: #16a34a;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-dark: #1e293b;
+            --text-muted: #64748b;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 2rem 1rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            text-align: center;
+            color: var(--text-dark);
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+        }
+
+        /* Contenedor de Inputs */
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1.5rem;
+            background: #f1f5f9;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .input-group label {
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+        }
+
+        .input-group input {
+            padding: 0.75rem;
+            border: 2px solid #cbd5e1;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: 700;
+            font-size: 1.1rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .highlight-input {
+            grid-column: 1 / -1;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .highlight-input input {
+            width: 250px;
+            border-color: var(--primary-color);
+            background: #eff6ff;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+        }
+
+        /* Representación Visual Interactiva */
+        .visual-container {
+            padding: 2rem;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background: #ffffff;
+        }
+
+        .visual-title {
+            text-align: center;
+            font-weight: 900;
+            margin-top: 0;
+            color: var(--text-dark);
+        }
+
+        .bar-label {
+            font-weight: 900;
+            margin-bottom: -1.2rem;
+            color: var(--text-dark);
+            z-index: 1;
+            position: relative;
+        }
+
+        .bar-track {
+            position: relative;
+            height: 40px;
+            background: #e2e8f0;
+            border-radius: 20px;
+            margin: 2.5rem 0 1.5rem 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .bar-fill {
+            position: absolute;
+            top: 0; left: 0; height: 100%;
+            border-radius: 20px;
+            width: 0%;
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        #ma_fill { background: linear-gradient(90deg, #93c5fd, #2563eb); }
+        #bar_fill { background: linear-gradient(90deg, #6ee7b7, #059669); }
+
+        .marker {
+            position: absolute;
+            top: -10px;
+            width: 4px;
+            height: 60px;
+            background: #ef4444;
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+            transform: translateX(-50%);
+            transition: left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+        }
+
+        .marker-bubble {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ef4444;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-weight: 900;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+
+        .bar-limits {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+            color: var(--text-muted);
+            margin-top: -10px;
+            padding: 0 5px;
+        }
+
+        /* Resultado Final */
+        .result-box {
+            text-align: center;
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: #dcfce7;
+            border: 2px solid #bbf7d0;
+            border-radius: 12px;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #166534;
+            transition: all 0.3s;
+        }
+    </style>
+</head>
+<body>
+
+    <main class="container">
+        <div class="card">
+            <h2>🎛️ Simulador Interactivo de Calibración</h2>
+            <p class="subtitle">Ingresa los parámetros y observa cómo se ajusta la medición en tiempo real.</p>
+            
+            <!-- Panel de Controles -->
+            <div class="controls-grid">
+                <div class="input-group">
+                    <label>Señal Mínima (mA)</label>
+                    <input type="number" id="ma_min" value="4" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Señal Máxima (mA)</label>
+                    <input type="number" id="ma_max" value="20" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Rango Mínimo (bar)</label>
+                    <input type="number" id="bar_min" value="-1" step="0.1">
+                </div>
+                <div class="input-group">
+                    <label>Rango Máximo (bar)</label>
+                    <input type="number" id="bar_max" value="9" step="0.1">
+                </div>
+                
+                <!-- Lectura Actual (Destacada) -->
+                <div class="input-group highlight-input">
+                    <label style="color: var(--primary-color); font-size: 1.1rem;">Medición de Entrada (mA)</label>
+                    <input type="number" id="lectura" value="7.2" step="0.1">
+                </div>
+            </div>
+
+            <!-- Panel Visual (La "Imagen" Interactiva) -->
+            <div class="visual-container">
+                <h3 class="visual-title">Representación Visual en Vivo</h3>
+                
+                <!-- Barra de Señal Eléctrica -->
+                <div class="bar-label">Señal Eléctrica (mA)</div>
+                <div class="bar-track">
+                    <div class="bar-fill" id="ma_fill"></div>
+                    <div class="marker" id="ma_marker">
+                        <div class="marker-bubble" id="ma_label">7.2 mA</div>
+                    </div>
+                </div>
+                <div class="bar-limits">
+                    <span id="lbl_ma_min">4 mA</span>
+                    <span id="lbl_ma_max">20 mA</span>
+                </div>
+
+                <br>
+
+                <!-- Barra de Presión Física -->
+                <div class="bar-label">Presión Física (bar)</div>
+                <div class="bar-track">
+                    <div class="bar-fill" id="bar_fill"></div>
+                    <div class="marker" id="bar_marker">
+                        <div class="marker-bubble" id="bar_label">1.00 bar</div>
+                    </div>
+                </div>
+                <div class="bar-limits">
+                    <span id="lbl_bar_min">-1 bar</span>
+                    <span id="lbl_bar_max">9 bar</span>
+                </div>
+            </div>
+
+            <!-- Cuadro de Resultado -->
+            <div class="result-box" id="resultado_final">
+                Presión Soportada: 1.00 bar
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        function actualizarVisualizacion() {
+            // Obtener y validar valores de los inputs
+            const maMin = parseFloat(document.getElementById('ma_min').value) || 0;
+            const maMax = parseFloat(document.getElementById('ma_max').value) || 0;
+            const barMin = parseFloat(document.getElementById('bar_min').value) || 0;
+            const barMax = parseFloat(document.getElementById('bar_max').value) || 0;
+            const lectura = parseFloat(document.getElementById('lectura').value) || 0;
+
+            // Calcular Rangos (Span)
+            const spanMa = maMax - maMin;
+            const spanBar = barMax - barMin;
+            
+            // Evitar división por cero
+            if (spanMa === 0) return;
+
+            // 1. Calcular Porcentaje (Escalamiento de Señal)
+            let porcentajeDecimal = (lectura - maMin) / spanMa;
+            
+            // 2. Calcular Presión Equivalente
+            const presionCalculada = (porcentajeDecimal * spanBar) + barMin;
+
+            // Limitar el porcentaje visible en las barras entre 0% y 100%
+            let porcentajeVisual = Math.max(0, Math.min(1, porcentajeDecimal)) * 100;
+            const percentStr = porcentajeVisual + '%';
+
+            // Actualizar Textos en Pantalla
+            document.getElementById('lbl_ma_min').innerText = maMin + ' mA';
+            document.getElementById('lbl_ma_max').innerText = maMax + ' mA';
+            document.getElementById('lbl_bar_min').innerText = barMin + ' bar';
+            document.getElementById('lbl_bar_max').innerText = barMax + ' bar';
+            
+            document.getElementById('ma_label').innerText = lectura.toFixed(2) + ' mA';
+            document.getElementById('bar_label').innerText = presionCalculada.toFixed(2) + ' bar';
+            
+            document.getElementById('resultado_final').innerText = 'Presión Soportada: ' + presionCalculada.toFixed(2) + ' bar';
+
+            // Animar y Actualizar Barras Visibles
+            document.getElementById('ma_fill').style.width = percentStr;
+            document.getElementById('ma_marker').style.left = percentStr;
+            
+            document.getElementById('bar_fill').style.width = percentStr;
+            document.getElementById('bar_marker').style.left = percentStr;
+        }
+
+        // Agregar Event Listeners a todos los inputs para que se actualice al escribir
+        document.querySelectorAll('input').forEach(input => {
+            input.addEventListener('input', actualizarVisualizacion);
+        });
+
+        // Ejecutar una vez al cargar la página para inicializar los gráficos
+        actualizarVisualizacion();
+    </script>
+</body>
+</html>
