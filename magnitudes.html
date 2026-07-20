@@ -12,7 +12,7 @@ html_content = """<!DOCTYPE html>
     <link rel="stylesheet" href="styles.css">
 
     <style>
-        /* Estilos Específicos del Simulador (compatibles con tu plantilla) */
+        /* Estilos Base del Simulador */
         .simulador-wrapper {
             font-family: 'Quicksand', sans-serif;
             color: #1e293b;
@@ -40,185 +40,162 @@ html_content = """<!DOCTYPE html>
             margin-bottom: 2rem;
         }
 
-        /* Controles de entrada */
-        .controls-grid {
+        /* Controles de Selección y Entrada */
+        .config-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            grid-template-columns: 1fr 1fr;
             gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        @media (max-width: 768px) {
+            .config-grid { grid-template-columns: 1fr; }
+        }
+
+        .config-panel {
             background: #f8fafc;
             padding: 1.5rem;
             border-radius: 12px;
-            margin-bottom: 2.5rem;
             border: 1px solid #e2e8f0;
+        }
+
+        .config-panel-title {
+            font-weight: 900;
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #cbd5e1;
         }
 
         .input-group {
             display: flex;
             flex-direction: column;
+            margin-bottom: 1rem;
         }
+
+        .input-group:last-child { margin-bottom: 0; }
 
         .input-group label {
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             font-size: 0.9rem;
+            color: #475569;
         }
 
-        .input-group input {
+        .input-group input, .input-group select {
             padding: 0.75rem;
             border: 2px solid #cbd5e1;
             border-radius: 8px;
             font-family: inherit;
             font-weight: 700;
-            font-size: 1.1rem;
-            text-align: center;
+            font-size: 1rem;
+            background: #fff;
             transition: border-color 0.2s;
         }
 
-        .input-group input:focus {
+        .input-group input:focus, .input-group select:focus {
             outline: none;
             border-color: #2563eb;
         }
 
         .highlight-input {
-            grid-column: 1 / -1;
-            align-items: center;
-            margin-top: 1rem;
-        }
-
-        .highlight-input input {
-            width: 250px;
-            border-color: #2563eb;
+            margin-top: 1.5rem;
             background: #eff6ff;
-            font-size: 1.3rem;
-            color: #2563eb;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 2px solid #bfdbfe;
         }
 
-        /* Representación Visual - Vasos de Agua */
+        .highlight-input label { color: #1d4ed8; font-size: 1rem; }
+        .highlight-input input { border-color: #3b82f6; font-size: 1.2rem; text-align: center; color: #1d4ed8; }
+
+        /* Contenedor Visual */
         .visual-container {
             display: flex;
             justify-content: space-around;
-            align-items: flex-end;
-            padding: 3rem 1rem 1rem 1rem;
+            align-items: center;
+            padding: 2.5rem 1rem;
             background: #ffffff;
             border: 2px dashed #cbd5e1;
             border-radius: 12px;
             margin-bottom: 2rem;
             position: relative;
+            min-height: 250px;
         }
 
-        .tank-wrapper {
+        .instrument-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 140px;
+            width: 200px;
+            position: relative;
         }
 
-        .tank-title {
+        .instrument-title {
             font-weight: 900;
             margin-bottom: 1.5rem;
             text-align: center;
             font-size: 1.1rem;
+            height: 40px;
         }
 
-        .tank {
-            width: 80px;
-            height: 250px;
-            border: 4px solid #94a3b8;
-            border-top: none;
-            border-bottom-left-radius: 10px;
-            border-bottom-right-radius: 10px;
-            position: relative;
-            background: rgba(241, 245, 249, 0.5);
-            margin: 0 auto;
-        }
-
-        /* Líneas de graduación en el vaso */
-        .tank::before {
-            content: '';
-            position: absolute;
-            top: 25%; left: 0; width: 15px; height: 1px; background: #94a3b8;
-            box-shadow: 0 62.5px 0 #94a3b8, 0 125px 0 #94a3b8; /* Marcas al 75%, 50%, 25% */
-            z-index: 5;
-        }
-        .tank::after {
-            content: '';
-            position: absolute;
-            top: 25%; right: 0; width: 15px; height: 1px; background: #94a3b8;
-            box-shadow: 0 62.5px 0 #94a3b8, 0 125px 0 #94a3b8;
-            z-index: 5;
-        }
-
-        .water {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            height: 0%;
-            transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            border-bottom-left-radius: 6px;
-            border-bottom-right-radius: 6px;
-        }
-
-        /* Oleaje animado (decorativo) */
-        .water::after {
-            content: '';
-            position: absolute;
-            top: -5px;
-            left: 0;
-            width: 100%;
-            height: 10px;
-            background: inherit;
-            border-radius: 50%;
-            opacity: 0.8;
-        }
-
-        .water-blue { background: linear-gradient(to top, #2563eb, #60a5fa); }
-        .water-green { background: linear-gradient(to top, #059669, #34d399); }
-
-        /* Etiquetas del eje Y (Min, Max, Actual) */
-        .tank-labels {
-            position: absolute;
-            height: 250px;
-            width: 100px;
-            right: -110px;
-            bottom: 0;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            font-weight: 700;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-
-        .label-max { margin-top: -10px; }
-        .label-min { margin-bottom: -10px; }
-
-        .label-current {
-            position: absolute;
-            left: -130px; /* Al otro lado del vaso */
-            background: #ef4444;
-            color: white;
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-weight: 900;
-            font-size: 0.9rem;
-            white-space: nowrap;
-            transition: bottom 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            bottom: 0%;
-            transform: translateY(50%);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-            z-index: 10;
-        }
-
-        /* Indicador de conexión entre vasos */
         .connection-arrow {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #94a3b8;
             font-weight: 900;
+        }
+
+        /* --- Estilos de los Instrumentos --- */
+        
+        /* 1. Tanque (Nivel/Volumen) */
+        .inst-tank { display: none; }
+        .tank-body { width: 80px; height: 160px; border: 4px solid #64748b; border-top: none; border-radius: 0 0 12px 12px; position: relative; background: rgba(241, 245, 249, 0.5); overflow: hidden; margin: 0 auto; }
+        .tank-fill { position: absolute; bottom: 0; left: 0; width: 100%; transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
+        /* Marcas del tanque */
+        .tank-body::before { content:''; position:absolute; top:25%; left:0; width:10px; height:2px; background:#64748b; box-shadow: 0 40px 0 #64748b, 0 80px 0 #64748b; z-index:5; }
+        
+        /* 2. Termómetro (Temperatura) */
+        .inst-thermo { display: none; flex-direction: column; align-items: center; }
+        .thermo-body { width: 24px; height: 140px; background: #f8fafc; border: 4px solid #64748b; border-bottom: none; border-radius: 12px 12px 0 0; position: relative; z-index: 1; overflow: hidden; }
+        .thermo-fill { position: absolute; bottom: 0; left: 0; width: 100%; transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
+        .thermo-bulb { width: 44px; height: 44px; border-radius: 50%; border: 4px solid #64748b; position: relative; margin-top: -8px; z-index: 2; transition: background 0.3s; }
+        /* Marcas termómetro */
+        .thermo-body::after { content:''; position:absolute; top:10%; right:0; width:6px; height:2px; background:#64748b; box-shadow: 0 25px 0 #64748b, 0 50px 0 #64748b, 0 75px 0 #64748b, 0 100px 0 #64748b; z-index:5; }
+
+        /* 3. Manómetro (Presión/Humedad) */
+        .inst-gauge { display: none; flex-direction: column; align-items: center; margin-top: 40px; }
+        .gauge-body { width: 160px; height: 80px; border: 4px solid #64748b; border-bottom: none; border-radius: 80px 80px 0 0; position: relative; overflow: hidden; background: #ffffff; }
+        .gauge-bg { position: absolute; top: 0; left: 0; width: 100%; height: 200%; border-radius: 50%; background: conic-gradient(from 270deg, #22c55e 0deg, #22c55e 60deg, #eab308 60deg, #eab308 120deg, #ef4444 120deg, #ef4444 180deg); opacity: 0.2; }
+        .gauge-needle { width: 4px; height: 65px; background: #1e293b; position: absolute; bottom: 0; left: 50%; transform-origin: bottom center; margin-left: -2px; transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1); border-radius: 4px 4px 0 0; z-index: 5; }
+        .gauge-center { width: 24px; height: 24px; background: #334155; border-radius: 50%; position: absolute; bottom: -12px; left: 50%; margin-left: -12px; z-index: 6; border: 3px solid #1e293b; }
+
+        /* 4. Digital/Multímetro (Corriente, Voltaje, etc.) */
+        .inst-digital { display: none; }
+        .digital-body { width: 110px; height: 160px; background: #334155; border-radius: 12px; padding: 12px; display: flex; flex-direction: column; align-items: center; border: 2px solid #0f172a; box-shadow: inset 0 0 10px rgba(0,0,0,0.5); margin: 0 auto; }
+        .digital-screen { width: 100%; height: 36px; background: #ecfccb; border: inset 2px #bef264; border-radius: 4px; display: flex; align-items: center; justify-content: center; font-family: 'Courier New', monospace; font-weight: bold; font-size: 1rem; color: #166534; margin-bottom: 12px; box-shadow: inset 0 2px 4px rgba(0,0,0,0.1); }
+        .digital-bar-container { width: 40px; flex-grow: 1; background: #0f172a; border-radius: 6px; position: relative; overflow: hidden; border: 2px solid #475569; }
+        .digital-fill { position: absolute; bottom: 0; left: 0; width: 100%; transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
+
+        /* Etiquetas del Instrumento */
+        .inst-labels {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .label-current {
+            background: #1e293b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-weight: 900;
+            font-size: 1rem;
+            margin-top: 10px;
+            transition: background 0.3s;
         }
 
         /* Resultado Final */
@@ -248,27 +225,13 @@ html_content = """<!DOCTYPE html>
         .btn-home-custom:hover { background: #334155; }
 
         @media (max-width: 600px) {
-            .visual-container {
-                flex-direction: column;
-                align-items: center;
-                gap: 4rem;
-                padding-bottom: 2rem;
-            }
-            .connection-arrow {
-                transform: translate(-50%, -50%) rotate(90deg);
-            }
-            .tank-labels {
-                right: -80px;
-            }
-            .label-current {
-                left: -100px;
-            }
+            .visual-container { flex-direction: column; gap: 3rem; }
+            .connection-arrow { transform: rotate(90deg); margin: 1rem 0; }
         }
     </style>
 
     <!-- Scripts Institucionales -->
     <script>
-        // Lógica de enrutamiento automático (Mantenido del original)
         var urlIncorrecta = window.location.href.toLowerCase();
         if (urlIncorrecta.includes("calculadora")) {
             window.location.replace("https://merunaku.github.io/calculadora2026/");
@@ -290,76 +253,117 @@ html_content = """<!DOCTYPE html>
 
     <main class="container simulador-wrapper">
         <div class="sim-card">
-            <h2 class="sim-title">💧 Simulador de Escalamiento</h2>
-            <p class="sim-subtitle">Observa cómo el "nivel" eléctrico se traduce al "nivel" de presión física usando vasos comunicantes.</p>
+            <h2 class="sim-title">⚙️ Simulador Universal de Escalamiento</h2>
+            <p class="sim-subtitle">Configura las variables de entrada y salida para ver la equivalencia gráfica de la señal.</p>
             
-            <!-- Panel de Controles -->
-            <div class="controls-grid">
-                <div class="input-group">
-                    <label>Señal Mínima (mA)</label>
-                    <input type="number" id="ma_min" value="4" step="0.1">
+            <!-- Panel de Configuración -->
+            <div class="config-grid">
+                <!-- Panel de Entrada -->
+                <div class="config-panel">
+                    <div class="config-panel-title" id="title_in" style="color: #2563eb;">Entrada Eléctrica</div>
+                    <div class="input-group">
+                        <label>Magnitud</label>
+                        <select id="sel_in">
+                            <option value="corriente" selected>Corriente (mA)</option>
+                            <option value="voltaje">Voltaje (V)</option>
+                            <option value="frecuencia">Frecuencia (Hz)</option>
+                            <option value="temperatura">Temperatura (°C)</option>
+                            <option value="presion">Presión (bar)</option>
+                            <option value="nivel">Nivel/Volumen (L)</option>
+                            <option value="humedad">Humedad (%)</option>
+                            <option value="peso">Peso (kg)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl_in_min">Mínimo</label>
+                        <input type="number" id="val_in_min" value="4" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl_in_max">Máximo</label>
+                        <input type="number" id="val_in_max" value="20" step="0.1">
+                    </div>
+                    
+                    <div class="input-group highlight-input">
+                        <label id="lbl_in_current">Lectura Actual</label>
+                        <input type="number" id="val_in_current" value="7.2" step="0.1">
+                    </div>
                 </div>
-                <div class="input-group">
-                    <label>Señal Máxima (mA)</label>
-                    <input type="number" id="ma_max" value="20" step="0.1">
-                </div>
-                <div class="input-group">
-                    <label>Presión Mínima (bar)</label>
-                    <input type="number" id="bar_min" value="-1" step="0.1">
-                </div>
-                <div class="input-group">
-                    <label>Presión Máxima (bar)</label>
-                    <input type="number" id="bar_max" value="9" step="0.1">
-                </div>
-                
-                <!-- Lectura Actual -->
-                <div class="input-group highlight-input">
-                    <label style="color: #2563eb; font-size: 1.1rem;">Medición de Entrada (mA)</label>
-                    <input type="number" id="lectura" value="7.2" step="0.1">
+
+                <!-- Panel de Salida -->
+                <div class="config-panel">
+                    <div class="config-panel-title" id="title_out" style="color: #059669;">Salida Física</div>
+                    <div class="input-group">
+                        <label>Magnitud</label>
+                        <select id="sel_out">
+                            <option value="corriente">Corriente (mA)</option>
+                            <option value="voltaje">Voltaje (V)</option>
+                            <option value="frecuencia">Frecuencia (Hz)</option>
+                            <option value="temperatura">Temperatura (°C)</option>
+                            <option value="presion" selected>Presión (bar)</option>
+                            <option value="nivel">Nivel/Volumen (L)</option>
+                            <option value="humedad">Humedad (%)</option>
+                            <option value="peso">Peso (kg)</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl_out_min">Mínimo</label>
+                        <input type="number" id="val_out_min" value="-1" step="0.1">
+                    </div>
+                    <div class="input-group">
+                        <label id="lbl_out_max">Máximo</label>
+                        <input type="number" id="val_out_max" value="9" step="0.1">
+                    </div>
                 </div>
             </div>
 
-            <!-- Representación Visual (Vasos de Agua) -->
+            <!-- Representación Visual Dinámica -->
             <div class="visual-container">
-                <div class="connection-arrow">➔</div>
-
-                <!-- Vaso 1: Eléctrico -->
-                <div class="tank-wrapper">
-                    <div class="tank-title" style="color: #2563eb;">Señal Eléctrica</div>
-                    <div style="position: relative;">
-                        <div class="tank">
-                            <div class="water water-blue" id="water_ma"></div>
-                        </div>
-                        <div class="tank-labels">
-                            <span class="label-max" id="lbl_ma_max">20 mA</span>
-                            <span class="label-min" id="lbl_ma_min">4 mA</span>
-                        </div>
-                        <div class="label-current" id="label_ma_current">7.2 mA</div>
+                
+                <!-- Instrumento IN -->
+                <div class="instrument-wrapper">
+                    <div class="instrument-title" id="name_in" style="color: #2563eb;">Corriente (mA)</div>
+                    
+                    <!-- Formas -->
+                    <div class="inst-tank" id="in_tank"><div class="tank-body"><div class="tank-fill" id="fill_in_tank"></div></div></div>
+                    <div class="inst-thermo" id="in_thermo"><div class="thermo-body"><div class="thermo-fill" id="fill_in_thermo"></div></div><div class="thermo-bulb" id="bulb_in_thermo"></div></div>
+                    <div class="inst-gauge" id="in_gauge"><div class="gauge-body"><div class="gauge-bg"></div><div class="gauge-needle" id="needle_in_gauge"></div><div class="gauge-center"></div></div></div>
+                    <div class="inst-digital" id="in_digital"><div class="digital-body"><div class="digital-screen" id="screen_in_digital">0.0</div><div class="digital-bar-container"><div class="digital-fill" id="fill_in_digital"></div></div></div></div>
+                    
+                    <!-- Labels -->
+                    <div class="inst-labels">
+                        <span id="txt_in_min">0</span>
+                        <span id="txt_in_max">100</span>
                     </div>
+                    <div class="label-current" id="badge_in" style="background: #2563eb;">0.00</div>
                 </div>
 
-                <!-- Vaso 2: Presión -->
-                <div class="tank-wrapper">
-                    <div class="tank-title" style="color: #059669;">Presión Física</div>
-                    <div style="position: relative;">
-                        <div class="tank">
-                            <div class="water water-green" id="water_bar"></div>
-                        </div>
-                        <div class="tank-labels">
-                            <span class="label-max" id="lbl_bar_max">9 bar</span>
-                            <span class="label-min" id="lbl_bar_min">-1 bar</span>
-                        </div>
-                        <div class="label-current" id="label_bar_current" style="background: #059669;">1.00 bar</div>
+                <div class="connection-arrow">➔</div>
+
+                <!-- Instrumento OUT -->
+                <div class="instrument-wrapper">
+                    <div class="instrument-title" id="name_out" style="color: #059669;">Presión (bar)</div>
+                    
+                    <!-- Formas -->
+                    <div class="inst-tank" id="out_tank"><div class="tank-body"><div class="tank-fill" id="fill_out_tank"></div></div></div>
+                    <div class="inst-thermo" id="out_thermo"><div class="thermo-body"><div class="thermo-fill" id="fill_out_thermo"></div></div><div class="thermo-bulb" id="bulb_out_thermo"></div></div>
+                    <div class="inst-gauge" id="out_gauge"><div class="gauge-body"><div class="gauge-bg"></div><div class="gauge-needle" id="needle_out_gauge"></div><div class="gauge-center"></div></div></div>
+                    <div class="inst-digital" id="out_digital"><div class="digital-body"><div class="digital-screen" id="screen_out_digital">0.0</div><div class="digital-bar-container"><div class="digital-fill" id="fill_out_digital"></div></div></div></div>
+                    
+                    <!-- Labels -->
+                    <div class="inst-labels">
+                        <span id="txt_out_min">0</span>
+                        <span id="txt_out_max">100</span>
                     </div>
+                    <div class="label-current" id="badge_out" style="background: #059669;">0.00</div>
                 </div>
             </div>
 
             <!-- Cuadro de Resultado -->
             <div class="result-box" id="resultado_final">
-                Lectura Final: 1.00 bar
+                Equivalencia: 1.00 bar
             </div>
 
-            <!-- Botón de retorno al home (Formato Institucional) -->
+            <!-- Botón de retorno -->
             <a href="https://merunaku.github.io/home/index.html" class="btn-home-custom">
                 🗂️ Volver al Portal General
             </a>
@@ -367,56 +371,161 @@ html_content = """<!DOCTYPE html>
     </main>
 
     <script>
-        function actualizarVisualizacion() {
-            // 1. Obtener valores
-            const maMin = parseFloat(document.getElementById('ma_min').value) || 0;
-            const maMax = parseFloat(document.getElementById('ma_max').value) || 0;
-            const barMin = parseFloat(document.getElementById('bar_min').value) || 0;
-            const barMax = parseFloat(document.getElementById('bar_max').value) || 0;
-            const lectura = parseFloat(document.getElementById('lectura').value) || 0;
+        // Configuración de las magnitudes
+        const magConfig = {
+            'corriente': { name: 'Corriente', unit: 'mA', inst: 'digital', color: '#3b82f6', defMin: 4, defMax: 20 },
+            'voltaje': { name: 'Voltaje', unit: 'V', inst: 'digital', color: '#8b5cf6', defMin: 0, defMax: 10 },
+            'presion': { name: 'Presión', unit: 'bar', inst: 'gauge', color: '#f59e0b', defMin: -1, defMax: 9 },
+            'temperatura': { name: 'Temperatura', unit: '°C', inst: 'thermo', color: '#ef4444', defMin: 0, defMax: 100 },
+            'nivel': { name: 'Nivel/Volum.', unit: 'L', inst: 'tank', color: '#0ea5e9', defMin: 0, defMax: 500 },
+            'humedad': { name: 'Humedad', unit: '%', inst: 'gauge', color: '#06b6d4', defMin: 0, defMax: 100 },
+            'frecuencia': { name: 'Frecuencia', unit: 'Hz', inst: 'digital', color: '#10b981', defMin: 0, defMax: 60 },
+            'peso': { name: 'Peso', unit: 'kg', inst: 'digital', color: '#f97316', defMin: 0, defMax: 150 }
+        };
 
-            const spanMa = maMax - maMin;
-            const spanBar = barMax - barMin;
+        const selIn = document.getElementById('sel_in');
+        const selOut = document.getElementById('sel_out');
+        const inputs = document.querySelectorAll('input');
+
+        // Función para cambiar la configuración visual según la selección
+        function actualizarTipos(esCambioManual = false) {
+            const confIn = magConfig[selIn.value];
+            const confOut = magConfig[selOut.value];
+
+            // Si es un cambio desde los dropdowns, poner valores por defecto para ayudar al usuario
+            if (esCambioManual) {
+                // Actualizar IN (solo el actual para que caiga en medio si cambian los min/max)
+                const inMin = parseFloat(document.getElementById('val_in_min').value);
+                const inMax = parseFloat(document.getElementById('val_in_max').value);
+                const midIn = inMin + ((inMax - inMin) / 2);
+                document.getElementById('val_in_current').value = midIn.toFixed(1);
+            }
+
+            // Cambiar textos y labels
+            document.getElementById('title_in').style.color = confIn.color;
+            document.getElementById('title_out').style.color = confOut.color;
             
-            if (spanMa === 0) return;
-
-            // 2. Cálculo Matemático
-            let porcentajeDecimal = (lectura - maMin) / spanMa;
-            const presionCalculada = (porcentajeDecimal * spanBar) + barMin;
-
-            // 3. Limitar visualmente el porcentaje entre 0% y 100% para que el agua no se salga del vaso
-            let porcentajeVisual = Math.max(0, Math.min(1, porcentajeDecimal)) * 100;
-            const percentStr = porcentajeVisual + '%';
-
-            // 4. Actualizar Textos
-            document.getElementById('lbl_ma_min').innerText = maMin + ' mA';
-            document.getElementById('lbl_ma_max').innerText = maMax + ' mA';
-            document.getElementById('lbl_bar_min').innerText = barMin + ' bar';
-            document.getElementById('lbl_bar_max').innerText = barMax + ' bar';
+            document.getElementById('lbl_in_min').innerText = `Mínimo (${confIn.unit})`;
+            document.getElementById('lbl_in_max').innerText = `Máximo (${confIn.unit})`;
+            document.getElementById('lbl_in_current').innerText = `Medición (${confIn.unit})`;
             
-            document.getElementById('label_ma_current').innerText = lectura.toFixed(2) + ' mA';
-            document.getElementById('label_bar_current').innerText = presionCalculada.toFixed(2) + ' bar';
-            document.getElementById('resultado_final').innerText = 'Lectura Final: ' + presionCalculada.toFixed(2) + ' bar';
+            document.getElementById('lbl_out_min').innerText = `Mínimo (${confOut.unit})`;
+            document.getElementById('lbl_out_max').innerText = `Máximo (${confOut.unit})`;
 
-            // 5. Animar "Agua" (Altura) y Etiquetas (Posición vertical)
-            document.getElementById('water_ma').style.height = percentStr;
-            document.getElementById('label_ma_current').style.bottom = percentStr;
-            
-            document.getElementById('water_bar').style.height = percentStr;
-            document.getElementById('label_bar_current').style.bottom = percentStr;
+            document.getElementById('name_in').innerText = `${confIn.name} (${confIn.unit})`;
+            document.getElementById('name_in').style.color = confIn.color;
+            document.getElementById('badge_in').style.background = confIn.color;
+
+            document.getElementById('name_out').innerText = `${confOut.name} (${confOut.unit})`;
+            document.getElementById('name_out').style.color = confOut.color;
+            document.getElementById('badge_out').style.background = confOut.color;
+
+            // Ocultar todos los instrumentos
+            const allInsts = ['tank', 'thermo', 'gauge', 'digital'];
+            allInsts.forEach(inst => {
+                document.getElementById(`in_${inst}`).style.display = 'none';
+                document.getElementById(`out_${inst}`).style.display = 'none';
+            });
+
+            // Mostrar los correctos
+            document.getElementById(`in_${confIn.inst}`).style.display = (confIn.inst === 'thermo' || confIn.inst === 'gauge') ? 'flex' : 'block';
+            document.getElementById(`out_${confOut.inst}`).style.display = (confOut.inst === 'thermo' || confOut.inst === 'gauge') ? 'flex' : 'block';
+
+            actualizarCalculos();
         }
 
-        // Listeners para que funcione en vivo
-        document.querySelectorAll('input').forEach(input => {
-            input.addEventListener('input', actualizarVisualizacion);
+        // Función que aplica los valores calculados a los instrumentos visibles
+        function aplicarInstrumento(prefijo, conf, min, max, val, percentDecimal) {
+            let percent = Math.max(0, Math.min(1, percentDecimal)) * 100;
+            const percentStr = percent + '%';
+            
+            // Textos Min/Max
+            document.getElementById(`txt_${prefijo}_min`).innerText = min + conf.unit;
+            document.getElementById(`txt_${prefijo}_max`).innerText = max + conf.unit;
+            document.getElementById(`badge_${prefijo}`).innerText = val.toFixed(2) + ' ' + conf.unit;
+
+            // Animaciones según tipo
+            if (conf.inst === 'tank') {
+                document.getElementById(`fill_${prefijo}_tank`).style.height = percentStr;
+                document.getElementById(`fill_${prefijo}_tank`).style.background = conf.color;
+            } 
+            else if (conf.inst === 'thermo') {
+                document.getElementById(`fill_${prefijo}_thermo`).style.height = percentStr;
+                document.getElementById(`fill_${prefijo}_thermo`).style.background = conf.color;
+                document.getElementById(`bulb_${prefijo}_thermo`).style.background = conf.color;
+            }
+            else if (conf.inst === 'gauge') {
+                // Rotación de -90 a 90 grados
+                const rotacion = -90 + (percent * 1.8);
+                document.getElementById(`needle_${prefijo}_gauge`).style.transform = `translateX(-50%) rotate(${rotacion}deg)`;
+            }
+            else if (conf.inst === 'digital') {
+                document.getElementById(`fill_${prefijo}_digital`).style.height = percentStr;
+                document.getElementById(`fill_${prefijo}_digital`).style.background = conf.color;
+                document.getElementById(`screen_${prefijo}_digital`).innerText = val.toFixed(2);
+                document.getElementById(`screen_${prefijo}_digital`).style.color = conf.color;
+            }
+        }
+
+        function actualizarCalculos() {
+            // Obtener valores numéricos
+            const inMin = parseFloat(document.getElementById('val_in_min').value) || 0;
+            const inMax = parseFloat(document.getElementById('val_in_max').value) || 0;
+            const outMin = parseFloat(document.getElementById('val_out_min').value) || 0;
+            const outMax = parseFloat(document.getElementById('val_out_max').value) || 0;
+            const inVal = parseFloat(document.getElementById('val_in_current').value) || 0;
+
+            const spanIn = inMax - inMin;
+            const spanOut = outMax - outMin;
+            
+            if (spanIn === 0) return;
+
+            // Cálculo Matemático Lineal
+            let percentDecimal = (inVal - inMin) / spanIn;
+            const outVal = (percentDecimal * spanOut) + outMin;
+
+            // Configs actuales
+            const confIn = magConfig[selIn.value];
+            const confOut = magConfig[selOut.value];
+
+            // Renderizar Instrumentos
+            aplicarInstrumento('in', confIn, inMin, inMax, inVal, percentDecimal);
+            aplicarInstrumento('out', confOut, outMin, outMax, outVal, percentDecimal);
+
+            // Actualizar cuadro final
+            document.getElementById('resultado_final').innerText = `Equivalencia: ${outVal.toFixed(2)} ${confOut.unit}`;
+            document.getElementById('resultado_final').style.color = confOut.color;
+            document.getElementById('resultado_final').style.borderColor = confOut.color;
+            document.getElementById('resultado_final').style.background = confOut.color + '15'; // Color semi-transparente
+        }
+
+        // Listeners para selectores que inyectan valores por defecto
+        selIn.addEventListener('change', function() {
+            const conf = magConfig[this.value];
+            document.getElementById('val_in_min').value = conf.defMin;
+            document.getElementById('val_in_max').value = conf.defMax;
+            actualizarTipos(true);
+        });
+
+        selOut.addEventListener('change', function() {
+            const conf = magConfig[this.value];
+            document.getElementById('val_out_min').value = conf.defMin;
+            document.getElementById('val_out_max').value = conf.defMax;
+            actualizarTipos(true);
+        });
+
+        // Listeners para los inputs numéricos
+        inputs.forEach(input => {
+            input.addEventListener('input', actualizarCalculos);
         });
 
         // Ejecución inicial
-        actualizarVisualizacion();
+        actualizarTipos();
     </script>
 </body>
 </html>
 """
-with open("/mnt/data/simulador_vasos_institucional.html", "w", encoding="utf-8") as f:
+
+with open("/mnt/data/simulador_universal_institucional.html", "w", encoding="utf-8") as f:
     f.write(html_content)
-print("File successfully created with tag simulador_vasos_institucional.html")
+print("File successfully created with tag simulador_universal_institucional.html")
