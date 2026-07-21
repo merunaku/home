@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+html_content = """<!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
@@ -43,9 +43,11 @@
         /* Controles de Selección y Entrada */
         .config-grid {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            /* La magia para que ambas columnas sean exactamente iguales */
+            grid-template-columns: repeat(2, minmax(0, 1fr)); 
             gap: 1.5rem;
-            margin-bottom: 1.5rem;
+            margin: 0 auto 2rem auto;
+            max-width: 900px; /* Centra y evita que se estire demasiado en PC */
         }
         
         @media (max-width: 768px) {
@@ -57,6 +59,8 @@
             padding: 1.5rem;
             border-radius: 12px;
             border: 1px solid #e2e8f0;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .config-panel-title {
@@ -91,6 +95,8 @@
             font-size: 1rem;
             background: #fff;
             transition: border-color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
         }
 
         .input-group input:focus, .input-group select:focus {
@@ -151,7 +157,6 @@
         .inst-tank { display: none; }
         .tank-body { width: 80px; height: 160px; border: 4px solid #64748b; border-top: none; border-radius: 0 0 12px 12px; position: relative; background: rgba(241, 245, 249, 0.5); overflow: hidden; margin: 0 auto; }
         .tank-fill { position: absolute; bottom: 0; left: 0; width: 100%; transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
-        /* Marcas del tanque */
         .tank-body::before { content:''; position:absolute; top:25%; left:0; width:10px; height:2px; background:#64748b; box-shadow: 0 40px 0 #64748b, 0 80px 0 #64748b; z-index:5; }
         
         /* 2. Termómetro (Temperatura) */
@@ -159,7 +164,6 @@
         .thermo-body { width: 24px; height: 140px; background: #f8fafc; border: 4px solid #64748b; border-bottom: none; border-radius: 12px 12px 0 0; position: relative; z-index: 1; overflow: hidden; }
         .thermo-fill { position: absolute; bottom: 0; left: 0; width: 100%; transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s; }
         .thermo-bulb { width: 44px; height: 44px; border-radius: 50%; border: 4px solid #64748b; position: relative; margin-top: -8px; z-index: 2; transition: background 0.3s; }
-        /* Marcas termómetro */
         .thermo-body::after { content:''; position:absolute; top:10%; right:0; width:6px; height:2px; background:#64748b; box-shadow: 0 25px 0 #64748b, 0 50px 0 #64748b, 0 75px 0 #64748b, 0 100px 0 #64748b; z-index:5; }
 
         /* 3. Manómetro (Presión/Humedad) */
@@ -208,6 +212,28 @@
             font-size: 1.5rem;
             font-weight: 900;
             color: #166534;
+        }
+
+        /* Estilos Video */
+        .video-container {
+            position: relative;
+            padding-bottom: 56.25%; /* Relación de aspecto 16:9 */
+            height: 0;
+            overflow: hidden;
+            width: 100%;
+            max-width: 800px; /* Ancho máximo para que no sea inmenso en PC */
+            margin: 2.5rem auto 1rem auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .video-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
         }
 
         .btn-home-custom {
@@ -361,6 +387,15 @@
             <!-- Cuadro de Resultado -->
             <div class="result-box" id="resultado_final">
                 Equivalencia: 1.00 bar
+            </div>
+
+            <!-- Video de Google Drive Incrustado -->
+            <div class="video-container">
+                <iframe 
+                    src="https://drive.google.com/file/d/1M-WGubR9gDM9_wWltWZIpVNWcZ3XCtQG/preview" 
+                    allow="autoplay" 
+                    allowfullscreen>
+                </iframe>
             </div>
 
             <!-- Botón de retorno -->
@@ -524,3 +559,8 @@
     </script>
 </body>
 </html>
+"""
+
+with open("/mnt/data/simulador_universal_institucional.html", "w", encoding="utf-8") as f:
+    f.write(html_content)
+print("File successfully created with tag simulador_universal_institucional.html")
