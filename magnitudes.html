@@ -391,6 +391,7 @@ html_content = """<!DOCTYPE html>
 
             <!-- Video de Google Drive Incrustado -->
             <div class="video-container">
+                <div class="config-panel-title" id="title_in" style="color: #2563eb;">Video Resumen</div>
                 <iframe 
                     src="https://drive.google.com/file/d/1M-WGubR9gDM9_wWltWZIpVNWcZ3XCtQG/preview" 
                     allow="autoplay" 
@@ -559,8 +560,3 @@ html_content = """<!DOCTYPE html>
     </script>
 </body>
 </html>
-"""
-
-with open("/mnt/data/simulador_universal_institucional.html", "w", encoding="utf-8") as f:
-    f.write(html_content)
-print("File successfully created with tag simulador_universal_institucional.html")
