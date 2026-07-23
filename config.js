@@ -15,7 +15,7 @@ const CONFIG = {
     
     // 3. Conexiones con Google Sheets (Web Apps de Apps Script)
     APIS: {
-        NORMATIVA: "https://script.google.com/macros/s/AKfycbxXuHwc-oPc9Sf3sXf2M9HCkLjiuEEn0uLmRVn3EzNvFtihGtrI8PgtlRP5FBLWaj4EWw/exec",
+        NORMATIVA: "https://script.google.com/macros/s/AKfycbzIx5dFme0S0m1uedQuFog4akMcCZ3pYYJ3rbi6VL_p1t6PDiK4r_3ptnZjb9J7RGaRzQ/exec",
         INSTRUMENTACION: "https://script.google.com/macros/s/AKfycbxfAYkuxXaXYLOuuJvC6IKO4NujyVM3X-NrVRa9sQJomJsT8HQ9NRNZawLoxVaD38jb/exec",
     },
     
