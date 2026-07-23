@@ -3,679 +3,249 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Examen Instrumentación Industrial 2026</title>
-    
-    <!-- FUENTES -->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- ARCHIVOS EXTERNOS DE CONFIGURACIÓN Y ESTILOS -->
-    <link rel="stylesheet" href="https://merunaku.github.io/home/styles.css">
-    <script src="https://merunaku.github.io/home/config.js" defer></script>
-
+    <title>Tabla de Posiciones - Normativa e Instrumentación</title>
     <style>
-        :root {
-            /* COLORES INSTITUCIONALES (Se mantienen por si la app los requiere específicamente) */
-            --primary-color: #002b5c;
-            --primary-dark: #001a38;
-            --secondary-color: #f4b223;
-            --bg-color: #f7f9fc;
-            --card-bg: #ffffff;
-            --text-color: #2c3e50;
-            --success-color: #28a745;
-            --error-color: #dc3545;
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
         }
 
         body {
-            font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
-            /* Fondo vivo con transición suave de colores */
-            background: linear-gradient(-45deg, #e0f2fe, #fef3c7, #e0e7ff, #f0fdf4);
-            background-size: 400% 400%;
-            animation: gradientBg 12s ease infinite;
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-height: 100vh;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            padding: 20px;
+            color: #333;
         }
 
-        @keyframes gradientBg {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        /* CONTENEDOR DE TARJETAS FLOTANTES (GLASSMORPHISM) */
-        .container {
-            width: 90%;
-            max-width: 600px;
-            margin: 30px 0;
-            flex-grow: 1;
-        }
-
-        .card {
-            background-color: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border-radius: 24px;
-            box-shadow: 0 20px 50px -12px rgba(0, 43, 92, 0.1), 0 10px 25px -10px rgba(0, 0, 0, 0.04);
-            padding: 35px 30px;
-            margin-bottom: 20px;
-            box-sizing: border-box;
-            border: 3px solid rgba(255, 255, 255, 0.9);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 6px;
-            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
-        }
-
-        .screen { display: none; }
-        .active { display: block !important; animation: cardEntrance 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.15); }
-
-        @keyframes cardEntrance {
-            from { opacity: 0; transform: translateY(15px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        h2 { 
-            color: var(--primary-color); 
-            margin-top: 0; 
-            font-weight: 900;
-            font-size: 1.75rem;
-            letter-spacing: -0.5px;
-        }
-
-        /* BOTONES DE ACCIÓN PRINCIPAL ACENTUADOS */
-        .btn {
-            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: 16px 25px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            border-radius: 14px;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.25s ease;
-            margin-top: 15px;
-            box-shadow: 0 4px 12px rgba(0, 43, 92, 0.2);
-        }
-
-        .btn:hover:not(:disabled) { 
-            transform: translateY(-2px);
-            box-shadow: 0 8px 18px rgba(0, 43, 92, 0.3);
-            filter: brightness(1.1);
-        }
-        
-        .btn:active:not(:disabled) { transform: translateY(0); }
-        .btn:disabled { background: #cbd5e1; color: #94a3b8; cursor: not-allowed; box-shadow: none; }
-
-        /* BARRA DE PROGRESO CORREDIZA */
-        .progress-bar {
-            background-color: #e2e8f0;
-            border-radius: 50px;
-            height: 10px;
-            width: 100%;
-            margin-bottom: 25px;
-            overflow: hidden;
-        }
-
-        .progress {
-            background: linear-gradient(90deg, var(--secondary-color), #f59e0b);
-            height: 100%;
-            width: 0%;
-            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            border-radius: 50px;
-        }
-
-        .question-txt {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 20px;
-            line-height: 1.5;
-        }
-
-        .topic-tag {
-            display: inline-block;
-            background-color: #e0f2fe;
-            color: #0369a1;
-            padding: 5px 14px;
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            margin-bottom: 12px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        /* OPCIONES INTERACTIVAS DEL SIMULADOR */
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .option-btn {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border: 2px solid #e2e8f0;
-            padding: 14px 18px;
-            text-align: left;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            font-family: inherit;
-            cursor: pointer;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-            color: var(--text-color);
-            line-height: 1.4;
-        }
-
-        .option-btn:hover:not(:disabled) {
-            background: #ffffff;
-            border-color: var(--primary-color);
-            transform: translateX(4px);
-            box-shadow: 0 4px 12px rgba(0, 43, 92, 0.05);
-        }
-
-        /* ESTADOS CORRECTO E INCORRECTO */
-        .option-btn.correct {
-            background: #dcfce7 !important;
-            border-color: var(--success-color) !important;
-            color: #15803d !important;
-            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
-        }
-
-        .option-btn.incorrect {
-            background: #fee2e2 !important;
-            border-color: var(--error-color) !important;
-            color: #b91c1c !important;
-            box-shadow: 0 4px 12px rgba(220, 53, 69, 0.15);
-        }
-
-        /* CAJA DE RETROALIMENTACIÓN TÉCNICA */
-        .justification-box {
-            display: none;
-            background-color: #f0fdf4;
-            border: 2px solid #bbf7d0;
-            border-left: 6px solid var(--success-color);
-            padding: 18px;
-            margin-top: 20px;
-            border-radius: 12px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #166534;
-            animation: cardEntrance 0.3s ease;
-        }
-
-        .timer-txt { font-weight: 900; color: #64748b; float: right; font-size: 1.05rem; }
-        
-        /* DISEÑO DE LA INSIGNIA DE CALIFICACIÓN */
-        .grade-badge {
-            font-size: 4rem;
-            font-weight: 900;
-            color: var(--primary-color);
-            margin: 15px 0;
+        h1 {
             text-align: center;
-            text-shadow: 0 4px 10px rgba(0,0,0,0.05);
-            letter-spacing: -1px;
+            margin-bottom: 25px;
+            color: #1e293b;
         }
-        
-        .grade-badge.reprobo { color: var(--error-color); }
-        .grade-badge.aprobo { color: var(--success-color); }
 
-        .details-box {
-            background-color: #f8fafc;
-            border-left: 6px solid var(--primary-color);
-            padding: 18px;
-            margin: 20px 0;
-            border-radius: 4px 16px 16px 4px;
-            font-size: 0.95rem;
-            color: #475569;
-            line-height: 1.6;
+        /* Contenedor Flexbox para poner las dos tablas lado a lado */
+        .contenedor-tablas {
+            display: flex;
+            gap: 25px;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap; /* Permite que en celulares se muestre una debajo de otra */
+            max-width: 1400px;
+            margin: 0 auto;
         }
-        
-        .details-box ul { margin: 6px 0 0 0; padding-left: 20px; }
-        .details-box li { margin-bottom: 4px; }
 
-        .input-nombre {
+        /* Tarjeta que envuelve a cada tabla */
+        .tabla-card {
+            flex: 1;
+            min-width: 320px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .tabla-card h2 {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #0f172a;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 8px;
+        }
+
+        .loading {
+            text-align: center;
+            font-size: 1em;
+            color: #64748b;
+            padding: 20px 0;
+        }
+
+        .error {
+            color: #ef4444;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9em;
+            padding: 10px 0;
+        }
+
+        table {
             width: 100%;
-            padding: 16px;
-            border: 2px solid #cbd5e1;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-family: inherit;
-            font-weight: 700;
-            margin-bottom: 12px;
-            box-sizing: border-box;
-            transition: all 0.2s ease;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        th, td {
+            padding: 10px 12px;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background-color: #1e293b;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:nth-child(even) {
             background-color: #f8fafc;
         }
 
-        .input-nombre:focus {
-            border-color: var(--primary-color);
-            background-color: #ffffff;
-            box-shadow: 0 0 0 4px rgba(0, 43, 92, 0.1);
-            outline: none;
+        tr:hover {
+            background-color: #f1f5f9;
         }
 
-        /* TABLA DE LÍDERES ESTILIZADA */
-        .leaderboard-table {
-            width: 100%; 
-            border-collapse: separate; 
-            border-spacing: 0 6px;
-            font-size: 0.95rem;
+        .posicion {
+            font-weight: bold;
+            width: 50px;
         }
-        
-        .leaderboard-table th {
-            background-color: #1e293b;
-            color: #f8fafc;
-            padding: 12px;
-            font-weight: 700;
-        }
-        
-        .leaderboard-table th:first-child { border-radius: 8px 0 0 8px; }
-        .leaderboard-table th:last-child { border-radius: 0 8px 8px 0; }
 
-        .leaderboard-row td {
-            padding: 12px 10px;
-            background: #f8fafc;
-            border-top: 1px solid #e2e8f0;
-            border-bottom: 1px solid #e2e8f0;
+        .nombre {
+            text-align: left;
         }
-        
-        .leaderboard-row td:first-child { border-left: 1px solid #e2e8f0; border-radius: 10px 0 0 10px; }
-        .leaderboard-row td:last-child { border-right: 1px solid #e2e8f0; border-radius: 0 10px 10px 0; }
+
+        .nota {
+            font-weight: bold;
+            color: #16a34a;
+        }
+
+        .tiempo {
+            color: #475569;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
 
-    <!-- SCRIPT DEL HEADER EXTERNO -->
-    <script src="https://merunaku.github.io/home/header.js"></script>
+    <h1>🏆 Tablas de Posiciones</h1>
 
-    <div class="container">
-        
-        <div id="welcome-screen" class="card screen active">
-            <h2>⚡ ¡Simulador Activo!</h2>
-            <p>Evalúa tus conocimientos en instrumentación y control de procesos.</p>
+    <div class="contenedor-tablas">
+
+        <!-- TABLA 1: NORMATIVA -->
+        <div class="tabla-card">
+            <h2>📜 Normativa</h2>
+            <div id="loading-normativa" class="loading">Cargando datos...</div>
+            <div id="error-normativa" class="error"></div>
             
-            <div class="details-box">
-                <strong>Condiciones de Evaluación:</strong>
-                <ul>
-                    <li><strong>20 preguntas aleatorias</strong> extraídas del banco oficial.</li>
-                    <li>Las alternativas se barajan automáticamente en cada intento.</li>
-                    <li>Escala de evaluación: <strong>60% de exigencia (Nota 4.0)</strong>.</li>
-                    <li>¡Mucho éxito en tu preparación!</li>
-                </ul>
-            </div>
-
-            <input type="text" id="nombre-alumno" class="input-nombre" placeholder="Ingresa tu Nombre y Apellido para comenzar">
-
-            <div id="db-loader" style="text-align: center; color: #d97706; font-weight: bold; margin-top: 15px;">
-                🔄 Conectando con el servidor y descargando preguntas...
-            </div>
-
-            <button id="start-btn" class="btn" style="display:none;" onclick="startQuiz()">Iniciar Evaluación Aleatoria</button>
+            <table id="tabla-normativa" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th style="text-align: left;">Nombre</th>
+                        <th>Nota</th>
+                        <th>Puntaje</th>
+                        <th>Tiempo</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-normativa"></tbody>
+            </table>
         </div>
 
-        <div id="quiz-screen" class="card screen">
-            <div class="progress-bar"><div id="progress" class="progress"></div></div>
-            <div>
-                <span id="question-counter" style="font-size: 0.95rem; font-weight: 700; color: #64748b;">Pregunta X de 20</span>
-                <span id="timer" class="timer-txt">00:00</span>
-            </div>
-            <div style="clear:both;"></div>
+        <!-- TABLA 2: INSTRUMENTACIÓN -->
+        <div class="tabla-card">
+            <h2>⚙️ Instrumentación</h2>
+            <div id="loading-instrumentacion" class="loading">Cargando datos...</div>
+            <div id="error-instrumentacion" class="error"></div>
             
-            <div style="margin-top: 12px;">
-                <div id="topic-container" class="topic-tag">Tópico</div>
-            </div>
-            <div class="question-txt" id="question-text">Cargando pregunta...</div>
-            <div class="options-list" id="options-container"></div>
-            
-            <div id="justification-container" class="justification-box">
-                <strong>📘 Justificación Técnica:</strong> <span id="justification-text"></span>
-            </div>
-            
-            <button id="next-btn" class="btn" style="display:none;" onclick="nextQuestion()">Avanzar Pregunta 👉</button>
+            <table id="tabla-instrumentacion" style="display: none;">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th style="text-align: left;">Nombre</th>
+                        <th>Nota</th>
+                        <th>Puntaje</th>
+                        <th>Tiempo</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-instrumentacion"></tbody>
+            </table>
         </div>
 
-        <div id="result-screen" class="card screen">
-            <h2>Resumen del Intento</h2>
-            <div class="score-display">
-                <div style="font-size: 1.1rem; color: #475569; text-align: center; font-weight: 700;">Tu calificación final es:</div>
-                <div id="grade-output" class="grade-badge">1.0</div>
-                <div id="score-output" style="font-size: 1.15rem; font-weight: 900; color: #1e293b; text-align: center;">Puntaje: 0 / 20 correctas</div>
-                <div id="time-output" style="font-size: 1rem; color: #64748b; margin-top: 6px; text-align: center; font-weight: 700;">Tiempo total: 00:00</div>
-                <div id="feedback-message" style="margin-top: 20px; font-weight: 900; font-size: 1.1rem; text-align: center;">Guardando resultado en el servidor...</div>
-            </div>
-
-            <div id="leaderboard-section" style="margin: 30px 0; display: none;">
-                <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 16px; font-size: 1.3rem; font-weight: 900;">🏆 Tabla de Líderes (Top 20)</h3>
-                <table class="leaderboard-table">
-                    <thead>
-                        <tr>
-                            <th style="text-align: center; width: 15%;">Pos</th>
-                            <th style="text-align: left; width: 45%;">Nombre</th>
-                            <th style="text-align: center; width: 15%;">Puntos</th>
-                            <th style="text-align: center; width: 15%;">Nota</th>
-                            <th style="text-align: center; width: 10%;">Tiempo</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboard-body"></tbody>
-                </table>
-            </div>
-            <button class="btn" onclick="goToWelcome()">🔄 Realizar un nuevo intento</button>
-        </div>
     </div>
 
     <script>
-        // --- VARIABLES GLOBALES ---
-        let allQuestions = [];
-        let currentQuizQuestions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        
-        let timerInterval = null;
-        let totalSeconds = 0;
+        // URLs de tus dos Web Apps de Google Apps Script
+        const URL_NORMATIVA = "https://script.google.com/macros/s/AKfycbwMC0t6JF4bqocgi1D1msvnC0iEg5V6lURmQGB0bkNNLM1f099VD7y0vz7mHUftLk9Q0Q/exec";
+        const URL_INSTRUMENTACION = "https://script.google.com/macros/s/AKfycbxfAYkuxXaXYLOuuJvC6IKO4NujyVM3X-NrVRa9sQJomJsT8HQ9NRNZawLoxVaD38jb/exec";
 
-        // URL DE TU SCRIPT DE GOOGLE SHEETS
-        const GOOGLE_SHEETS_URL = "https://script.google.com/macros/s/AKfycbxfAYkuxXaXYLOuuJvC6IKO4NujyVM3X-NrVRa9sQJomJsT8HQ9NRNZawLoxVaD38jb/exec"; 
+        // Función principal para cargar y procesar una tabla
+        async function cargarTabla(url, loadingId, errorId, tablaId, cuerpoId) {
+            const loadingEl = document.getElementById(loadingId);
+            const errorEl = document.getElementById(errorId);
+            const tablaEl = document.getElementById(tablaId);
+            const cuerpoEl = document.getElementById(cuerpoId);
 
-        // --- INICIALIZACIÓN: DESCARGAR CSV DESDE GITHUB ---
-        window.onload = async () => {
             try {
-                const response = await fetch('https://merunaku.github.io/InstInd2026/preguntas.csv'); 
-                if (!response.ok) throw new Error("No se pudo leer el archivo");
-                
-                const text = await response.text();
-                allQuestions = parseCSVData(text);
-                
-                if(allQuestions.length > 0) {
-                    document.getElementById('db-loader').style.display = 'none';
-                    document.getElementById('start-btn').style.display = 'block';
-                } else {
-                    throw new Error("El archivo está vacío o mal formateado");
-                }
-            } catch (error) {
-                console.error("Error:", error);
-                document.getElementById('db-loader').innerHTML = '<span style="color: #dc3545;">⚠️ Error: No se encontró el archivo "preguntas.csv". Asegúrate de subirlo a GitHub junto al index.html.</span>';
-            }
-        };
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Error de conexión con Google Sheets");
 
-        // --- PARSER DEL CSV ---
-        function parseCSVData(text) {
-            let result = [];
-            let row = [];
-            let inQuotes = false;
-            let value = "";
-            
-            for (let i = 0; i < text.length; i++) {
-                let char = text[i];
-                if (char === '"') {
-                    if (inQuotes && text[i+1] === '"') {
-                        value += '"'; i++;
-                    } else {
-                        inQuotes = !inQuotes;
+                let data = await response.json();
+
+                loadingEl.style.display = "none";
+
+                if (!data || data.length === 0) {
+                    loadingEl.innerText = "No hay registros disponibles.";
+                    loadingEl.style.display = "block";
+                    return;
+                }
+
+                // ORDENAMIENTO EN EL CLIENTE:
+                // 1. Mayor Nota primero
+                // 2. Si las notas son iguales, Menor Tiempo primero
+                data.sort((a, b) => {
+                    // Convertir nota a número flotante (soporta comas o puntos)
+                    const notaA = parseFloat(String(a.nota || 0).replace(',', '.'));
+                    const notaB = parseFloat(String(b.nota || 0).replace(',', '.'));
+
+                    if (notaB !== notaA) {
+                        return notaB - notaA; // Mayor nota arriba
                     }
-                } else if (char === ',' && !inQuotes) {
-                    row.push(value.trim());
-                    value = "";
-                } else if (char === '\n' && !inQuotes) {
-                    row.push(value.trim());
-                    processRow(row, result);
-                    row = []; value = "";
-                } else if (char !== '\r') {
-                    value += char;
-                }
-            }
-            if (value || row.length > 0) {
-                row.push(value.trim());
-                processRow(row, result);
-            }
-            return result;
-        }
 
-        function processRow(row, resultList) {
-            if (row.length >= 8 && row[0] !== "Número de Pregunta" && row[0] !== "0" && row[0] !== "") {
-                let ansLetter = row[7] ? row[7].trim().toUpperCase() : '';
-                let idx = -1;
-                
-                if(ansLetter === 'A') idx = 3;
-                else if(ansLetter === 'B') idx = 4;
-                else if(ansLetter === 'C') idx = 5;
-                else if(ansLetter === 'D') idx = 6;
+                    // Desempate por tiempo (normalizamos tiempo ej: "1:20" -> "01:20")
+                    const tiempoA = String(a.tiempo || "99:99").trim().padStart(5, '0');
+                    const tiempoB = String(b.tiempo || "99:99").trim().padStart(5, '0');
 
-                if(idx !== -1 && row[idx]) {
-                    resultList.push({
-                        t: row[1] || 'General',
-                        q: row[2] || '',
-                        o: [row[3], row[4], row[5], row[6]].filter(Boolean),
-                        a: row[idx],
-                        j: row[8] || 'Sin justificación técnica disponible.'
-                    });
-                }
+                    return tiempoA.localeCompare(tiempoB); // Menor tiempo arriba
+                });
+
+                // Renderizar las filas con medallas para los 3 primeros
+                cuerpoEl.innerHTML = data.map((item, index) => {
+                    let medalla = index + 1;
+                    if (index === 0) medalla = "🥇";
+                    else if (index === 1) medalla = "🥈";
+                    else if (index === 2) medalla = "🥉";
+
+                    return `
+                        <tr>
+                            <td class="posicion">${medalla}</td>
+                            <td class="nombre">${escaparHTML(item.nombre)}</td>
+                            <td class="nota">${item.nota}</td>
+                            <td>${item.puntaje ?? '-'}</td>
+                            <td class="tiempo">${item.tiempo || '-'}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                tablaEl.style.display = "table";
+
+            } catch (err) {
+                loadingEl.style.display = "none";
+                errorEl.innerText = "No se pudieron cargar los datos.";
+                console.error(err);
             }
         }
 
-        // --- LÓGICA DEL CUESTIONARIO ---
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
+        // Función de seguridad contra inyección de HTML
+        function escaparHTML(texto) {
+            const div = document.createElement('div');
+            div.innerText = texto || '';
+            return div.innerHTML;
         }
 
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            return `${mins}:${secs}`;
-        }
-
-        function startTimer() {
-            totalSeconds = 0;
-            document.getElementById('timer').innerText = "00:00";
-            timerInterval = setInterval(() => {
-                totalSeconds++;
-                document.getElementById('timer').innerText = formatTime(totalSeconds);
-            }, 1000);
-        }
-
-        function startQuiz() {
-            const nombre = document.getElementById('nombre-alumno').value.trim();
-            if(nombre === "") {
-                alert("Por favor, ingresa tu Nombre y Apellido antes de comenzar.");
-                return;
-            }
-
-            score = 0;
-            currentQuestionIndex = 0;
-            
-            let randomizedPool = shuffle([...allQuestions]);
-            currentQuizQuestions = randomizedPool.slice(0, 20);
-
-            document.getElementById('welcome-screen').classList.remove('active');
-            document.getElementById('result-screen').classList.remove('active');
-            document.getElementById('quiz-screen').classList.add('active');
-
-            startTimer();
-            showQuestion();
-        }
-
-        function showQuestion() {
-            document.getElementById('justification-container').style.display = 'none';
-            document.getElementById('next-btn').style.display = 'none';
-            
-            const qData = currentQuizQuestions[currentQuestionIndex];
-            
-            document.getElementById('question-counter').innerText = `Pregunta ${currentQuestionIndex + 1} de 20`;
-            document.getElementById('topic-container').innerText = qData.t;
-            document.getElementById('question-text').innerText = qData.q;
-            
-            const progressPercent = (currentQuestionIndex / 20) * 100;
-            document.getElementById('progress').style.width = `${progressPercent}%`;
-
-            let options = shuffle([...qData.o]);
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-
-            options.forEach(optText => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = optText;
-                btn.onclick = () => checkAnswer(btn, optText, qData.a, qData.j);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function checkAnswer(selectedBtn, selectedText, correctText, justification) {
-            const buttons = document.getElementById('options-container').getElementsByClassName('option-btn');
-            
-            for (let btn of buttons) {
-                btn.disabled = true;
-                if (btn.innerText === correctText) {
-                    btn.classList.add('correct');
-                }
-            }
-
-            if (selectedText === correctText) {
-                score++;
-            } else {
-                selectedBtn.classList.add('incorrect');
-            }
-
-            document.getElementById('justification-text').innerText = justification;
-            document.getElementById('justification-container').style.display = 'block';
-            document.getElementById('next-btn').style.display = 'block';
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < 20) {
-                showQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
-
-        // --- SISTEMA DE EVALUACIÓN Y GUARDADO ---
-        function calculateGrade(score, total) {
-            const percentage = score / total;
-            let grade = 1.0;
-            if (percentage < 0.6) {
-                grade = 1.0 + (3.0 * (percentage / 0.6));
-            } else {
-                grade = 4.0 + (3.0 * ((percentage - 0.6) / 0.4));
-            }
-            return Math.round(grade * 10) / 10;
-        }
-
-        function finishQuiz() {
-            clearInterval(timerInterval);
-            document.getElementById('quiz-screen').classList.remove('active');
-            document.getElementById('result-screen').classList.add('active');
-
-            const finalGrade = calculateGrade(score, 20);
-            const timeString = formatTime(totalSeconds);
-            const nombre = document.getElementById('nombre-alumno').value.trim();
-            
-            const gradeOutput = document.getElementById('grade-output');
-            gradeOutput.innerText = finalGrade.toFixed(1);
-            gradeOutput.className = 'grade-badge ' + (finalGrade >= 4.0 ? 'aprobo' : 'reprobo');
-
-            document.getElementById('score-output').innerText = `Puntaje: ${score} / 20 correctas`;
-            document.getElementById('time-output').innerText = `Tiempo total: ${timeString}`;
-            
-            const feedbackMsg = document.getElementById('feedback-message');
-            feedbackMsg.innerText = "Guardando resultado en el servidor...";
-            feedbackMsg.style.color = "#475569";
-
-            const notaConComa = finalGrade.toFixed(1).replace('.', ','); 
-
-            const params = new URLSearchParams();
-            params.append('nombre', nombre);
-            params.append('nota', notaConComa); 
-            params.append('puntaje', score);
-            params.append('tiempo', timeString);
-
-            fetch(GOOGLE_SHEETS_URL, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                body: params.toString() 
-            })
-            .then(() => {
-                feedbackMsg.innerText = "🚀 ¡Resultado enviado a la nube con éxito!";
-                feedbackMsg.style.color = "var(--success-color)";
-                
-                obtenerTablaLideres();
-            })
-            .catch(error => {
-                console.error('Error al guardar:', error);
-                feedbackMsg.innerText = "❌ Error de conexión al guardar el resultado.";
-                feedbackMsg.style.color = "var(--error-color)";
-            });
-        }
-
-        function goToWelcome() {
-            document.getElementById('result-screen').classList.remove('active');
-            document.getElementById('welcome-screen').classList.add('active');
-            document.getElementById('nombre-alumno').value = "";
-        }
-
-        // --- SISTEMA DE LECTURA DE LÍDERES DESDE EL EXCEL ---
-        function obtenerTablaLideres() {
-            const leaderboardSection = document.getElementById('leaderboard-section');
-            const leaderboardBody = document.getElementById('leaderboard-body');
-            
-            fetch(GOOGLE_SHEETS_URL)
-            .then(response => response.json())
-            .then(data => {
-                leaderboardBody.innerHTML = ""; 
-                
-                if (data.length === 0) {
-                    leaderboardBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:15px; color:#64748b;">No hay puntajes registrados aún.</td></tr>`;
-                } else {
-                  // SE LIMITA EL RESULTADO A LOS PRIMEROS 20 REGISTROS (TOP 20)
-                    const top20Data = data.slice(0, 20);
-
-                    top20Data.forEach((alumno, index) => {
-                        let posicion = index + 1;
-                        if (index === 0) posicion = "🥇";
-                        if (index === 1) posicion = "🥈";
-                        if (index === 2) posicion = "🥉";
-
-                        const fila = document.createElement('tr');
-                        fila.className = "leaderboard-row";
-                        
-                        const notaNumerica = parseFloat(String(alumno.nota).replace(',', '.'));
-                        const colorNota = notaNumerica >= 4.0 ? '#16a34a' : '#dc2626';
-
-                        fila.innerHTML = `
-                            <td style="text-align: center; font-weight: 900; font-size: 1.1rem;">${posicion}</td>
-                            <td style="color: #1e293b; font-weight: 700;">${alumno.nombre}</td>
-                            <td style="text-align: center; font-weight: 900; color: #2563eb;">${alumno.puntaje}</td>
-                            <td style="text-align: center; font-weight: 900; color: ${colorNota};">${alumno.nota}</td>
-                            <td style="text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 700;">⏱️ ${alumno.tiempo}</td>
-                        `;
-                        leaderboardBody.appendChild(fila);
-                    });
-                }
-                leaderboardSection.style.display = "block";
-            })
-            .catch(err => {
-                console.error("Error al obtener el ranking:", err);
-            });
-        }
+        // Cargar ambas tablas simultáneamente
+        cargarTabla(URL_NORMATIVA, "loading-normativa", "error-normativa", "tabla-normativa", "cuerpo-normativa");
+        cargarTabla(URL_INSTRUMENTACION, "loading-instrumentacion", "error-instrumentacion", "tabla-instrumentacion", "cuerpo-instrumentacion");
     </script>
+
 </body>
 </html>
