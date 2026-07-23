@@ -16,7 +16,7 @@ const CONFIG = {
     // 3. Conexiones con Google Sheets (Web Apps de Apps Script)
     APIS: {
         NORMATIVA: "https://script.google.com/macros/s/AKfycbxXuHwc-oPc9Sf3sXf2M9HCkLjiuEEn0uLmRVn3EzNvFtihGtrI8PgtlRP5FBLWaj4EWw/exec",
-        INSTRUMENTACION: "https://script.google.com/macros/s/AKfycbw46HZO4J-9mJonYU_qB_fkW27jjZs6F-TO67abPBwksyknCi8Yu-eNT9WZpNsrHhSG/exec",
+        INSTRUMENTACION: "https://script.google.com/macros/s/AKfycbxfAYkuxXaXYLOuuJvC6IKO4NujyVM3X-NrVRa9sQJomJsT8HQ9NRNZawLoxVaD38jb/exec",
     },
     
     // 4. Origen de los archivos de preguntas (CSVs en GitHub)
