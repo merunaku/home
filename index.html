@@ -117,80 +117,101 @@
     </div>
 
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            // Verificamos que CONFIG exista antes de arrancar los fetchs del podio
-            if (typeof CONFIG !== 'undefined' && CONFIG.APIS) {
-                renderPodio(CONFIG.APIS.NORMATIVA, "podio-normativa");
-                renderPodio(CONFIG.APIS.INSTRUMENTACION, "podio-instrumentacion");
-            } else {
-                console.error("No se pudo cargar el objeto CONFIG global.");
-                document.getElementById("podio-normativa").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
-                document.getElementById("podio-instrumentacion").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+      window.addEventListener('DOMContentLoaded', () => {
+   // Verificamos que CONFIG exista antes de arrancar los fetchs del podio
+    if (typeof CONFIG !== 'undefined' && CONFIG.APIS) {
+        renderPodio(CONFIG.APIS.NORMATIVA, "podio-normativa");
+        renderPodio(CONFIG.APIS.INSTRUMENTACION, "podio-instrumentacion");
+    } else {
+        console.error("No se pudo cargar el objeto CONFIG global.");
+        document.getElementById("podio-normativa").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+        document.getElementById("podio-instrumentacion").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+    }
+});
+
+// Función mejorada para soportar formatos: "SS", "MM:SS" y "HH:MM:SS"
+function convertirTiempoASegundos(tiempoStr) {
+    if (!tiempoStr) return 999999;
+    
+    // Limpia espacios y convierte a string
+    const limpio = String(tiempoStr).trim();
+    const partes = limpio.split(':').map(p => parseInt(p, 10) || 0);
+
+    if (partes.length === 3) {
+        // Formato HH:MM:SS
+        return (partes[0] * 3600) + (partes[1] * 60) + partes[2];
+    } else if (partes.length === 2) {
+        // Formato MM:SS
+        return (partes[0] * 60) + partes[1];
+    } else if (partes.length === 1) {
+        // Formato en segundos puros
+        return partes[0];
+    }
+    
+    return 999999;
+}
+
+async function renderPodio(url, elementId) {
+    const container = document.getElementById(elementId);
+    try {
+        const response = await fetch(url);
+        if(!response.ok) throw new Error("Error de red");
+        
+        const data = await response.json();
+        container.innerHTML = "";
+
+        if (!data || data.length === 0) {
+            container.innerHTML = `<tr><td colspan="5" class="loading">No hay registros aún.</td></tr>`;
+            return;
+        }
+
+        // Ordenamiento robusto
+        data.sort((a, b) => {
+            // 1. Obtener Puntaje (o Nota si no hay puntaje)
+            const ptsA = parseFloat(String(a.puntaje || a.nota || 0).replace(',', '.')) || 0;
+            const ptsB = parseFloat(String(b.puntaje || b.nota || 0).replace(',', '.')) || 0;
+
+            // 2. Si los puntajes/notas son distintos, priorizar el mayor
+            if (ptsB !== ptsA) {
+                return ptsB - ptsA;
             }
+
+            // 3. Si empatan en puntaje/nota, gana el de MENOR tiempo
+            const tiempoA = convertirTiempoASegundos(a.tiempo);
+            const tiempoB = convertirTiempoASegundos(b.tiempo);
+
+            return tiempoA - tiempoB;
         });
 
-        function convertirTiempoASegundos(tiempoStr) {
-            if (!tiempoStr || !tiempoStr.includes(':')) return 999999;
-            const partes = tiempoStr.split(':');
-            const minutos = parseInt(partes[0], 10) || 0;
-            const segundos = parseInt(partes[1], 10) || 0;
-            return (minutos * 60) + segundos;
-        }
+        const top3 = data.slice(0, 3);
 
-        async function renderPodio(url, elementId) {
-            const container = document.getElementById(elementId);
-            try {
-                const response = await fetch(url);
-                if(!response.ok) throw new Error("Error de red");
-                
-                const data = await response.json();
-                container.innerHTML = "";
+        top3.forEach((alumno, index) => {
+            let posicion = "";
+            if (index === 0) posicion = "🥇";
+            else if (index === 1) posicion = "🥈";
+            else if (index === 2) posicion = "🥉";
 
-                if (!data || data.length === 0) {
-                    container.innerHTML = `<tr><td colspan="5" class="loading">No hay registros aún.</td></tr>`;
-                    return;
-                }
+            const fila = document.createElement('tr');
+            fila.className = "leaderboard-row";
+            
+            const notaNumerica = parseFloat(String(alumno.nota || 0).replace(',', '.')) || 0;
+            const colorNota = notaNumerica >= 4.0 ? 'var(--success-color)' : 'var(--error-color)';
 
-                data.sort((a, b) => {
-                    const notaA = parseFloat(String(a.nota).replace(',', '.'));
-                    const notaB = parseFloat(String(b.nota).replace(',', '.'));
+            fila.innerHTML = `
+                <td style="text-align: center; font-weight: 900; font-size: 1.25rem;">${posicion}</td>
+                <td style="color: #1e293b; font-weight: 700;">${alumno.nombre || 'Anónimo'}</td>
+                <td style="text-align: center; font-weight: 900; color: #2563eb;">${alumno.puntaje ?? 0}</td>
+                <td style="text-align: center; font-weight: 900; color: ${colorNota};">${alumno.nota ?? '1.0'}</td>
+                <td style="text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 700;">⏱️ ${alumno.tiempo || 'N/A'}</td>
+            `;
+            container.appendChild(fila);
+        });
 
-                    if (notaB !== notaA) {
-                        return notaB - notaA;
-                    } else {
-                        return convertirTiempoASegundos(a.tiempo) - convertirTiempoASegundos(b.tiempo);
-                    }
-                });
-
-                const top3 = data.slice(0, 3);
-
-                top3.forEach((alumno, index) => {
-                    let posicion = "";
-                    if (index === 0) posicion = "🥇";
-                    else if (index === 1) posicion = "🥈";
-                    else if (index === 2) posicion = "🥉";
-
-                    const fila = document.createElement('tr');
-                    fila.className = "leaderboard-row";
-                    
-                    const notaNumerica = parseFloat(String(alumno.nota).replace(',', '.'));
-                    const colorNota = notaNumerica >= 4.0 ? 'var(--success-color)' : 'var(--error-color)';
-
-                    fila.innerHTML = `
-                        <td style="text-align: center; font-weight: 900; font-size: 1.25rem;">${posicion}</td>
-                        <td style="color: #1e293b; font-weight: 700;">${alumno.nombre}</td>
-                        <td style="text-align: center; font-weight: 900; color: #2563eb;">${alumno.puntaje}</td>
-                        <td style="text-align: center; font-weight: 900; color: ${colorNota};">${alumno.nota}</td>
-                        <td style="text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 700;">⏱️ ${alumno.tiempo}</td>
-                    `;
-                    container.appendChild(fila);
-                });
-
-            } catch (err) {
-                console.error("Error al procesar el podio:", err);
-                container.innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error al conectar con la base de datos.</td></tr>`;
-            }
-        }
+    } catch (err) {
+        console.error("Error al procesar el podio:", err);
+        container.innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error al conectar con la base de datos.</td></tr>`;
+    }
+}
     </script>
 </body>
 </html>
