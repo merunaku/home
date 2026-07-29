@@ -22,7 +22,7 @@ const CONFIG = {
     // 4. Origen de los archivos de preguntas (CSVs en GitHub)
     REPOSITORIO_CSV: {
         NORMATIVA: "preguntasnormativa.csv",
-        INSTRUMENTACION: "preguntasinstind.csv"
+        INSTRUMENTACION: "https://merunaku.github.io/InstInd2026/preguntas.csv"
     }, // <-- ¡AQUÍ FALTABA ESTA COMA!
 
     // 5. Ruta absoluta del logo:
