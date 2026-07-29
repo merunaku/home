@@ -48,7 +48,7 @@ header {
 }
 
 .header-container {
-    max-width: 600px; /* REVERTIDO: Tu tamaño original compacto y perfecto */
+    max-width: 600px;
     width: 90%;
     margin: 0 auto;
 }
@@ -134,7 +134,7 @@ header {
 }
 
 .podio-container {
-    max-width: 1100px; /* REVERTIDO: Tu tamaño original amplio para el podio */
+    max-width: 1100px;
     width: 90%;
     margin: 0 auto;
 }
@@ -218,6 +218,9 @@ h2 {
 /* LISTA DE BOTONES TOTALMENTE INTERACTIVOS */
 .options-list {
     margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
 .btn-link {
@@ -269,7 +272,7 @@ h2 {
    ========================================================================== */
 .leaderboard-container {
     width: 90%;
-    max-width: 1100px; /* MODIFICADO: Expandido al máximo para que las tablas sean anchas */
+    max-width: 1100px;
     margin: 30px auto 50px auto;
 }
 
@@ -277,7 +280,7 @@ h2 {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    gap: 2%; /* Pequeño espacio para maximizar el ancho de las tarjetas */
+    gap: 2%;
     width: 100%;
 }
 
@@ -292,7 +295,7 @@ h2 {
     border: 3px solid rgba(255, 255, 255, 0.9);
     position: relative;
     overflow: hidden;
-    width: 49%; /* MODIFICADO: Casi el 50% exacto para cada lado aprovechando el ancho */
+    width: 49%;
     display: flex;
     flex-direction: column;
 }
@@ -318,7 +321,7 @@ h2 {
     border-collapse: separate; 
     border-spacing: 0 8px;
     font-size: 0.95rem;
-    table-layout: fixed; /* Mantiene la cuadratura y simetría estricta de las columnas */
+    table-layout: fixed;
 }
  
 .leaderboard-table th {
@@ -339,7 +342,7 @@ h2 {
     transition: transform 0.2s ease;
     white-space: nowrap;
     overflow: hidden;
-    text-overflow: ellipsis; /* Protección anti-deformación de filas */
+    text-overflow: ellipsis;
 }
  
 .leaderboard-row td:first-child { border-left: 1px solid #e2e8f0; border-radius: 14px 0 0 14px; }
@@ -366,4 +369,190 @@ h2 {
     .leaderboard-card {
         width: 100%;
     }
+}
+
+/* ==========================================================================
+   BOTONES Y COMPONENTES EXCLUSIVOS DE EVALUACIONES Y EXÁMENES
+   ========================================================================== */
+
+/* Botón Principal de Acción */
+.btn {
+    width: 100%;
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+    color: #ffffff;
+    border: none;
+    padding: 16px 24px;
+    border-radius: 16px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 14px rgba(0, 43, 92, 0.25);
+    margin-top: 15px;
+    box-sizing: border-box;
+    display: inline-block;
+}
+
+.btn:hover {
+    background: linear-gradient(135deg, var(--secondary-color) 0%, #d97706 100%);
+    color: var(--primary-dark);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(244, 178, 35, 0.35);
+}
+
+.btn:disabled {
+    background: #cbd5e1;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* Manejo de Pantallas en evaluaciones */
+.screen { display: none; }
+.active { 
+    display: block !important; 
+    animation: cardEntrance 0.35s ease-in-out; 
+}
+
+/* Barra de progreso y temporizador */
+.progress-bar {
+    background-color: #e2e8f0;
+    border-radius: 50px;
+    height: 10px;
+    width: 100%;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.progress {
+    background: linear-gradient(90deg, var(--secondary-color), var(--success-color));
+    height: 100%;
+    width: 0%;
+    transition: width 0.4s ease;
+    border-radius: 50px;
+}
+
+.timer-txt { 
+    font-weight: 900; 
+    color: #64748b; 
+    float: right; 
+    font-size: 1.05rem; 
+}
+
+.topic-tag {
+    display: inline-block;
+    background-color: #e0f2fe;
+    color: #0369a1;
+    padding: 5px 14px;
+    border-radius: 50px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.question-txt {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 20px;
+    line-height: 1.5;
+    text-align: left;
+}
+
+/* Opciones de respuesta */
+.option-btn {
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    padding: 14px 18px;
+    text-align: left;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: inherit;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: var(--text-color);
+    line-height: 1.4;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.option-btn:hover:not(:disabled) {
+    background: #ffffff;
+    border-color: var(--primary-color);
+    transform: translateX(4px);
+}
+
+.option-btn.correct {
+    background: #dcfce7 !important;
+    border-color: #22c55e !important;
+    color: #15803d !important;
+}
+
+.option-btn.incorrect {
+    background: #fee2e2 !important;
+    border-color: #ef4444 !important;
+    color: #b91c1c !important;
+}
+
+/* Retroalimentación e Inputs */
+.justification-box {
+    display: none;
+    background-color: #f0fdf4;
+    border: 2px solid #bbf7d0;
+    border-left: 6px solid #22c55e;
+    padding: 18px;
+    margin-top: 20px;
+    border-radius: 12px;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #166534;
+    text-align: left;
+}
+
+.grade-badge {
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--primary-color);
+    margin: 15px 0;
+    text-align: center;
+}
+.grade-badge.reprobo { color: var(--error-color); }
+.grade-badge.aprobo { color: var(--success-color); }
+
+.details-box {
+    background-color: #f8fafc;
+    border-left: 6px solid var(--primary-color);
+    padding: 18px;
+    margin: 20px 0;
+    border-radius: 4px 16px 16px 4px;
+    font-size: 0.95rem;
+    color: #475569;
+    line-height: 1.6;
+    text-align: left;
+}
+
+.details-box ul { margin: 6px 0 0 0; padding-left: 20px; }
+
+.input-nombre {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid #cbd5e1;
+    border-radius: 14px;
+    font-size: 1rem;
+    font-family: inherit;
+    font-weight: 700;
+    margin-bottom: 12px;
+    box-sizing: border-box;
+    background-color: #f8fafc;
+    text-align: center;
+}
+
+.input-nombre:focus {
+    border-color: var(--primary-color);
+    background-color: #ffffff;
+    outline: none;
 }
