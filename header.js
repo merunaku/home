@@ -2,24 +2,22 @@
    HEADER COMPARTIDO - PLATAFORMA PROFE DIEGO 2026
    Inyecta el encabezado institucional automáticamente en cualquier página.
    ========================================================================== */
+document.addEventListener("DOMContentLoaded", async () => {
+    // Esperamos a que config.js termine de cargar CONFIG desde el Sheet
+    // (y de paso, a que se aplique la paleta de colores dinámica).
+    if (window.configListo) {
+        await window.configListo;
+    }
+    if (window.estilosListos) {
+        await window.estilosListos;
+    }
 
-document.addEventListener("DOMContentLoaded", () => {
     // Detectamos la URL completa actual y la pasamos a minúsculas
     const currentURL = window.location.href.toLowerCase();
-    
-    // Título por defecto (en caso de que estén en la raíz o en la 404)
-    let tituloDinamico = "Plataforma de Estudios 2026"; 
 
-    // Condicionales exactas para cada una de tus páginas
-    if (currentURL.includes("normativa")) {
-        tituloDinamico = "Normativa Eléctrica 2026";
-    } else if (currentURL.includes("instind") || currentURL.includes("instrumentacion")) {
-        tituloDinamico = "Instrumentación Eléctrica 2026";
-    } else if (currentURL.includes("calculadora")) {
-        tituloDinamico = "Calculadora de Notas 2026";
-    } else if (currentURL.includes("404") || currentURL.includes("home") || currentURL.endsWith("github.io/")) {
-        tituloDinamico = "Plataforma de Estudios 2026";
-    }
+    // Título dinámico: se busca en la pestaña "header" del Sheet
+    // (columnas: ramo | titulo) en vez de estar hardcodeado acá.
+    const tituloDinamico = await obtenerTituloDinamico(currentURL);
 
     // Inyección del HTML en el contenedor correspondiente
     const headerContainer = document.getElementById("global-header");
@@ -28,7 +26,6 @@ document.addEventListener("DOMContentLoaded", () => {
         const logoSrc = typeof CONFIG !== 'undefined' ? CONFIG.LOGO_URL : "logo.png";
         const nombreInstitucion = typeof CONFIG !== 'undefined' ? CONFIG.INSTITUCION : "IPCHILE";
         const nombreProfesor = typeof CONFIG !== 'undefined' ? CONFIG.PROFESOR : "ProfeDiego";
-
         headerContainer.innerHTML = `
             <header>
                 <div class="header-container">
@@ -48,3 +45,32 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
     }
 });
+
+// Busca en la pestaña "header" del Sheet (vía getHeaderInfo) una fila cuyo
+// "ramo" aparezca dentro de la URL actual, y devuelve su título. Si no
+// encuentra ninguna coincidencia, usa la fila "default"; si eso también
+// falla (o el fetch falla), cae en un título fijo como último respaldo.
+async function obtenerTituloDinamico(currentURL) {
+    const TITULO_RESPALDO = "Plataforma de Estudios 2026";
+
+    if (typeof API_UNIFICADA === 'undefined' || !API_UNIFICADA || API_UNIFICADA.includes('AQUI_PEGA')) {
+        return TITULO_RESPALDO;
+    }
+
+    try {
+        const respuesta = await fetch(API_UNIFICADA + "?action=getHeaderInfo");
+        const filas = await respuesta.json();
+
+        if (!Array.isArray(filas)) return TITULO_RESPALDO;
+
+        const coincidencia = filas.find(f => f.ramo !== "default" && currentURL.includes(f.ramo.toLowerCase()));
+        if (coincidencia) return coincidencia.titulo;
+
+        const porDefecto = filas.find(f => f.ramo === "default");
+        return porDefecto ? porDefecto.titulo : TITULO_RESPALDO;
+
+    } catch (error) {
+        console.error("Error al obtener título dinámico:", error);
+        return TITULO_RESPALDO;
+    }
+}
