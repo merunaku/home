@@ -1,33 +1,31 @@
 // ==========================================
-// CONFIGURACIÓN GLOBAL DE LAS PLATAFORMAS 2026
+// CONFIGURACIÓN DINÁMICA - PLATAFORMAS 2026
 // ==========================================
 
-const CONFIG = {
-    // 1. Identificación Institucional
-    INSTITUCION: "IPCHILE",
-    PROFESOR: "ProfeDiego",
-    ANIO: "2026",
-    URL_BASE: "https://merunaku.github.io/404.html",
-    
-    // 2. Parámetros Generales de Evaluación
-    EXIGENCIA_MINIMA: 0.6, // 60% para nota 4.0
-    TOTAL_PREGUNTAS: 20,
-    
-    // 3. Conexiones con Google Sheets (Web Apps de Apps Script)
-    APIS: {
-        NORMATIVA: "https://script.google.com/macros/s/AKfycbwMC0t6JF4bqocgi1D1msvnC0iEg5V6lURmQGB0bkNNLM1f099VD7y0vz7mHUftLk9Q0Q/exec",
-        INSTRUMENTACION: "https://script.google.com/macros/s/AKfycbxfAYkuxXaXYLOuuJvC6IKO4NujyVM3X-NrVRa9sQJomJsT8HQ9NRNZawLoxVaD38jb/exec",
-    },
-    
-    // 4. Origen de los archivos de preguntas (CSVs en GitHub)
-    REPOSITORIO_CSV: {
-        NORMATIVA: "preguntasnormativa.csv",
-        INSTRUMENTACION: "https://merunaku.github.io/InstInd2026/preguntas.csv"
-    }, // <-- ¡AQUÍ FALTABA ESTA COMA!
+// ESTA ES LA ÚNICA RUTA QUE NECESITAS (La de tu Google Sheet Unificado)
+const API_UNIFICADA = "AQUI_PEGA_LA_URL_DE_TU_NUEVA_WEB_APP";
 
-    // 5. Ruta absoluta del logo:
-    LOGO_URL: "https://merunaku.github.io/home/logo.png"
-};
+// Esta variable guardará toda la info que viene del Google Sheet
+let CONFIG = {};
 
-// Congelamos el objeto para evitar modificaciones accidentales en tiempo de ejecución
-Object.freeze(CONFIG);
+// Función para descargar la configuración antes de iniciar la página
+async function cargarConfiguracion() {
+    try {
+        console.log("Cargando configuración desde Google Sheets...");
+        
+        // Le pedimos a la API la acción "getConfig"
+        const respuesta = await fetch(API_UNIFICADA + "?action=getConfig");
+        CONFIG = await respuesta.json();
+        
+        // Convertimos los textos que deben ser números para evitar errores matemáticos
+        CONFIG.EXIGENCIA_MINIMA = parseFloat(CONFIG.EXIGENCIA_MINIMA);
+        CONFIG.TOTAL_PREGUNTAS = parseInt(CONFIG.TOTAL_PREGUNTAS);
+        
+        console.log("¡Configuración cargada con éxito!", CONFIG);
+        return true;
+        
+    } catch (error) {
+        console.error("Error crítico al cargar la configuración:", error);
+        return false;
+    }
+}
