@@ -2,7 +2,7 @@
 // CONFIGURACIÓN DINÁMICA - PLATAFORMAS 2026
 // ==========================================
 // ESTA ES LA ÚNICA RUTA QUE NECESITAS (La de tu Google Sheet Unificado)
-const API_UNIFICADA = "https://script.google.com/macros/s/AKfycbwHoK1Lou7DEKtNeYHbjAa33fxwDkLJ8jSwrEvficlchgKBxR-yPVtCXgtCFPTXtfhk0g/exec";
+const API_UNIFICADA = "https://script.google.com/macros/s/AKfycbyXNi5a95F_rd4Hzo7A2GDuU3ohU0r_b3GCmRF8YdvjyM3Jh5YGXMTJU44D3ql8_gs/exec";
 
 // Esta variable guardará toda la info que viene del Google Sheet (pestaña "config")
 let CONFIG = {};
