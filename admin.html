@@ -7,74 +7,100 @@
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* Ajustes específicos para el formulario administrativo */
         .admin-container {
             width: 95%;
-            max-width: 750px;
+            max-width: 800px;
             margin: 30px auto 60px auto;
         }
-        .form-group {
+        .admin-card {
+            max-width: 100%;
+            padding: 35px 30px;
             text-align: left;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
+        .admin-card h2 { text-align: left; font-size: 1.5rem; }
+        .admin-card > p { margin-bottom: 20px; }
+
+        .form-group { margin-bottom: 16px; }
         .form-group label {
             display: block;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 6px;
             color: var(--primary-color);
+            font-size: 0.9rem;
         }
-        .form-group input, .form-group select {
+        .form-group input[type=text],
+        .form-group input[type=number],
+        .form-group input[type=url],
+        .form-group input[type=password] {
             width: 100%;
-            padding: 12px;
+            padding: 11px;
             border: 2px solid #e2e8f0;
-            border-radius: 12px;
+            border-radius: 10px;
             font-family: inherit;
-            font-size: 1rem;
+            font-size: 0.95rem;
             box-sizing: border-box;
             background-color: #f8fafc;
         }
-        .form-group input:focus {
-            border-color: var(--secondary-color);
-            outline: none;
-            background-color: #fff;
-        }
-        .row-grid {
+        .form-group input:focus { border-color: var(--secondary-color); outline: none; background: #fff; }
+
+        .row-grid { display: flex; gap: 15px; flex-wrap: wrap; }
+        .row-grid .form-group { flex: 1; min-width: 200px; }
+
+        .color-row {
             display: flex;
-            gap: 15px;
+            align-items: center;
+            gap: 10px;
         }
-        .row-grid .form-group {
-            flex: 1;
+        .color-row input[type=color] {
+            width: 46px; height: 40px; border: none; border-radius: 8px; cursor: pointer; flex-shrink: 0;
         }
-        .output-box {
-            background-color: #1e293b;
-            color: #f8fafc;
-            padding: 20px;
-            border-radius: 16px;
-            font-family: 'Courier New', Courier, monospace;
-            font-size: 0.9rem;
-            text-align: left;
-            white-space: pre-wrap;
-            overflow-x: auto;
-            margin-top: 25px;
-            border: 2px solid #334155;
+        .color-row input[type=text] {
+            flex: 1; padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px;
+            font-family: 'Courier New', monospace; text-transform: uppercase;
         }
-        .btn-action {
+
+        .header-row {
+            display: flex; gap: 10px; align-items: center; margin-bottom: 10px;
+        }
+        .header-row input[type=text] {
+            padding: 10px; border: 2px solid #e2e8f0; border-radius: 8px; font-family: inherit;
+        }
+        .header-row .campo-ramo { width: 140px; font-weight: 700; }
+        .header-row .campo-titulo { flex: 1; }
+        .btn-quitar {
+            background: #fee2e2; color: #b91c1c; border: none; border-radius: 8px;
+            width: 36px; height: 36px; cursor: pointer; font-weight: 900; flex-shrink: 0;
+        }
+
+        .btn-secundario {
+            background: #f1f5f9; color: var(--primary-color); border: 2px dashed #cbd5e1;
+            padding: 10px 16px; border-radius: 10px; cursor: pointer; font-weight: 700;
+            font-family: inherit; margin-top: 6px;
+        }
+
+        .btn-guardar {
             width: 100%;
             background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 14px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: all 0.2s ease;
+            color: white; border: none; padding: 14px; border-radius: 12px;
+            font-size: 1rem; font-weight: 700; cursor: pointer; margin-top: 18px;
         }
-        .btn-action:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 15px rgba(0, 43, 92, 0.2);
+        .btn-guardar:hover { opacity: 0.92; }
+        .btn-guardar:disabled { background: #cbd5e1; cursor: not-allowed; }
+
+        .estado-msg {
+            margin-top: 12px; font-weight: 700; font-size: 0.9rem; min-height: 1.2em;
         }
+        .estado-msg.ok { color: var(--success-color); }
+        .estado-msg.error { color: var(--error-color); }
+
+        .clave-box {
+            background: #fffbeb; border: 2px solid #fde68a; border-radius: 12px;
+            padding: 16px; margin-bottom: 25px;
+        }
+        .clave-box label { color: #92400e; }
+
+        .cargando { text-align: center; padding: 40px; color: #64748b; font-weight: 700; }
     </style>
 </head>
 <body>
@@ -85,163 +111,242 @@
     <script src="header.js"></script>
 
     <main class="admin-container">
-        <div class="card" style="max-width: 100%; padding: 35px 30px;">
-            <h2>⚙️ Panel de Configuración Global</h2>
-            <p>Modifica los parámetros interactivos abajo. Al finalizar, copia el código generado y reemplázalo en tu archivo <b>config.js</b>.</p>
-            
-            <form id="configForm">
-                <div class="row-grid">
-                    <div class="form-group">
-                        <label>🏫 Institución</label>
-                        <input type="text" id="inst" required>
-                    </div>
-                    <div class="form-group">
-                        <label>👨‍🏫 Nombre Profesor</label>
-                        <input type="text" id="prof" required>
-                    </div>
-                </div>
 
-                <div class="row-grid">
-                    <div class="form-group">
-                        <label>📅 Año Plataforma</label>
-                        <input type="text" id="anio" required>
-                    </div>
-                    <div class="form-group">
-                        <label>🔗 URL Base (404)</label>
-                        <input type="url" id="urlBase" required>
-                    </div>
+        <div class="card admin-card">
+            <h2>🔑 Clave de administrador</h2>
+            <p>Se pide una sola vez por sesión. La define el profesor en Apps Script (Project Settings → Script Properties → <code>ADMIN_PASSWORD</code>).</p>
+            <div class="clave-box">
+                <div class="form-group" style="margin-bottom:0;">
+                    <label>Clave</label>
+                    <input type="password" id="claveAdmin" placeholder="Ingresa la clave de administrador">
                 </div>
-
-                <div class="row-grid">
-                    <div class="form-group">
-                        <label>🎯 Exigencia Mínima (Ej: 0.6 para 60%)</label>
-                        <input type="number" id="exigencia" step="0.01" min="0" max="1" required>
-                    </div>
-                    <div class="form-group">
-                        <label>📝 Total de Preguntas Simulador</label>
-                        <input type="number" id="preguntas" min="1" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>🌐 Web App API - Normativa Industrial</label>
-                    <input type="url" id="apiNorm" required>
-                </div>
-                <div class="form-group">
-                    <label>🌐 Web App API - Instrumentación Industrial</label>
-                    <input type="url" id="apiInst" required>
-                </div>
-
-                <div class="row-grid">
-                    <div class="form-group">
-                        <label>📂 Archivo CSV Normativa</label>
-                        <input type="text" id="csvNorm" required>
-                    </div>
-                    <div class="form-group">
-                        <label>📂 Archivo CSV Instrumentación</label>
-                        <input type="text" id="csvInst" required>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label>🖼️ URL Absoluta del Logotipo</label>
-                    <input type="url" id="logoUrl" required>
-                </div>
-
-                <button type="button" class="btn-action" onclick="generarConfig()">⚡ Generar nuevo config.js</button>
-            </form>
-
-            <div id="resultadoZona" style="display:none; margin-top:30px;">
-                <h3 style="color:var(--primary-color); text-align:left; margin-bottom:5px;">📋 Archivo Generado:</h3>
-                <div class="output-box" id="codigoOutput"></div>
-                <button class="btn-action" style="background:#16a34a; margin-top:15px;" onclick="copiarCodigo()">📄 Copiar al Portapapeles</button>
             </div>
         </div>
 
-        <a href="index.html" class="btn-home" style="margin-top:25px;">🗂️ Volver al Portal General</a>
+        <div id="zonaCargando" class="cargando">🔄 Cargando configuración actual desde el Sheet...</div>
+
+        <div id="zonaFormularios" style="display:none;">
+
+            <!-- ===================== CONFIGURACIÓN GENERAL ===================== -->
+            <div class="card admin-card">
+                <h2>⚙️ Configuración General</h2>
+                <p>Estos valores vienen de la pestaña <b>config</b> del Sheet Unificado.</p>
+                <div id="camposConfig"></div>
+                <button type="button" class="btn-secundario" onclick="agregarCampoConfig()">➕ Agregar nueva clave</button>
+                <button type="button" class="btn-guardar" onclick="guardarConfig()">💾 Guardar Configuración</button>
+                <div class="estado-msg" id="estadoConfig"></div>
+            </div>
+
+            <!-- ===================== COLORES / ESTILOS ===================== -->
+            <div class="card admin-card">
+                <h2>🎨 Paleta de Colores</h2>
+                <p>Estos valores vienen de la pestaña <b>styles</b> del Sheet Unificado. Se aplican a todo el sitio automáticamente.</p>
+                <div id="camposEstilos"></div>
+                <button type="button" class="btn-guardar" onclick="guardarEstilos()">💾 Guardar Colores</button>
+                <div class="estado-msg" id="estadoEstilos"></div>
+            </div>
+
+            <!-- ===================== TÍTULOS POR MATERIA (HEADER) ===================== -->
+            <div class="card admin-card">
+                <h2>🏷️ Títulos por Materia</h2>
+                <p>Estos valores vienen de la pestaña <b>header</b> del Sheet Unificado. El "ramo" debe coincidir con el que usa cada página (ej: <code>instind</code>, <code>norm</code>) y la fila <code>default</code> es el título de respaldo.</p>
+                <div id="camposHeader"></div>
+                <button type="button" class="btn-secundario" onclick="agregarFilaHeader()">➕ Agregar materia</button>
+                <button type="button" class="btn-guardar" onclick="guardarHeader()">💾 Guardar Títulos</button>
+                <div class="estado-msg" id="estadoHeader"></div>
+            </div>
+
+        </div>
+
+        <a href="index.html" class="btn-home" style="margin-top:10px;">🗂️ Volver al Portal General</a>
     </main>
 
     <script>
-        // Al cargar la página, leemos los datos que ya existen en tu config.js actual
-        window.addEventListener('DOMContentLoaded', () => {
-            if (typeof CONFIG !== 'undefined') {
-                document.getElementById('inst').value = CONFIG.INSTITUCION || '';
-                document.getElementById('prof').value = CONFIG.PROFESOR || '';
-                document.getElementById('anio').value = CONFIG.ANIO || '';
-                document.getElementById('urlBase').value = CONFIG.URL_BASE || '';
-                document.getElementById('exigencia').value = CONFIG.EXIGENCIA_MINIMA || 0.6;
-                document.getElementById('preguntas').value = CONFIG.TOTAL_PREGUNTAS || 20;
-                document.getElementById('apiNorm').value = CONFIG.APIS?.NORMATIVA || '';
-                document.getElementById('apiInst').value = CONFIG.APIS?.INSTRUMENTACION || '';
-                document.getElementById('csvNorm').value = CONFIG.REPOSITORIO_CSV?.NORMATIVA || '';
-                document.getElementById('csvInst').value = CONFIG.REPOSITORIO_CSV?.INSTRUMENTACION || '';
-                document.getElementById('logoUrl').value = CONFIG.LOGO_URL || '';
+        // Claves de "styles" que sabemos que son colores -> se muestran con
+        // selector de color nativo. Cualquier clave nueva que se agregue
+        // (a config o a styles) se trata como texto simple.
+        const CLAVES_COLOR = ['PRIMARY_COLOR', 'PRIMARY_DARK', 'SECONDARY_COLOR', 'BG_COLOR', 'CARD_BG', 'TEXT_COLOR', 'SUCCESS_COLOR', 'ERROR_COLOR'];
+
+        let datosConfig = {};
+        let datosEstilos = {};
+        let datosHeader = [];
+
+        window.addEventListener('DOMContentLoaded', async () => {
+            if (window.configListo) await window.configListo;
+
+            try {
+                const respuesta = await fetch(API_UNIFICADA + "?action=getBootstrap");
+                const datos = await respuesta.json();
+
+                datosConfig = datos.config || {};
+                datosEstilos = datos.estilos || {};
+                datosHeader = Array.isArray(datos.header) ? datos.header : [];
+
+                renderizarConfig();
+                renderizarEstilos();
+                renderizarHeader();
+
+                document.getElementById('zonaCargando').style.display = 'none';
+                document.getElementById('zonaFormularios').style.display = 'block';
+            } catch (error) {
+                console.error(error);
+                document.getElementById('zonaCargando').innerHTML =
+                    '<span style="color:var(--error-color);">⚠️ No se pudo cargar la configuración actual. Revisa la consola.</span>';
             }
         });
 
-        function generarConfig() {
-            const inst = document.getElementById('inst').value;
-            const prof = document.getElementById('prof').value;
-            const anio = document.getElementById('anio').value;
-            const urlBase = document.getElementById('urlBase').value;
-            const exigencia = document.getElementById('exigencia').value;
-            const preguntas = document.getElementById('preguntas').value;
-            const apiNorm = document.getElementById('apiNorm').value;
-            const apiInst = document.getElementById('apiInst').value;
-            const csvNorm = document.getElementById('csvNorm').value;
-            const csvInst = document.getElementById('csvInst').value;
-            const logoUrl = document.getElementById('logoUrl').value;
-
-            // Construimos la estructura idéntica con saltos de línea y comentarios institucionales
-            const template = `// ==========================================
-// CONFIGURACIÓN GLOBAL DE LAS PLATAFORMAS 2026
-// Generado dinámicamente mediante el Panel Administrativo
-// ==========================================
-
-const CONFIG = {
-    // 1. Identificación Institucional
-    INSTITUCION: "${inst}",
-    PROFESOR: "${prof}",
-    ANIO: "${anio}",
-    URL_BASE: "${urlBase}",
-    
-    // 2. Parámetros Generales de Evaluación
-    EXIGENCIA_MINIMA: ${exigencia}, // % para nota 4.0
-    TOTAL_PREGUNTAS: ${preguntas},
-    
-    // 3. Conexiones con Google Sheets (Web Apps de Apps Script)
-    APIS: {
-        NORMATIVA: "${apiNorm}",
-        INSTRUMENTACION: "${apiInst}"
-    },
-    
-    // 4. Origen de los archivos de preguntas (CSVs en GitHub)
-    REPOSITORIO_CSV: {
-        NORMATIVA: "${csvNorm}",
-        INSTRUMENTACION: "${csvInst}"
-    },
-
-    // 5. Ruta absoluta del logo:
-    LOGO_URL: "${logoUrl}"
-};
-
-// Congelamos el objeto para evitar modificaciones accidentales en tiempo de ejecución
-Object.freeze(CONFIG);`;
-
-            document.getElementById('codigoOutput').innerText = template;
-            document.getElementById('resultadoZona').style.display = 'block';
-            
-            // Auto scroll hacia la zona del código
-            document.getElementById('resultadoZona').scrollIntoView({ behavior: 'smooth' });
+        // ---------------------- CONFIG ----------------------
+        function renderizarConfig() {
+            const cont = document.getElementById('camposConfig');
+            cont.innerHTML = '';
+            Object.keys(datosConfig).forEach(clave => filaConfig(clave, datosConfig[clave]));
         }
 
-        function copiarCodigo() {
-            const codigo = document.getElementById('codigoOutput').innerText;
-            navigator.clipboard.writeText(codigo).then(() => {
-                alert("¡Código copiado con éxito! Ahora pégalo dentro de tu archivo config.js");
-            }).catch(err => {
-                alert("No se pudo copiar automáticamente, por favor selecciónalo manualmente.");
+        function filaConfig(clave, valor) {
+            const cont = document.getElementById('camposConfig');
+            const div = document.createElement('div');
+            div.className = 'form-group';
+            div.dataset.clave = clave;
+            div.innerHTML = `<label>${clave}</label><input type="text" value="${(valor ?? '').toString().replace(/"/g, '&quot;')}">`;
+            cont.appendChild(div);
+        }
+
+        function agregarCampoConfig() {
+            const clave = prompt('Nombre de la nueva clave (ej: CANTIDAD_RANKING):');
+            if (!clave) return;
+            filaConfig(clave.trim().toUpperCase(), '');
+        }
+
+        async function guardarConfig() {
+            const datos = {};
+            document.querySelectorAll('#camposConfig .form-group').forEach(div => {
+                datos[div.dataset.clave] = div.querySelector('input').value;
             });
+            await enviarAdmin('setConfig', datos, 'estadoConfig');
+        }
+
+        // ---------------------- ESTILOS ----------------------
+        function renderizarEstilos() {
+            const cont = document.getElementById('camposEstilos');
+            cont.innerHTML = '';
+
+            // Primero las claves de color conocidas (en orden fijo), luego cualquier extra
+            CLAVES_COLOR.forEach(clave => {
+                if (datosEstilos.hasOwnProperty(clave)) filaEstiloColor(clave, datosEstilos[clave]);
+            });
+            Object.keys(datosEstilos).forEach(clave => {
+                if (!CLAVES_COLOR.includes(clave)) filaEstiloTexto(clave, datosEstilos[clave]);
+            });
+        }
+
+        function filaEstiloColor(clave, valorHex) {
+            const cont = document.getElementById('camposEstilos');
+            const hex = /^#[0-9A-Fa-f]{6}$/.test(valorHex) ? valorHex : '#000000';
+            const div = document.createElement('div');
+            div.className = 'form-group';
+            div.dataset.clave = clave;
+            div.innerHTML = `
+                <label>${clave}</label>
+                <div class="color-row">
+                    <input type="color" value="${hex}">
+                    <input type="text" value="${hex.toUpperCase()}" maxlength="7">
+                </div>`;
+            const inputs = div.querySelectorAll('input');
+            const colorInput = inputs[0];
+            const textInput = inputs[1];
+            colorInput.addEventListener('input', () => textInput.value = colorInput.value.toUpperCase());
+            textInput.addEventListener('input', () => {
+                if (/^#[0-9A-Fa-f]{6}$/.test(textInput.value)) colorInput.value = textInput.value;
+            });
+            cont.appendChild(div);
+        }
+
+        function filaEstiloTexto(clave, valor) {
+            const cont = document.getElementById('camposEstilos');
+            const div = document.createElement('div');
+            div.className = 'form-group';
+            div.dataset.clave = clave;
+            div.innerHTML = `<label>${clave}</label><input type="text" value="${(valor ?? '').toString().replace(/"/g, '&quot;')}">`;
+            cont.appendChild(div);
+        }
+
+        async function guardarEstilos() {
+            const datos = {};
+            document.querySelectorAll('#camposEstilos .form-group').forEach(div => {
+                // En filas de color, el segundo input (texto) tiene el hex final
+                const inputs = div.querySelectorAll('input');
+                const input = inputs.length > 1 ? inputs[1] : inputs[0];
+                datos[div.dataset.clave] = input.value;
+            });
+            await enviarAdmin('setStyles', datos, 'estadoEstilos');
+        }
+
+        // ---------------------- HEADER ----------------------
+        function renderizarHeader() {
+            const cont = document.getElementById('camposHeader');
+            cont.innerHTML = '';
+            datosHeader.forEach(fila => filaHeader(fila.ramo, fila.titulo));
+        }
+
+        function filaHeader(ramo, titulo) {
+            const cont = document.getElementById('camposHeader');
+            const div = document.createElement('div');
+            div.className = 'header-row';
+            div.innerHTML = `
+                <input type="text" class="campo-ramo" placeholder="ramo" value="${(ramo ?? '').toString().replace(/"/g, '&quot;')}">
+                <input type="text" class="campo-titulo" placeholder="Título a mostrar" value="${(titulo ?? '').toString().replace(/"/g, '&quot;')}">
+                <button type="button" class="btn-quitar" onclick="this.parentElement.remove()">✕</button>`;
+            cont.appendChild(div);
+        }
+
+        function agregarFilaHeader() {
+            filaHeader('', '');
+        }
+
+        async function guardarHeader() {
+            const filas = [];
+            document.querySelectorAll('#camposHeader .header-row').forEach(div => {
+                const ramo = div.querySelector('.campo-ramo').value.trim();
+                const titulo = div.querySelector('.campo-titulo').value.trim();
+                if (ramo) filas.push({ ramo, titulo });
+            });
+            await enviarAdmin('setHeader', filas, 'estadoHeader');
+        }
+
+        // ---------------------- ENVÍO COMÚN ----------------------
+        async function enviarAdmin(accion, datos, idEstado) {
+            const estadoEl = document.getElementById(idEstado);
+            const clave = document.getElementById('claveAdmin').value;
+
+            if (!clave) {
+                estadoEl.className = 'estado-msg error';
+                estadoEl.innerText = '⚠️ Ingresa la clave de administrador arriba antes de guardar.';
+                return;
+            }
+
+            estadoEl.className = 'estado-msg';
+            estadoEl.innerText = 'Guardando...';
+
+            const payload = { tipo: 'admin', accion, clave, datos };
+
+            try {
+                // mode:no-cors evita el preflight, pero la respuesta queda
+                // opaca (no podemos leer si el servidor devolvió error).
+                // Por eso el mensaje es "enviado", no "confirmado" — igual
+                // que en el guardado de puntajes del cuestionario.
+                await fetch(API_UNIFICADA, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'text/plain' },
+                    body: JSON.stringify(payload)
+                });
+                estadoEl.className = 'estado-msg ok';
+                estadoEl.innerText = '✅ Cambios enviados. Recarga esta página en unos segundos para confirmar.';
+            } catch (error) {
+                console.error(error);
+                estadoEl.className = 'estado-msg error';
+                estadoEl.innerText = '❌ Error de conexión al guardar.';
+            }
         }
     </script>
 </body>
