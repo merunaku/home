@@ -7,78 +7,86 @@ const API_UNIFICADA = "https://script.google.com/macros/library/d/1psyLqMmkBhYtl
 // Esta variable guardará toda la info que viene del Google Sheet (pestaña "config")
 let CONFIG = {};
 
-// Función para descargar la configuración antes de iniciar la página
-async function cargarConfiguracion() {
+// Info de títulos por materia (pestaña "header" del Sheet), la usa header.js.
+// Se llena acá para no tener que pedirla de nuevo por separado.
+window.HEADER_INFO = [];
+
+// ------------------------------------------------------------------
+// UNA SOLA LLAMADA AL BACKEND (antes eran 3: getConfig + getStyles +
+// getHeaderInfo, una detrás de otra). Ahora se piden todas juntas con
+// "getBootstrap", que además el backend cachea 5 minutos — así, en
+// época de pruebas, la mayoría de los alumnos recibe respuesta casi
+// instantánea sin que Apps Script tenga que releer el Sheet cada vez.
+// ------------------------------------------------------------------
+async function cargarBootstrap() {
     try {
-        console.log("Cargando configuración desde Google Sheets...");
+        console.log("Cargando configuración, estilos y header desde Google Sheets...");
 
-        // Le pedimos a la API la acción "getConfig"
-        const respuesta = await fetch(API_UNIFICADA + "?action=getConfig");
-        CONFIG = await respuesta.json();
+        const respuesta = await fetch(API_UNIFICADA + "?action=getBootstrap");
+        const datos = await respuesta.json();
 
-        // Convertimos los textos que deben ser números para evitar errores matemáticos
+        // 1. Configuración general
+        CONFIG = datos.config || {};
         CONFIG.EXIGENCIA_MINIMA = parseFloat(CONFIG.EXIGENCIA_MINIMA);
         CONFIG.TOTAL_PREGUNTAS = parseInt(CONFIG.TOTAL_PREGUNTAS);
 
-        console.log("¡Configuración cargada con éxito!", CONFIG);
+        // 2. Paleta de colores (inyecta el <style> dinámico)
+        aplicarEstilos(datos.estilos || {});
+
+        // 3. Info de títulos por materia, para que header.js no tenga
+        //    que pedirla aparte.
+        window.HEADER_INFO = Array.isArray(datos.header) ? datos.header : [];
+
+        console.log("¡Bootstrap cargado con éxito!", CONFIG);
         return true;
 
     } catch (error) {
-        console.error("Error crítico al cargar la configuración:", error);
+        console.error("Error crítico al cargar el bootstrap:", error);
         return false;
     }
 }
 
-// Descarga la paleta de colores desde la pestaña "styles" del Sheet e
-// inyecta un <style> que sobreescribe las variables CSS definidas en
-// :root dentro de styles.css (--primary-color, --secondary-color, etc.).
-// Así se puede cambiar toda la paleta institucional editando el Sheet,
-// sin tocar styles.css ni redesplegar nada.
-async function aplicarEstilosDinamicos() {
-    try {
-        const respuesta = await fetch(API_UNIFICADA + "?action=getStyles");
-        const estilos = await respuesta.json();
+// Inyecta un <style> que sobreescribe las variables CSS definidas en
+// :root dentro de styles.css (--primary-color, --secondary-color, etc.),
+// a partir de lo que venga en la pestaña "styles" del Sheet. Así se puede
+// cambiar la paleta institucional editando el Sheet, sin tocar styles.css.
+function aplicarEstilos(estilos) {
+    const mapaVariables = {
+        PRIMARY_COLOR: '--primary-color',
+        PRIMARY_DARK: '--primary-dark',
+        SECONDARY_COLOR: '--secondary-color',
+        BG_COLOR: '--bg-color',
+        CARD_BG: '--card-bg',
+        TEXT_COLOR: '--text-color',
+        SUCCESS_COLOR: '--success-color',
+        ERROR_COLOR: '--error-color'
+    };
 
-        // Mapeo clave del Sheet -> variable CSS
-        const mapaVariables = {
-            PRIMARY_COLOR: '--primary-color',
-            PRIMARY_DARK: '--primary-dark',
-            SECONDARY_COLOR: '--secondary-color',
-            BG_COLOR: '--bg-color',
-            CARD_BG: '--card-bg',
-            TEXT_COLOR: '--text-color',
-            SUCCESS_COLOR: '--success-color',
-            ERROR_COLOR: '--error-color'
-        };
-
-        let reglasCSS = '';
-        for (const clave in mapaVariables) {
-            if (estilos[clave]) {
-                reglasCSS += `${mapaVariables[clave]}: ${estilos[clave]};\n`;
-            }
+    let reglasCSS = '';
+    for (const clave in mapaVariables) {
+        if (estilos[clave]) {
+            reglasCSS += `${mapaVariables[clave]}: ${estilos[clave]};\n`;
         }
+    }
 
-        if (reglasCSS) {
-            const styleTag = document.createElement('style');
-            styleTag.id = 'dynamic-theme';
-            styleTag.innerHTML = `:root {\n${reglasCSS}}`;
-            document.head.appendChild(styleTag);
-            console.log("Paleta de colores dinámica aplicada.");
-        }
-
-        return true;
-    } catch (error) {
-        // Si falla, el sitio simplemente se queda con los colores por
-        // defecto de styles.css. No es un error crítico.
-        console.warn("No se pudo aplicar la paleta dinámica, se usan los colores por defecto:", error);
-        return false;
+    if (reglasCSS) {
+        const styleTag = document.createElement('style');
+        styleTag.id = 'dynamic-theme';
+        styleTag.innerHTML = `:root {\n${reglasCSS}}`;
+        document.head.appendChild(styleTag);
+        console.log("Paleta de colores dinámica aplicada.");
     }
 }
 
-// Se disparan automáticamente apenas se carga este script (no hay que
+// Se dispara automáticamente apenas se carga este script (no hay que
 // esperar a window.onload de la página). Cualquier otro script (header.js,
-// el propio cuestionario, etc.) puede hacer `await window.configListo` o
-// `await window.estilosListos` para asegurarse de que ya terminaron, sin
-// disparar una segunda descarga.
-window.configListo = cargarConfiguracion();
-window.estilosListos = aplicarEstilosDinamicos();
+// el propio cuestionario, etc.) puede hacer `await window.configListo`
+// para asegurarse de que CONFIG, los estilos y window.HEADER_INFO ya
+// estén listos, sin disparar una segunda descarga.
+//
+// Se mantienen "estilosListos" y "headerInfoListo" como alias de la MISMA
+// promesa, por compatibilidad con código anterior que los esperaba por
+// separado — awaitear una promesa ya resuelta no cuesta una llamada extra.
+window.configListo = cargarBootstrap();
+window.estilosListos = window.configListo;
+window.headerInfoListo = window.configListo;
