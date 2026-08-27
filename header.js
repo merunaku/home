@@ -15,9 +15,10 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Detectamos la URL completa actual y la pasamos a minúsculas
     const currentURL = window.location.href.toLowerCase();
 
-    // Título dinámico: se busca en la pestaña "header" del Sheet
-    // (columnas: ramo | titulo) en vez de estar hardcodeado acá.
-    const tituloDinamico = await obtenerTituloDinamico(currentURL);
+    // Título dinámico: se busca en window.HEADER_INFO, que config.js ya
+    // dejó listo como parte del mismo llamado a getBootstrap (ya NO se
+    // hace un tercer fetch acá, para no sumar otro round-trip a Apps Script).
+    const tituloDinamico = obtenerTituloDinamico(currentURL);
 
     // Inyección del HTML en el contenedor correspondiente
     const headerContainer = document.getElementById("global-header");
@@ -46,31 +47,19 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
-// Busca en la pestaña "header" del Sheet (vía getHeaderInfo) una fila cuyo
-// "ramo" aparezca dentro de la URL actual, y devuelve su título. Si no
-// encuentra ninguna coincidencia, usa la fila "default"; si eso también
-// falla (o el fetch falla), cae en un título fijo como último respaldo.
-async function obtenerTituloDinamico(currentURL) {
+// Busca en window.HEADER_INFO (cargado por config.js junto con getBootstrap)
+// una fila cuyo "ramo" aparezca dentro de la URL actual, y devuelve su
+// título. Si no encuentra ninguna coincidencia, usa la fila "default"; si
+// eso también falla, cae en un título fijo como último respaldo.
+function obtenerTituloDinamico(currentURL) {
     const TITULO_RESPALDO = "Plataforma de Estudios 2026";
+    const filas = window.HEADER_INFO;
 
-    if (typeof API_UNIFICADA === 'undefined' || !API_UNIFICADA || API_UNIFICADA.includes('AQUI_PEGA')) {
-        return TITULO_RESPALDO;
-    }
+    if (!Array.isArray(filas) || filas.length === 0) return TITULO_RESPALDO;
 
-    try {
-        const respuesta = await fetch(API_UNIFICADA + "?action=getHeaderInfo");
-        const filas = await respuesta.json();
+    const coincidencia = filas.find(f => f.ramo !== "default" && currentURL.includes(String(f.ramo).toLowerCase()));
+    if (coincidencia) return coincidencia.titulo;
 
-        if (!Array.isArray(filas)) return TITULO_RESPALDO;
-
-        const coincidencia = filas.find(f => f.ramo !== "default" && currentURL.includes(f.ramo.toLowerCase()));
-        if (coincidencia) return coincidencia.titulo;
-
-        const porDefecto = filas.find(f => f.ramo === "default");
-        return porDefecto ? porDefecto.titulo : TITULO_RESPALDO;
-
-    } catch (error) {
-        console.error("Error al obtener título dinámico:", error);
-        return TITULO_RESPALDO;
-    }
+    const porDefecto = filas.find(f => f.ramo === "default");
+    return porDefecto ? porDefecto.titulo : TITULO_RESPALDO;
 }
