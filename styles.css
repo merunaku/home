@@ -123,12 +123,15 @@ header {
 
 /* Estilos específicos para el segundo Header (Podio) */
 .header-podio {
-    background: linear-gradient(135deg, #002b5c 0%, #001a38 100%);
+    /* Antes tenía #002b5c/#001a38/#f4b223 hardcodeados, por eso no
+       reaccionaba a los cambios de color desde admin.html/el Sheet.
+       Ahora usa las mismas variables CSS que el header principal. */
+    background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
     color: white;
     width: 100%;
     padding: 22px 0;
     box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
-    border-bottom: 5px solid #f4b223;
+    border-bottom: 5px solid var(--secondary-color);
     z-index: 10;
     text-align: center;
 }
@@ -325,7 +328,10 @@ h2 {
 }
  
 .leaderboard-table th {
-    background-color: #1e293b;
+    /* Antes: background-color: #1e293b (hardcodeado). Ahora usa
+       var(--primary-color) para que responda a los cambios de color
+       hechos desde admin.html/el Sheet, igual que el resto del sitio. */
+    background-color: var(--primary-color);
     color: #f8fafc;
     padding: 12px 10px;
     font-weight: 700;
