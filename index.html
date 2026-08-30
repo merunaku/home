@@ -120,16 +120,19 @@
 
     <script>
       window.addEventListener('DOMContentLoaded', () => {
-   // Verificamos que CONFIG exista antes de arrancar los fetchs del podio
-    if (typeof CONFIG !== 'undefined' && CONFIG.APIS) {
-        renderPodio(CONFIG.APIS.NORMATIVA, "podio-normativa");
-        renderPodio(CONFIG.APIS.INSTRUMENTACION, "podio-instrumentacion");
-    } else {
-        console.error("No se pudo cargar el objeto CONFIG global.");
-        document.getElementById("podio-normativa").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
-        document.getElementById("podio-instrumentacion").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
-    }
-});
+        // Ya no depende de CONFIG.APIS (no existe en el esquema nuevo).
+        // Ahora todo pasa por API_UNIFICADA (definida en config.js) con
+        // ?action=getLeaderboard&ramo=<ramo>, igual que el resto del sitio.
+        if (typeof API_UNIFICADA === 'undefined' || !API_UNIFICADA || API_UNIFICADA.includes('AQUI_PEGA')) {
+            console.error("API_UNIFICADA no está configurada en config.js.");
+            document.getElementById("podio-normativa").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+            document.getElementById("podio-instrumentacion").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+            return;
+        }
+
+        renderPodio(`${API_UNIFICADA}?action=getLeaderboard&ramo=norm`, "podio-normativa");
+        renderPodio(`${API_UNIFICADA}?action=getLeaderboard&ramo=instind`, "podio-instrumentacion");
+    });
 
 // Función mejorada para soportar formatos: "SS", "MM:SS" y "HH:MM:SS"
 function convertirTiempoASegundos(tiempoStr) {
@@ -167,18 +170,17 @@ async function renderPodio(url, elementId) {
             return;
         }
 
-        // Ordenamiento robusto
+        // Ordenamiento robusto (redundante con el que ya hace el backend,
+        // se deja como respaldo defensivo: mismo criterio — mayor puntaje,
+        // y en empate, menor tiempo gana).
         data.sort((a, b) => {
-            // 1. Obtener Puntaje (o Nota si no hay puntaje)
-            const ptsA = parseFloat(String(a.puntaje || a.nota || 0).replace(',', '.')) || 0;
-            const ptsB = parseFloat(String(b.puntaje || b.nota || 0).replace(',', '.')) || 0;
+            const ptsA = parseFloat(String(a.puntaje ?? a.nota ?? 0).replace(',', '.')) || 0;
+            const ptsB = parseFloat(String(b.puntaje ?? b.nota ?? 0).replace(',', '.')) || 0;
 
-            // 2. Si los puntajes/notas son distintos, priorizar el mayor
             if (ptsB !== ptsA) {
                 return ptsB - ptsA;
             }
 
-            // 3. Si empatan en puntaje/nota, gana el de MENOR tiempo
             const tiempoA = convertirTiempoASegundos(a.tiempo);
             const tiempoB = convertirTiempoASegundos(b.tiempo);
 
