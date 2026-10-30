@@ -3,13 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sensores y Actuadores 2026</title>
-    
-    <!-- Fuentes Google -->
+    <title>Evaluaciones 2026 - ProfeDiego</title>
+
+    <!-- Fuentes y CSS Global -->
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;900&display=swap" rel="stylesheet">
-    
-    <!-- ESTILOS GLOBALES CENTRALIZADOS -->
     <link rel="stylesheet" href="https://merunaku.github.io/home/styles.css">
+
+    <script>
+        // Lógica de enrutamiento automático por coincidencia en URL
+        var urlIncorrecta = window.location.href.toLowerCase();
+        if (urlIncorrecta.includes("calculadora")) {
+            window.location.replace("https://merunaku.github.io/calculadora2026/");
+        } else if (urlIncorrecta.includes("instind")) {
+            window.location.replace("https://merunaku.github.io/InstInd2026/");
+        } else if (urlIncorrecta.includes("normativa")) {
+            window.location.replace("https://merunaku.github.io/Normativa2026/");
+        }
+    </script>
 </head>
 <body>
 
@@ -22,366 +32,183 @@
 
     <main class="container">
         <div class="card">
+            <h2>👋 ¡Te damos la bienvenida!</h2>
+            <p>Por favor, selecciona la asignatura o herramienta a la que deseas acceder para comenzar. ¡Mucho éxito en tus procesos académicos!</p>
             
-            <!-- PANTALLA 1: BIENVENIDA Y REGISTRO -->
-            <div id="welcome-screen" class="screen active">
-                <h2>⚡ ¡Simulador Activo!</h2>
-                <p style="color: #64748b; font-weight: 700; margin-bottom: 15px;">Evalúa tus conocimientos en la materia.</p>
-                
-                <div class="details-box">
-                    <strong>Condiciones de Evaluación:</strong>
-                    <ul>
-                        <li><strong id="desc-cant-preguntas">20 preguntas aleatorias</strong> extraídas del banco de preguntas.</li>
-                        <li>Las alternativas se barajan automáticamente en cada intento.</li>
-                        <li>Escala de evaluación: <strong id="desc-exigencia">60% de exigencia (Nota 4.0)</strong>.</li>
-                        <li>¡Mucho éxito en tu preparación!</li>
-                    </ul>
-                </div>
-
-                <input type="text" id="nombre-alumno" class="input-nombre" placeholder="Ingresa tu Nombre y Apellido para comenzar" maxlength="50">
-
-                <div id="db-loader" style="text-align: center; color: #d97706; font-weight: bold; margin-top: 15px;">
-                    🔄 Conectando con el servidor y descargando preguntas...
-                </div>
-
-                <button id="start-btn" class="btn" style="display:none;" onclick="startQuiz()">Iniciar Evaluación</button>
+            <div class="options-list">
+                <a href="https://merunaku.github.io/calculadora2026/" class="btn-link">
+                    📊 Calculadora de Notas 2026
+                </a>
+                <a href="https://merunaku.github.io/InstInd2026/" class="btn-link">
+                    ⚙️ Sensores y Actuadores 2026
+                </a>
+                <a href="https://merunaku.github.io/Normativa2026/" class="btn-link">
+                    📜 Normativa Eléctrica 2026
+                </a>
+                <a href="https://merunaku.github.io/home/magnitudes.html" class="btn-link">
+                    📊 Escalamiento de Magnitudes
+                </a>
+                <a href="https://merunaku.github.io/luminotecnia/calculadora.html" class="btn-link">
+                    📊 Luminotécnia
+                </a>
             </div>
 
-            <!-- PANTALLA 2: EVALUACIÓN EN CURSO -->
-            <div id="quiz-screen" class="screen">
-                <div class="progress-bar"><div id="progress" class="progress"></div></div>
-                <div class="progress-header">
-                    <span id="question-counter" style="font-size: 0.95rem; font-weight: 700; color: #64748b;">Pregunta 1</span>
-                    <span id="timer" class="timer-txt">⏱️ 00:00</span>
-                </div>
-                
-                <div style="margin-top: 12px; text-align: left;">
-                    <div id="topic-container" class="topic-tag">Tópico</div>
-                </div>
-
-                <div class="question-txt" id="question-text">Cargando pregunta...</div>
-                <div class="options-list" id="options-container"></div>
-                
-                <div id="justification-container" class="justification-box">
-                    <strong>📘 Justificación Técnica:</strong> <span id="justification-text"></span>
-                </div>
-                
-                <button id="next-btn" class="btn" style="display:none;" onclick="nextQuestion()">Avanzar Pregunta 👉</button>
-            </div>
-
-            <!-- PANTALLA 3: RESULTADOS -->
-            <div id="result-screen" class="screen">
-                <h2>Resumen del Intento</h2>
-                <div class="score-display">
-                    <div style="font-size: 1.1rem; color: #475569; text-align: center; font-weight: 700;">Tu calificación final es:</div>
-                    <div id="grade-output" class="grade-badge">1.0</div>
-                    <div id="score-output" style="font-size: 1.15rem; font-weight: 900; color: var(--text-color); text-align: center;">Puntaje: 0 correctas</div>
-                    <div id="time-output" style="font-size: 1rem; color: #64748b; margin-top: 6px; text-align: center; font-weight: 700;">Tiempo total: 00:00</div>
-                    <div id="feedback-message" style="margin-top: 20px; font-weight: 900; font-size: 1.1rem; text-align: center;">Guardando resultado en el servidor...</div>
-                </div>
-
-                <div id="leaderboard-section" style="margin: 30px 0; display: none;">
-                    <h3 style="text-align: center; color: var(--primary-color); margin-bottom: 16px; font-size: 1.3rem; font-weight: 900;">🏆 Tabla de Líderes</h3>
-                    <table class="leaderboard-table">
-                        <thead>
-                            <tr>
-                                <th style="text-align: center; width: 15%;">Pos</th>
-                                <th style="text-align: center; width: 40%;">Nombre</th>
-                                <th style="text-align: center; width: 12%;">Puntos</th>
-                                <th style="text-align: center; width: 12%;">Nota</th>
-                                <th style="text-align: center; width: 21%;">Tiempo</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboard-body"></tbody>
-                    </table>
-                </div>
-
-                <button class="btn" onclick="goToWelcome()">🔄 Realizar un nuevo intento</button>
-            </div>
-
-            <!-- RETORNO AL PORTAL -->
-            <a href="https://merunaku.github.io/home/index.html" class="btn-home" style="margin-top: 20px;">
-                🏠 Volver a Página Principal
+            <a href="https://merunaku.github.io/home/index.html" class="btn-home">
+                🗂️ Volver al Portal General
             </a>
-
         </div>
     </main>
 
+    <section class="header-podio">
+        <div class="podio-container">
+            <div class="podio-title-main">
+                <span>🏆 Tabla de Posiciones IPCHILE</span>
+            </div>
+            <div class="podio-subtitle-layout">
+                <h1>Podio</h1>
+                <p>Top 3 de Evaluaciones Simuladas &bull; 2026</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="leaderboard-container">
+        <div class="leaderboard-grid">
+            
+            <div class="leaderboard-card">
+                <h2>📜 Normativa Eléctrica</h2>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 10%;">Pos</th>
+                            <th style="text-align: left; width: 43%;">Nombre Alumno</th>
+                            <th style="text-align: center; width: 15%;">Pts</th>
+                            <th style="text-align: center; width: 12%;">Nota</th>
+                            <th style="text-align: center; width: 25%;">Tiempo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="podio-normativa">
+                        <tr>
+                            <td colspan="5" class="loading">🔄 Cargando podio de normativa...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="leaderboard-card">
+                <h2>⚡ Sensores y Actuadores</h2>
+                <table class="leaderboard-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center; width: 10%;">Pos</th>
+                            <th style="text-align: left; width: 43%;">Nombre Alumno</th>
+                            <th style="text-align: center; width: 15%;">Pts</th>
+                            <th style="text-align: center; width: 12%;">Nota</th>
+                            <th style="text-align: center; width: 25%;">Tiempo</th>
+                        </tr>
+                    </thead>
+                    <tbody id="podio-instrumentacion">
+                        <tr>
+                            <td colspan="5" class="loading">🔄 Cargando podio de instrumentación...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+
     <script>
-        const RAMO = "instind";
-
-        let allQuestions = [];
-        let currentQuizQuestions = [];
-        let currentQuestionIndex = 0;
-        let score = 0;
-        let timerInterval = null;
-        let totalSeconds = 0;
-        let QUIZ_CONFIG = { TOTAL_PREGUNTAS: 20, EXIGENCIA_PORCENTAJE: 0.60 };
-
-        window.onload = async () => {
+        window.addEventListener('DOMContentLoaded', async () => {
             if (window.configListo) {
                 await window.configListo;
             }
 
-            QUIZ_CONFIG = {
-                TOTAL_PREGUNTAS: parseInt(CONFIG.TOTAL_PREGUNTAS, 10) || 20,
-                EXIGENCIA_PORCENTAJE: parseFloat(CONFIG.EXIGENCIA_MINIMA) || 0.60
-            };
-
-            await cargarBancoPreguntas();
-        };
-
-        async function cargarBancoPreguntas() {
-            try {
-                if (typeof API_UNIFICADA === 'undefined' || !API_UNIFICADA) {
-                    throw new Error("La URL del backend (API_UNIFICADA) no está configurada en config.js");
-                }
-
-                const response = await fetch(`${API_UNIFICADA}?action=getPreguntas&ramo=${RAMO}`);
-                if (!response.ok) throw new Error("No se pudo contactar al servidor");
-
-                const data = await response.json();
-                if (data && data.error) throw new Error(data.error);
-
-                allQuestions = Array.isArray(data) ? data : [];
-
-                if (allQuestions.length > 0) {
-                    // Ajusta dinámicamente si el banco tiene menos preguntas de las configuradas
-                    QUIZ_CONFIG.TOTAL_PREGUNTAS = Math.min(QUIZ_CONFIG.TOTAL_PREGUNTAS, allQuestions.length);
-
-                    document.getElementById('desc-cant-preguntas').innerText = `${QUIZ_CONFIG.TOTAL_PREGUNTAS} preguntas aleatorias`;
-                    document.getElementById('desc-exigencia').innerText = `${Math.round(QUIZ_CONFIG.EXIGENCIA_PORCENTAJE * 100)}% de exigencia (Nota 4.0)`;
-
-                    document.getElementById('db-loader').style.display = 'none';
-                    document.getElementById('start-btn').style.display = 'block';
-                } else {
-                    throw new Error("El banco de preguntas para este ramo está vacío");
-                }
-            } catch (error) {
-                console.error("Error al cargar banco:", error);
-                document.getElementById('db-loader').innerHTML = `<span style="color: var(--error-color);">⚠️ Error: ${error.message}</span>`;
+            if (typeof API_UNIFICADA === 'undefined' || !API_UNIFICADA) {
+                console.error("API_UNIFICADA no está configurada en config.js.");
+                document.getElementById("podio-normativa").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+                document.getElementById("podio-instrumentacion").innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error de configuración global.</td></tr>`;
+                return;
             }
-        }
 
-        function shuffle(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-            return array;
-        }
-
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60).toString().padStart(2, '0');
-            const secs = (seconds % 60).toString().padStart(2, '0');
-            return `${mins}:${secs}`;
-        }
+            renderPodio(`${API_UNIFICADA}?action=getLeaderboard&ramo=norm`, "podio-normativa");
+            renderPodio(`${API_UNIFICADA}?action=getLeaderboard&ramo=instind`, "podio-instrumentacion");
+        });
 
         function escapeHTML(str) {
             return (str ?? '').toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         }
 
-        function startTimer() {
-            totalSeconds = 0;
-            document.getElementById('timer').innerText = "⏱️ 00:00";
-            if (timerInterval) clearInterval(timerInterval);
-            timerInterval = setInterval(() => {
-                totalSeconds++;
-                document.getElementById('timer').innerText = `⏱️ ${formatTime(totalSeconds)}`;
-            }, 1000);
-        }
+        function convertirTiempoASegundos(tiempoStr) {
+            if (!tiempoStr) return 999999;
+            const limpio = String(tiempoStr).trim();
+            const partes = limpio.split(':').map(p => parseInt(p, 10) || 0);
 
-        function startQuiz() {
-            const nombre = document.getElementById('nombre-alumno').value.trim();
-            if (nombre === "") {
-                alert("Por favor, ingresa tu Nombre y Apellido antes de comenzar.");
-                return;
+            if (partes.length === 3) {
+                return (partes[0] * 3600) + (partes[1] * 60) + partes[2];
+            } else if (partes.length === 2) {
+                return (partes[0] * 60) + partes[1];
+            } else if (partes.length === 1) {
+                return partes[0];
             }
-
-            score = 0;
-            currentQuestionIndex = 0;
-            
-            let randomizedPool = shuffle([...allQuestions]);
-            currentQuizQuestions = randomizedPool.slice(0, QUIZ_CONFIG.TOTAL_PREGUNTAS);
-
-            document.getElementById('welcome-screen').classList.remove('active');
-            document.getElementById('result-screen').classList.remove('active');
-            document.getElementById('quiz-screen').classList.add('active');
-
-            startTimer();
-            showQuestion();
+            return 999999;
         }
 
-        function showQuestion() {
-            document.getElementById('justification-container').style.display = 'none';
-            document.getElementById('next-btn').style.display = 'none';
-            
-            const qData = currentQuizQuestions[currentQuestionIndex];
-            
-            document.getElementById('question-counter').innerText = `Pregunta ${currentQuestionIndex + 1} de ${QUIZ_CONFIG.TOTAL_PREGUNTAS}`;
-            document.getElementById('topic-container').innerText = qData.t || 'General';
-            document.getElementById('question-text').innerText = qData.q;
-            
-            const progressPercent = (currentQuestionIndex / QUIZ_CONFIG.TOTAL_PREGUNTAS) * 100;
-            document.getElementById('progress').style.width = `${progressPercent}%`;
-
-            let options = shuffle([...qData.o]);
-            const optionsContainer = document.getElementById('options-container');
-            optionsContainer.innerHTML = '';
-
-            options.forEach(optText => {
-                const btn = document.createElement('button');
-                btn.className = 'option-btn';
-                btn.innerText = optText;
-                btn.onclick = () => checkAnswer(btn, optText, qData.a, qData.j);
-                optionsContainer.appendChild(btn);
-            });
-        }
-
-        function checkAnswer(selectedBtn, selectedText, correctText, justification) {
-            const buttons = document.getElementById('options-container').getElementsByClassName('option-btn');
-            const cleanCorrect = String(correctText || '').trim();
-            const cleanSelected = String(selectedText || '').trim();
-            
-            for (let btn of buttons) {
-                btn.disabled = true;
-                if (String(btn.innerText).trim() === cleanCorrect) {
-                    btn.classList.add('correct');
-                }
-            }
-
-            if (cleanSelected === cleanCorrect) {
-                score++;
-            } else {
-                selectedBtn.classList.add('incorrect');
-            }
-
-            document.getElementById('justification-text').innerText = justification || 'Sin información adicional.';
-            document.getElementById('justification-container').style.display = 'block';
-            document.getElementById('next-btn').style.display = 'inline-block';
-        }
-
-        function nextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < QUIZ_CONFIG.TOTAL_PREGUNTAS) {
-                showQuestion();
-            } else {
-                finishQuiz();
-            }
-        }
-
-        function calculateGrade(score, total) {
-            if (total <= 0) return 1.0;
-            const percentage = score / total;
-            let grade = 1.0;
-            const cut = QUIZ_CONFIG.EXIGENCIA_PORCENTAJE;
-
-            if (percentage < cut) {
-                grade = 1.0 + (3.0 * (percentage / cut));
-            } else {
-                grade = 4.0 + (3.0 * ((percentage - cut) / (1.0 - cut)));
-            }
-            return Math.round(grade * 10) / 10;
-        }
-
-        function finishQuiz() {
-            clearInterval(timerInterval);
-            document.getElementById('quiz-screen').classList.remove('active');
-            document.getElementById('result-screen').classList.add('active');
-
-            const finalGrade = calculateGrade(score, QUIZ_CONFIG.TOTAL_PREGUNTAS);
-            const timeString = formatTime(totalSeconds);
-            const nombre = document.getElementById('nombre-alumno').value.trim();
-            
-            const gradeOutput = document.getElementById('grade-output');
-            gradeOutput.innerText = finalGrade.toFixed(1);
-            gradeOutput.className = 'grade-badge ' + (finalGrade >= 4.0 ? 'aprobo' : 'reprobo');
-
-            document.getElementById('score-output').innerText = `Puntaje: ${score} / ${QUIZ_CONFIG.TOTAL_PREGUNTAS} correctas`;
-            document.getElementById('time-output').innerText = `Tiempo total: ${timeString}`;
-            
-            const feedbackMsg = document.getElementById('feedback-message');
-            feedbackMsg.innerText = "Guardando resultado en el servidor...";
-            feedbackMsg.style.color = "#475569";
-
-            if (typeof API_UNIFICADA === 'undefined' || !API_UNIFICADA) {
-                feedbackMsg.innerText = "⚠️ Resultado no guardado (URL del servidor no configurada).";
-                return;
-            }
-
-            const notaConComa = finalGrade.toFixed(1).replace('.', ',');
-
-            const payload = {
-                ramo: RAMO,
-                nombre: nombre,
-                nota: notaConComa,
-                puntaje: score,
-                tiempo: timeString
-            };
-
-            fetch(API_UNIFICADA, { 
-                method: 'POST', 
-                mode: 'no-cors', 
-                headers: { 'Content-Type': 'text/plain' },
-                body: JSON.stringify(payload) 
-            })
-            .then(() => {
-                feedbackMsg.innerText = "🚀 ¡Resultado enviado a la nube con éxito!";
-                feedbackMsg.style.color = "var(--success-color)";
-                obtenerTablaLideres();
-            })
-            .catch(error => {
-                console.error('Error al guardar:', error);
-                feedbackMsg.innerText = "❌ Error de conexión al guardar el resultado.";
-                feedbackMsg.style.color = "var(--error-color)";
-            });
-        }
-
-        function goToWelcome() {
-            document.getElementById('result-screen').classList.remove('active');
-            document.getElementById('welcome-screen').classList.add('active');
-            document.getElementById('nombre-alumno').value = "";
-        }
-
-        function obtenerTablaLideres() {
-            const leaderboardSection = document.getElementById('leaderboard-section');
-            const leaderboardBody = document.getElementById('leaderboard-body');
-            
-            fetch(`${API_UNIFICADA}?action=getLeaderboard&ramo=${RAMO}`)
-            .then(response => response.json())
-            .then(data => {
-                leaderboardBody.innerHTML = ""; 
+        async function renderPodio(url, elementId) {
+            const container = document.getElementById(elementId);
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error("Error de red");
                 
+                const data = await response.json();
+                container.innerHTML = "";
+
                 if (!data || data.length === 0) {
-                    leaderboardBody.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:15px; color:#64748b;">No hay puntajes registrados aún.</td></tr>`;
-                } else {
-                    data.forEach((alumno, index) => {
-                        let posicion = index + 1;
-                        if (index === 0) posicion = "🥇";
-                        if (index === 1) posicion = "🥈";
-                        if (index === 2) posicion = "🥉";
-
-                        const fila = document.createElement('tr');
-                        fila.className = "leaderboard-row";
-                        
-                        const notaNumerica = parseFloat(String(alumno.nota).replace(',', '.'));
-                        const colorNota = notaNumerica >= 4.0 ? 'var(--success-color)' : 'var(--error-color)';
-
-                        fila.innerHTML = `
-                            <td style="text-align: center; font-weight: 900; font-size: 1.1rem;">${posicion}</td>
-                            <td style="color: var(--text-color); font-weight: 700;">${escapeHTML(alumno.nombre)}</td>
-                            <td style="text-align: center; font-weight: 900; color: #2563eb;">${alumno.puntaje}</td>
-                            <td style="text-align: center; font-weight: 900; color: ${colorNota};">${escapeHTML(alumno.nota)}</td>
-                            <td style="text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 700;">⏱️ ${escapeHTML(alumno.tiempo)}</td>
-                        `;
-                        leaderboardBody.appendChild(fila);
-                    });
+                    container.innerHTML = `<tr><td colspan="5" class="loading">No hay registros aún.</td></tr>`;
+                    return;
                 }
-                leaderboardSection.style.display = "block";
-            })
-            .catch(err => {
-                console.error("Error al obtener ranking:", err);
-            });
+
+                data.sort((a, b) => {
+                    const ptsA = parseFloat(String(a.puntaje ?? a.nota ?? 0).replace(',', '.')) || 0;
+                    const ptsB = parseFloat(String(b.puntaje ?? b.nota ?? 0).replace(',', '.')) || 0;
+
+                    if (ptsB !== ptsA) {
+                        return ptsB - ptsA;
+                    }
+
+                    const tiempoA = convertirTiempoASegundos(a.tiempo);
+                    const tiempoB = convertirTiempoASegundos(b.tiempo);
+
+                    return tiempoA - tiempoB;
+                });
+
+                const top3 = data.slice(0, 3);
+
+                top3.forEach((alumno, index) => {
+                    let posicion = "";
+                    if (index === 0) posicion = "🥇";
+                    else if (index === 1) posicion = "🥈";
+                    else if (index === 2) posicion = "🥉";
+
+                    const fila = document.createElement('tr');
+                    fila.className = "leaderboard-row";
+                    
+                    const notaNumerica = parseFloat(String(alumno.nota || 0).replace(',', '.')) || 0;
+                    const colorNota = notaNumerica >= 4.0 ? 'var(--success-color)' : 'var(--error-color)';
+
+                    fila.innerHTML = `
+                        <td style="text-align: center; font-weight: 900; font-size: 1.25rem;">${posicion}</td>
+                        <td style="color: var(--text-color); font-weight: 700;">${escapeHTML(alumno.nombre || 'Anónimo')}</td>
+                        <td style="text-align: center; font-weight: 900; color: #2563eb;">${escapeHTML(alumno.puntaje ?? 0)}</td>
+                        <td style="text-align: center; font-weight: 900; color: ${colorNota};">${escapeHTML(alumno.nota ?? '1.0')}</td>
+                        <td style="text-align: center; color: #64748b; font-size: 0.85rem; font-weight: 700;">⏱️ ${escapeHTML(alumno.tiempo || 'N/A')}</td>
+                    `;
+                    container.appendChild(fila);
+                });
+
+            } catch (err) {
+                console.error("Error al procesar el podio:", err);
+                container.innerHTML = `<tr><td colspan="5" class="error-msg">⚠️ Error al conectar con la base de datos.</td></tr>`;
+            }
         }
     </script>
 </body>
