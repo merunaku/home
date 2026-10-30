@@ -4,7 +4,7 @@
    ========================================================================== */
 
 :root {
-    /* COLORES INSTITUCIONALES OPTIMIZADOS */
+    /* COLORES INSTITUCIONALES (Valores por defecto) */
     --primary-color: #002b5c;
     --primary-dark: #001a38;
     --secondary-color: #f4b223;
@@ -17,14 +17,15 @@
 
 body {
     font-family: 'Quicksand', 'Segoe UI', system-ui, sans-serif;
-    /* Fondo vivo con transición suave de colores */
-    background: linear-gradient(-45deg, #e0f2fe, #fef3c7, #e0e7ff, #f0fdf4);
+    /* Usa --bg-color como base, compatible con la configuración dinámica de Google */
+    background-color: var(--bg-color);
+    background: linear-gradient(-45deg, var(--bg-color), #ffffff, var(--bg-color), #f0fdf4);
     background-size: 400% 400%;
     animation: gradientBg 12s ease infinite;
     color: var(--text-color);
     margin: 0;
     padding: 0;
-    display: block; /* Evita problemas de flujo */
+    display: block;
     min-height: 100vh;
 }
 
@@ -35,14 +36,14 @@ body {
 }
 
 /* ==========================================================================
-   ENCABEZADOS INSTITUCIONALES - DISEÑO CORREGIDO Y BALANCEADO
+   ENCABEZADOS INSTITUCIONALES
    ========================================================================== */
 header {
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: white;
+    color: #ffffff;
     width: 100%;
     padding: 20px 0;
-    box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border-bottom: 5px solid var(--secondary-color);
     z-index: 10;
 }
@@ -105,7 +106,7 @@ header {
     letter-spacing: 0.3px;
 }
 
-/* Ajustes de Responsividad para Celulares */
+/* Responsividad Header */
 @media (max-width: 768px) {
     .header-flex {
         flex-direction: column !important;
@@ -121,16 +122,13 @@ header {
     }
 }
 
-/* Estilos específicos para el segundo Header (Podio) */
+/* Encabezado del Podio/Ranking */
 .header-podio {
-    /* Antes tenía #002b5c/#001a38/#f4b223 hardcodeados, por eso no
-       reaccionaba a los cambios de color desde admin.html/el Sheet.
-       Ahora usa las mismas variables CSS que el header principal. */
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
-    color: white;
+    color: #ffffff;
     width: 100%;
     padding: 22px 0;
-    box-shadow: 0 4px 20px rgba(0, 43, 92, 0.15);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     border-bottom: 5px solid var(--secondary-color);
     z-index: 10;
     text-align: center;
@@ -162,7 +160,9 @@ header {
     color: #cbd5e1;
 }
 
-/* CONTENEDOR CENTRAL (MENÚ DE ARRIBA) */
+/* ==========================================================================
+   CONTENEDOR Y TARJETAS
+   ========================================================================== */
 .container {
     width: 90%;
     max-width: 550px;
@@ -171,11 +171,11 @@ header {
 }
 
 .card {
-    background-color: rgba(255, 255, 255, 0.96);
+    background-color: var(--card-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: 32px;
-    box-shadow: 0 25px 60px -15px rgba(0, 43, 92, 0.12), 0 10px 30px -10px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.12), 0 10px 30px -10px rgba(0, 0, 0, 0.04);
     padding: 45px 35px;
     width: 100%;
     box-sizing: border-box;
@@ -211,14 +211,14 @@ h2 {
 }
 
 .card p {
-    color: #4b5563;
+    color: var(--text-color);
     font-size: 1.05rem;
     font-weight: 500;
     line-height: 1.6;
     margin-bottom: 35px;
 }
 
-/* LISTA DE BOTONES TOTALMENTE INTERACTIVOS */
+/* LISTA DE BOTONES */
 .options-list {
     margin-bottom: 20px;
     display: flex;
@@ -247,10 +247,9 @@ h2 {
     border-color: var(--secondary-color);
     color: var(--primary-color);
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 20px rgba(244, 178, 35, 0.15);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* RETORNO AL PORTAL ESTILO CÁPSULA DISCRETA */
 .btn-home {
     display: inline-block;
     margin-top: 20px;
@@ -271,7 +270,7 @@ h2 {
 }
 
 /* ==========================================================================
-   TABLA DE LÍDERES - ANCHURA OPTIMIZADA (MÁXIMO ESPACIO Y SIMETRÍA)
+   TABLA DE LÍDERES
    ========================================================================== */
 .leaderboard-container {
     width: 90%;
@@ -288,11 +287,11 @@ h2 {
 }
 
 .leaderboard-card {
-    background-color: rgba(255, 255, 255, 0.96);
+    background-color: var(--card-bg);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
     border-radius: 24px;
-    box-shadow: 0 20px 50px -12px rgba(0, 43, 92, 0.1), 0 10px 25px -10px rgba(0, 0, 0, 0.04);
+    box-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.1), 0 10px 25px -10px rgba(0, 0, 0, 0.04);
     padding: 35px 25px;
     box-sizing: border-box;
     border: 3px solid rgba(255, 255, 255, 0.9);
@@ -328,9 +327,6 @@ h2 {
 }
  
 .leaderboard-table th {
-    /* Antes: background-color: #1e293b (hardcodeado). Ahora usa
-       var(--primary-color) para que responda a los cambios de color
-       hechos desde admin.html/el Sheet, igual que el resto del sitio. */
     background-color: var(--primary-color);
     color: #f8fafc;
     padding: 12px 10px;
@@ -367,7 +363,6 @@ h2 {
 }
 .error-msg { color: var(--error-color); }
 
-/* Ajustes Responsivos Completos para Celulares */
 @media (max-width: 768px) {
     .leaderboard-grid {
         flex-direction: column;
@@ -378,10 +373,8 @@ h2 {
 }
 
 /* ==========================================================================
-   BOTONES Y COMPONENTES EXCLUSIVOS DE EVALUACIONES Y EXÁMENES
+   EVALUACIONES Y EXÁMENES
    ========================================================================== */
-
-/* Botón Principal de Acción */
 .btn {
     width: 100%;
     background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
@@ -394,7 +387,7 @@ h2 {
     font-family: inherit;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    box-shadow: 0 4px 14px rgba(0, 43, 92, 0.25);
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
     margin-top: 15px;
     box-sizing: border-box;
     display: inline-block;
@@ -404,7 +397,7 @@ h2 {
     background: linear-gradient(135deg, var(--secondary-color) 0%, #d97706 100%);
     color: var(--primary-dark);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(244, 178, 35, 0.35);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
 }
 
 .btn:disabled {
@@ -414,7 +407,6 @@ h2 {
     box-shadow: none;
 }
 
-/* Manejo de Pantallas en evaluaciones */
 .screen { display: none; }
 .active { 
     display: block !important; 
@@ -422,6 +414,13 @@ h2 {
 }
 
 /* Barra de progreso y temporizador */
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
 .progress-bar {
     background-color: #e2e8f0;
     border-radius: 50px;
@@ -442,7 +441,6 @@ h2 {
 .timer-txt { 
     font-weight: 900; 
     color: #64748b; 
-    float: right; 
     font-size: 1.05rem; 
 }
 
@@ -462,7 +460,7 @@ h2 {
 .question-txt {
     font-size: 1.2rem;
     font-weight: 700;
-    color: #1e293b;
+    color: var(--text-color);
     margin-bottom: 20px;
     line-height: 1.5;
     text-align: left;
@@ -536,7 +534,7 @@ h2 {
     margin: 20px 0;
     border-radius: 4px 16px 16px 4px;
     font-size: 0.95rem;
-    color: #475569;
+    color: var(--text-color);
     line-height: 1.6;
     text-align: left;
 }
