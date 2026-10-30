@@ -1,22 +1,17 @@
 // ==========================================
 // CONFIGURACIÓN DINÁMICA - PLATAFORMAS 2026
 // ==========================================
-// ESTA ES LA ÚNICA RUTA QUE NECESITAS (La de tu Google Sheet Unificado)
+// RUTA DEL GOOGLE SHEET UNIFICADO
 const API_UNIFICADA = "https://script.google.com/macros/s/AKfycbz-EHeSJb7LGGCjEfnUytjDCYf89tyQojOquOhcA1Ns1DircIMA8AxQ1_dKML0jpwhlFw/exec";
 
-// Esta variable guardará toda la info que viene del Google Sheet (pestaña "config")
+// Guardará la configuración global (pestaña "config")
 let CONFIG = {};
 
-// Info de títulos por materia (pestaña "header" del Sheet), la usa header.js.
-// Se llena acá para no tener que pedirla de nuevo por separado.
+// Información de títulos por materia (pestaña "header"), consumida por header.js
 window.HEADER_INFO = [];
 
 // ------------------------------------------------------------------
-// UNA SOLA LLAMADA AL BACKEND (antes eran 3: getConfig + getStyles +
-// getHeaderInfo, una detrás de otra). Ahora se piden todas juntas con
-// "getBootstrap", que además el backend cachea 5 minutos — así, en
-// época de pruebas, la mayoría de los alumnos recibe respuesta casi
-// instantánea sin que Apps Script tenga que releer el Sheet cada vez.
+// CARGA CONSOLIDADA "getBootstrap" (config + estilos + header)
 // ------------------------------------------------------------------
 async function cargarBootstrap() {
     try {
@@ -25,16 +20,16 @@ async function cargarBootstrap() {
         const respuesta = await fetch(API_UNIFICADA + "?action=getBootstrap");
         const datos = await respuesta.json();
 
-        // 1. Configuración general
+        // 1. Configuración general con resguardo contra valores no numéricos
         CONFIG = datos.config || {};
-        CONFIG.EXIGENCIA_MINIMA = parseFloat(CONFIG.EXIGENCIA_MINIMA);
-        CONFIG.TOTAL_PREGUNTAS = parseInt(CONFIG.TOTAL_PREGUNTAS);
+        CONFIG.EXIGENCIA_MINIMA = parseFloat(CONFIG.EXIGENCIA_MINIMA) || 0.6;
+        CONFIG.TOTAL_PREGUNTAS = parseInt(CONFIG.TOTAL_PREGUNTAS, 10) || 20;
+        CONFIG.CANTIDAD_RANKING = parseInt(CONFIG.CANTIDAD_RANKING, 10) || 50;
 
-        // 2. Paleta de colores (inyecta el <style> dinámico)
+        // 2. Paleta de colores (inyecta o actualiza el <style> dinámico)
         aplicarEstilos(datos.estilos || {});
 
-        // 3. Info de títulos por materia, para que header.js no tenga
-        //    que pedirla aparte.
+        // 3. Información de cabeceras por materia
         window.HEADER_INFO = Array.isArray(datos.header) ? datos.header : [];
 
         console.log("¡Bootstrap cargado con éxito!", CONFIG);
@@ -46,10 +41,7 @@ async function cargarBootstrap() {
     }
 }
 
-// Inyecta un <style> que sobreescribe las variables CSS definidas en
-// :root dentro de styles.css (--primary-color, --secondary-color, etc.),
-// a partir de lo que venga en la pestaña "styles" del Sheet. Así se puede
-// cambiar la paleta institucional editando el Sheet, sin tocar styles.css.
+// Inyecta o reemplaza el bloque <style id="dynamic-theme"> con las variables CSS
 function aplicarEstilos(estilos) {
     const mapaVariables = {
         PRIMARY_COLOR: '--primary-color',
@@ -70,23 +62,18 @@ function aplicarEstilos(estilos) {
     }
 
     if (reglasCSS) {
-        const styleTag = document.createElement('style');
-        styleTag.id = 'dynamic-theme';
+        let styleTag = document.getElementById('dynamic-theme');
+        if (!styleTag) {
+            styleTag = document.createElement('style');
+            styleTag.id = 'dynamic-theme';
+            document.head.appendChild(styleTag);
+        }
         styleTag.innerHTML = `:root {\n${reglasCSS}}`;
-        document.head.appendChild(styleTag);
         console.log("Paleta de colores dinámica aplicada.");
     }
 }
 
-// Se dispara automáticamente apenas se carga este script (no hay que
-// esperar a window.onload de la página). Cualquier otro script (header.js,
-// el propio cuestionario, etc.) puede hacer `await window.configListo`
-// para asegurarse de que CONFIG, los estilos y window.HEADER_INFO ya
-// estén listos, sin disparar una segunda descarga.
-//
-// Se mantienen "estilosListos" y "headerInfoListo" como alias de la MISMA
-// promesa, por compatibilidad con código anterior que los esperaba por
-// separado — awaitear una promesa ya resuelta no cuesta una llamada extra.
+// Promesas para control de asincronía en scripts dependientes
 window.configListo = cargarBootstrap();
 window.estilosListos = window.configListo;
 window.headerInfoListo = window.configListo;
