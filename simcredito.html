@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Educación Financiera 4to Medio | Descifra tu Crédito</title>
+    <title>Educación Financiera 4to Medio | Sistema de Amortización y Créditos</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!-- Alpine.js for lightweight state management -->
+    <!-- Alpine.js -->
     <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -35,7 +35,6 @@
         }
     </script>
     <style>
-        /* Custom scrollbar styling */
         ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
@@ -66,7 +65,7 @@
                         Finanzas 4to Medio
                         <span class="bg-amber-400 text-slate-900 text-xs px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">Chile</span>
                     </h1>
-                    <p class="text-xs text-indigo-200">Aprende a dominar los créditos, calcular intereses y no pagar de más</p>
+                    <p class="text-xs text-indigo-200">Aprende cómo se compone cada cuota: Capital vs Interés (Sistema Francés)</p>
                 </div>
             </div>
 
@@ -74,7 +73,7 @@
             <nav class="flex items-center space-x-1 sm:space-x-2 bg-slate-800/80 p-1.5 rounded-xl border border-slate-700/50 text-xs sm:text-sm">
                 <button @click="activeTab = 'simulador'" :class="activeTab === 'simulador' ? 'bg-indigo-600 text-white font-semibold shadow' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'" class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5">
                     <i class="fa-solid fa-chart-pie"></i>
-                    <span>Simulador</span>
+                    <span>Simulador y Cuotas</span>
                 </button>
                 <button @click="activeTab = 'comparador'" :class="activeTab === 'comparador' ? 'bg-indigo-600 text-white font-semibold shadow' : 'text-slate-300 hover:text-white hover:bg-slate-700/50'" class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5">
                     <i class="fa-solid fa-code-compare"></i>
@@ -95,46 +94,46 @@
     <!-- Main Content Container -->
     <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 flex-grow w-full">
 
-        <!-- ==================== TAB 1: SIMULADOR INTERACTIVO ==================== -->
-        <section x-show="activeTab === 'simulador'" x-transition:enter="transition ease-out duration-300 opacity-0 transform scale-95" x-transition:enter-start="opacity-0 scale-95" x-transition:enter-end="opacity-100 scale-100" class="space-y-8">
+        <!-- ==================== TAB 1: SIMULADOR INTERACTIVO Y AMORTIZACIÓN ==================== -->
+        <section x-show="activeTab === 'simulador'" x-transition:enter="transition ease-out duration-300 opacity-0 transform scale-95" class="space-y-8">
             
-            <!-- Intro Presets Banner -->
+            <!-- Banner Presets -->
             <div class="bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 rounded-3xl p-6 text-white shadow-xl relative overflow-hidden">
                 <div class="absolute -right-10 -bottom-10 opacity-10 pointer-events-none">
-                    <i class="fa-solid fa-piggy-bank text-9xl"></i>
+                    <i class="fa-solid fa-chart-line text-9xl"></i>
                 </div>
                 <div class="relative z-10 max-w-3xl">
                     <span class="bg-white/20 text-white text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider mb-3 inline-block backdrop-blur-md">
-                        Simulador de Deuda Real
+                        Simulador de Deuda & Amortización Real
                     </span>
-                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-2">¿Quieres pedir dinero prestado? ¡Calcula primero!</h2>
-                    <p class="text-indigo-100 text-sm sm:text-base mb-4">
-                        Prueba con estos ejemplos comunes que enfrentará un egresado de 4to medio o usa tus propios datos:
+                    <h2 class="text-2xl sm:text-3xl font-extrabold mb-2">Descubre cuánto pagas de Interés vs Capital en cada cuota</h2>
+                    <p class="text-indigo-100 text-sm mb-4">
+                        Selecciona un caso real en Chile o ajusta los valores para experimentar cómo funciona la amortización francesa:
                     </p>
                     
                     <!-- Quick Preset Buttons -->
                     <div class="flex flex-wrap gap-2.5">
-                        <button @click="setPreset(500000, 1.8, 12, 12000, 2500)" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2 backdrop-blur-sm active:scale-95">
-                            <i class="fa-solid fa-laptop text-amber-300"></i> Computador Notebook ($500.000 / 12 meses)
+                        <button @click="setPreset(600000, 1.8, 12, 15000, 2500)" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2 backdrop-blur-sm active:scale-95">
+                            <i class="fa-solid fa-laptop text-amber-300"></i> Notebook Estudios ($600.000 / 12 mes)
                         </button>
-                        <button @click="setPreset(1200000, 1.5, 24, 25000, 4000)" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2 backdrop-blur-sm active:scale-95">
-                            <i class="fa-solid fa-graduation-cap text-sky-300"></i> Matrícula Educación Superior ($1.200.000 / 24 meses)
+                        <button @click="setPreset(2500000, 1.5, 24, 30000, 5000)" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2 backdrop-blur-sm active:scale-95">
+                            <i class="fa-solid fa-graduation-cap text-sky-300"></i> Arancel Universidad ($2.500.000 / 24 mes)
                         </button>
-                        <button @click="setPreset(3500000, 1.95, 48, 50000, 8500)" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2 backdrop-blur-sm active:scale-95">
-                            <i class="fa-solid fa-motorcycle text-emerald-300"></i> Vehículo / Moto ($3.500.000 / 48 meses)
+                        <button @click="setPreset(5000000, 1.9, 36, 60000, 9500)" class="bg-white/10 hover:bg-white/20 border border-white/30 text-white text-xs sm:text-sm font-medium px-3.5 py-2 rounded-xl transition flex items-center gap-2 backdrop-blur-sm active:scale-95">
+                            <i class="fa-solid fa-car text-emerald-300"></i> Auto Usado / Proyecto ($5.000.000 / 36 mes)
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- Main Grid: Controls vs Results -->
+            <!-- Main Grid: Controls vs Summary KPIs -->
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
                 
-                <!-- Left Column: Input Controls Form -->
+                <!-- Left Column: Input Controls -->
                 <div class="lg:col-span-5 bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-6">
                     <div class="flex items-center justify-between border-b border-slate-100 pb-4">
                         <h3 class="font-bold text-lg text-slate-800 flex items-center gap-2">
-                            <i class="fa-solid fa-sliders text-indigo-600"></i> Parámetros del Crédito
+                            <i class="fa-solid fa-sliders text-indigo-600"></i> Configurar Crédito
                         </h3>
                         <button @click="resetForm()" class="text-xs text-slate-400 hover:text-rose-500 transition flex items-center gap-1 font-medium">
                             <i class="fa-solid fa-rotate-right"></i> Reiniciar
@@ -145,13 +144,7 @@
                     <div class="space-y-2">
                         <div class="flex justify-between items-center">
                             <label class="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
-                                Capital Solicitado
-                                <div class="relative group cursor-pointer">
-                                    <i class="fa-solid fa-circle-info text-slate-400 hover:text-indigo-600 text-xs"></i>
-                                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-56 p-2.5 bg-slate-900 text-white text-xs rounded-xl shadow-xl z-20 pointer-events-none">
-                                        Es el dinero real y líquido que la entidad financiera te entregará en mano o cuenta bancaria.
-                                    </div>
-                                </div>
+                                Capital Solicitado (CLP)
                             </label>
                             <span class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg" x-text="formatCLP(amount)"></span>
                         </div>
@@ -168,19 +161,13 @@
                         <div class="flex justify-between items-center">
                             <label class="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
                                 Tasa Interés Mensual (%)
-                                <div class="relative group cursor-pointer">
-                                    <i class="fa-solid fa-circle-info text-slate-400 hover:text-indigo-600 text-xs"></i>
-                                    <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-56 p-2.5 bg-slate-900 text-white text-xs rounded-xl shadow-xl z-20 pointer-events-none">
-                                        El porcentaje que cobra el banco cada mes por prestarte la plata. En Chile varía aprox entre 1.0% y 3.5% mensual para consumo.
-                                    </div>
-                                </div>
                             </label>
                             <span class="text-sm font-bold text-indigo-600 bg-indigo-50 px-2.5 py-1 rounded-lg" x-text="monthlyRate.toFixed(2) + '% mensual'"></span>
                         </div>
                         <input type="range" min="0.5" max="4.0" step="0.05" x-model.number="monthlyRate" class="w-full accent-indigo-600 bg-slate-200 h-2 rounded-lg cursor-pointer">
                         <div class="flex justify-between text-[11px] text-slate-400 font-medium">
                             <span>0.5% (Baja)</span>
-                            <span>2.0% (Promedio)</span>
+                            <span>1.8% (Promedio)</span>
                             <span>4.0% (Alta)</span>
                         </div>
                     </div>
@@ -188,17 +175,11 @@
                     <!-- Input 3: Plazo en Meses -->
                     <div class="space-y-2">
                         <label class="text-sm font-semibold text-slate-700 flex items-center gap-1.5">
-                            Plazo (Meses / Cuotas)
-                            <div class="relative group cursor-pointer">
-                                <i class="fa-solid fa-circle-info text-slate-400 hover:text-indigo-600 text-xs"></i>
-                                <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-56 p-2.5 bg-slate-900 text-white text-xs rounded-xl shadow-xl z-20 pointer-events-none">
-                                    En cuántos meses te comprometes a devolver todo el dinero. A mayor plazo, menor cuota pero MAYOR costo total final.
-                                </div>
-                            </div>
+                            Plazo (N° de Cuotas)
                         </label>
-                        <div class="grid grid-cols-5 gap-2">
-                            <template x-for="m in [6, 12, 24, 36, 48, 60]" :key="m">
-                                <button @click="termMonths = m" :class="termMonths === m ? 'bg-indigo-600 text-white border-indigo-600 font-bold shadow-sm' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'" class="py-2 rounded-xl text-xs border transition text-center">
+                        <div class="grid grid-cols-6 gap-1.5">
+                            <template x-for="m in [6, 12, 18, 24, 36, 48]" :key="m">
+                                <button @click="setTerm(m)" :class="termMonths === m ? 'bg-indigo-600 text-white font-bold shadow-sm' : 'bg-slate-50 text-slate-600 border-slate-200 hover:bg-slate-100'" class="py-2 rounded-xl text-xs border transition text-center">
                                     <span x-text="m"></span>m
                                 </button>
                             </template>
@@ -206,80 +187,62 @@
                     </div>
 
                     <div class="border-t border-slate-100 pt-4 space-y-4">
-                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Gastos Ocultos y Adicionales</span>
+                        <span class="text-xs font-bold text-slate-400 uppercase tracking-wider block">Gastos Ocultos y Seguros</span>
 
-                        <!-- Input 4: Gastos Operacionales Iniciales -->
-                        <div class="space-y-1.5">
+                        <!-- Input 4: Gastos Notariales -->
+                        <div class="space-y-1">
                             <div class="flex justify-between items-center">
-                                <label class="text-xs font-semibold text-slate-600 flex items-center gap-1">
-                                    Gastos Notariales / Iniciales
-                                    <div class="relative group cursor-pointer">
-                                        <i class="fa-solid fa-circle-info text-slate-400 hover:text-indigo-600 text-[10px]"></i>
-                                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-52 p-2 bg-slate-900 text-white text-[11px] rounded-lg shadow-xl z-20 pointer-events-none">
-                                            Costos únicos de formalización, timbres e impuestos legales al firmar el crédito.
-                                        </div>
-                                    </div>
-                                </label>
+                                <label class="text-xs font-semibold text-slate-600">Gastos Notariales / Iniciales ($)</label>
                                 <span class="text-xs font-semibold text-slate-700" x-text="formatCLP(initExpenses)"></span>
                             </div>
                             <input type="number" min="0" max="200000" step="5000" x-model.number="initExpenses" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
 
                         <!-- Input 5: Seguros Mensuales -->
-                        <div class="space-y-1.5">
+                        <div class="space-y-1">
                             <div class="flex justify-between items-center">
-                                <label class="text-xs font-semibold text-slate-600 flex items-center gap-1">
-                                    Seguro Desgravamen (Mensual)
-                                    <div class="relative group cursor-pointer">
-                                        <i class="fa-solid fa-circle-info text-slate-400 hover:text-indigo-600 text-[10px]"></i>
-                                        <div class="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-52 p-2 bg-slate-900 text-white text-[11px] rounded-lg shadow-xl z-20 pointer-events-none">
-                                            Seguro opcional/obligatorio que paga la deuda si el titular fallece. Se suma a la cuota mensual.
-                                        </div>
-                                    </div>
-                                </label>
+                                <label class="text-xs font-semibold text-slate-600">Seguro Desgravamen ($/mes)</label>
                                 <span class="text-xs font-semibold text-slate-700" x-text="formatCLP(monthlyInsurance)"></span>
                             </div>
-                            <input type="number" min="0" max="50000" step="1000" x-model.number="monthlyInsurance" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                            <input type="number" min="0" max="50000" step="500" x-model.number="monthlyInsurance" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         </div>
                     </div>
                 </div>
 
-                <!-- Right Column: Results Dashboard & Chart -->
+                <!-- Right Column: Summary KPIs -->
                 <div class="lg:col-span-7 space-y-6">
                     
                     <!-- KPI Cards Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         
-                        <!-- KPI 1: Cuota Mensual -->
+                        <!-- KPI 1: Cuota Mensual Fija -->
                         <div class="bg-white rounded-3xl p-5 shadow-md border border-slate-200/80 relative overflow-hidden flex flex-col justify-between">
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-indigo-50 rounded-bl-full -mr-4 -mt-4 z-0 pointer-events-none"></div>
                             <div class="relative z-10">
                                 <span class="text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center gap-1.5">
-                                    <i class="fa-regular fa-calendar-check text-indigo-500"></i> Cuota Mensual Final
+                                    <i class="fa-regular fa-calendar-check text-indigo-500"></i> Cuota Mensual Fija
                                 </span>
                                 <div class="text-3xl font-extrabold text-slate-900 mt-2" x-text="formatCLP(results.monthlyPayment)"></div>
                             </div>
                             <div class="text-xs text-slate-500 mt-3 pt-2 border-t border-slate-100 flex justify-between">
-                                <span>Plazo total:</span>
+                                <span>Duración:</span>
                                 <span class="font-semibold text-slate-700" x-text="termMonths + ' meses (' + (termMonths/12).toFixed(1) + ' años)'"></span>
                             </div>
                         </div>
 
                         <!-- KPI 2: Costo Total del Crédito (CTC) -->
                         <div class="bg-gradient-to-br from-slate-900 to-indigo-950 text-white rounded-3xl p-5 shadow-xl relative overflow-hidden flex flex-col justify-between">
-                            <div class="absolute top-0 right-0 w-24 h-24 bg-white/5 rounded-bl-full -mr-4 -mt-4 z-0 pointer-events-none"></div>
                             <div class="relative z-10">
                                 <div class="flex items-center justify-between">
                                     <span class="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
                                         <i class="fa-solid fa-coins text-amber-400"></i> Costo Total (CTC)
                                     </span>
-                                    <span class="text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2 py-0.5 rounded-full">¡La cifra REAL!</span>
+                                    <span class="text-[10px] bg-amber-400/20 text-amber-300 font-bold px-2 py-0.5 rounded-full">Suma Final</span>
                                 </div>
                                 <div class="text-3xl font-extrabold text-white mt-2" x-text="formatCLP(results.ctc)"></div>
                             </div>
                             <div class="text-xs text-indigo-200/80 mt-3 pt-2 border-t border-white/10 flex justify-between">
-                                <span>Pagas de más un:</span>
-                                <span class="font-bold text-amber-400" x-text="'+' + results.overpayPercentage + '% del capital'"></span>
+                                <span>Sobrepago total:</span>
+                                <span class="font-bold text-amber-400" x-text="'+' + results.overpayPercentage + '% sobre lo pedido'"></span>
                             </div>
                         </div>
 
@@ -289,126 +252,198 @@
                                 <i class="fa-solid fa-arrow-trend-up"></i> Intereses Totales
                             </span>
                             <div class="text-2xl font-bold text-slate-800 mt-1" x-text="formatCLP(results.totalInterest)"></div>
-                            <p class="text-[11px] text-slate-400 mt-1">
-                                El "arriendo" del dinero ganado por el banco.
-                            </p>
+                            <p class="text-[11px] text-slate-400 mt-1">Ganancia neta cobrada por la institución.</p>
                         </div>
 
-                        <!-- KPI 4: CAE (Carga Anual Equivalente) -->
+                        <!-- KPI 4: CAE -->
                         <div class="bg-white rounded-3xl p-5 shadow-md border border-slate-200/80">
                             <div class="flex justify-between items-start">
                                 <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider flex items-center gap-1.5">
                                     <i class="fa-solid fa-percent"></i> CAE Anual
                                 </span>
-                                <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Indicador Clave</span>
+                                <span class="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-2 py-0.5 rounded-full">Carga Anual</span>
                             </div>
                             <div class="text-2xl font-bold text-slate-800 mt-1" x-text="results.cae.toFixed(2) + '%'"></div>
-                            <p class="text-[11px] text-slate-400 mt-1">
-                                Tasa anual unificada (Interés + Seguros + Comisiones).
-                            </p>
+                            <p class="text-[11px] text-slate-400 mt-1">Costo real anual (Interés + Seguros + Gastos).</p>
                         </div>
                     </div>
 
-                    <!-- Chart & Breakdown Section -->
-                    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-4">
-                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-slate-100 pb-3">
+                    <!-- ==================== HIGHLIGHT FEATURE: INSPECTOR DE CUOTA ESPECÍFICA ==================== -->
+                    <div class="bg-gradient-to-br from-indigo-900 via-slate-900 to-indigo-950 text-white rounded-3xl p-6 shadow-xl border border-indigo-700/50 space-y-5">
+                        
+                        <div class="flex flex-col sm:flex-row justify-between sm:items-center gap-2 border-b border-indigo-800/80 pb-3">
                             <div>
-                                <h4 class="font-bold text-slate-800 text-base">Composición de tu Deuda Total</h4>
-                                <p class="text-xs text-slate-400">¿Hacia dónde se va exactamente cada peso pagado?</p>
+                                <span class="bg-amber-400 text-slate-900 text-[10px] font-bold px-2.5 py-0.5 rounded-full uppercase tracking-wider">
+                                    ¡Experimento Interactivo!
+                                </span>
+                                <h4 class="font-extrabold text-lg text-white mt-1">Inspecciona la Cuota N° <span x-text="selectedMonth" class="text-amber-300 underline"></span></h4>
                             </div>
-                            <div class="flex items-center gap-3 text-xs">
-                                <span class="flex items-center gap-1 font-medium text-slate-600">
-                                    <span class="w-3 h-3 rounded-full bg-indigo-500 inline-block"></span> Capital Base
-                                </span>
-                                <span class="flex items-center gap-1 font-medium text-slate-600">
-                                    <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Interés
-                                </span>
-                                <span class="flex items-center gap-1 font-medium text-slate-600">
-                                    <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Seguros/Gastos
-                                </span>
-                            </div>
+                            <p class="text-xs text-indigo-200">Mueve la barra para ver cómo evoluciona la cuota mes a mes:</p>
                         </div>
 
-                        <!-- Chart Canvas Container -->
-                        <div class="grid grid-cols-1 md:grid-cols-12 items-center gap-6">
-                            <div class="md:col-span-6 relative h-56 flex justify-center items-center">
-                                <canvas id="debtChart"></canvas>
+                        <!-- Slider for Month Selection -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-semibold text-indigo-200">
+                                <span>Cuota 1 (Inicio)</span>
+                                <span>Cuota <span x-text="selectedMonth" class="text-amber-400 font-bold"></span> de <span x-text="termMonths"></span></span>
+                                <span>Cuota <span x-text="termMonths"></span> (Final)</span>
                             </div>
-                            
-                            <div class="md:col-span-6 space-y-3">
-                                <!-- Capital detail -->
-                                <div class="bg-indigo-50/60 p-3 rounded-2xl border border-indigo-100 flex justify-between items-center">
-                                    <div>
-                                        <div class="text-xs text-indigo-900 font-bold">Capital Prestado</div>
-                                        <div class="text-xs text-indigo-600" x-text="((amount / results.ctc) * 100).toFixed(1) + '% del total'"></div>
+                            <input type="range" min="1" :max="termMonths" step="1" x-model.number="selectedMonth" class="w-full accent-amber-400 bg-indigo-950 h-3 rounded-lg cursor-pointer">
+                        </div>
+
+                        <!-- Active Month Detailed Breakdown Cards -->
+                        <template x-if="activeMonthData">
+                            <div class="space-y-4">
+                                <!-- Visual Split Bar -->
+                                <div class="space-y-1.5">
+                                    <div class="flex justify-between text-xs font-bold">
+                                        <span class="text-emerald-400">Capital: <span x-text="activeMonthData.capitalPct + '%'"></span></span>
+                                        <span class="text-rose-400">Interés: <span x-text="activeMonthData.interestPct + '%'"></span></span>
+                                        <template x-if="activeMonthData.insurance > 0">
+                                            <span class="text-amber-400">Seguro: <span x-text="activeMonthData.insurancePct + '%'"></span></span>
+                                        </template>
                                     </div>
-                                    <span class="font-bold text-indigo-950 text-sm" x-text="formatCLP(amount)"></span>
+                                    <div class="w-full h-4 bg-slate-800 rounded-full overflow-hidden flex shadow-inner">
+                                        <div :style="'width: ' + activeMonthData.capitalPct + '%'" class="bg-emerald-500 h-full transition-all duration-300" title="Abono a Capital"></div>
+                                        <div :style="'width: ' + activeMonthData.interestPct + '%'" class="bg-rose-500 h-full transition-all duration-300" title="Interés del mes"></div>
+                                        <div :style="'width: ' + activeMonthData.insurancePct + '%'" class="bg-amber-500 h-full transition-all duration-300" title="Seguro de Desgravamen"></div>
+                                    </div>
                                 </div>
 
-                                <!-- Interest detail -->
-                                <div class="bg-rose-50/60 p-3 rounded-2xl border border-rose-100 flex justify-between items-center">
-                                    <div>
-                                        <div class="text-xs text-rose-900 font-bold">Intereses Totales</div>
-                                        <div class="text-xs text-rose-600" x-text="((results.totalInterest / results.ctc) * 100).toFixed(1) + '% del total'"></div>
+                                <!-- Detail Grid in CLP -->
+                                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2">
+                                    
+                                    <!-- Capital -->
+                                    <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-emerald-500/30">
+                                        <span class="text-[11px] font-bold text-emerald-300 uppercase block">Abono a Capital</span>
+                                        <span class="text-lg font-extrabold text-white" x-text="formatCLP(activeMonthData.principal)"></span>
+                                        <span class="text-[10px] text-emerald-200 block mt-0.5" x-text="activeMonthData.capitalPct + '% de esta cuota'"></span>
                                     </div>
-                                    <span class="font-bold text-rose-950 text-sm" x-text="formatCLP(results.totalInterest)"></span>
+
+                                    <!-- Interés -->
+                                    <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-rose-500/30">
+                                        <span class="text-[11px] font-bold text-rose-300 uppercase block">Interés Pagado</span>
+                                        <span class="text-lg font-extrabold text-white" x-text="formatCLP(activeMonthData.interest)"></span>
+                                        <span class="text-[10px] text-rose-200 block mt-0.5" x-text="activeMonthData.interestPct + '% de esta cuota'"></span>
+                                    </div>
+
+                                    <!-- Saldo Insoluto -->
+                                    <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-2xl border border-indigo-400/30">
+                                        <span class="text-[11px] font-bold text-indigo-300 uppercase block">Deuda Restante</span>
+                                        <span class="text-lg font-extrabold text-amber-300" x-text="formatCLP(activeMonthData.endBalance)"></span>
+                                        <span class="text-[10px] text-indigo-200 block mt-0.5">Saldo insoluto tras el pago</span>
+                                    </div>
+
                                 </div>
 
-                                <!-- Expenses detail -->
-                                <div class="bg-amber-50/60 p-3 rounded-2xl border border-amber-100 flex justify-between items-center">
+                                <!-- Educational Note for this month -->
+                                <div class="bg-indigo-950/80 p-3 rounded-xl border border-indigo-700/60 text-xs text-indigo-100 flex items-start gap-2">
+                                    <i class="fa-solid fa-lightbulb text-amber-400 text-base shrink-0 mt-0.5"></i>
                                     <div>
-                                        <div class="text-xs text-amber-900 font-bold">Seguros y Comisiones</div>
-                                        <div class="text-xs text-amber-600" x-text="((results.totalExpenses / results.ctc) * 100).toFixed(1) + '% del total'"></div>
+                                        <template x-if="selectedMonth === 1">
+                                            <span><strong>En la Cuota 1:</strong> El interés es más ALTO porque se calcula sobre la totalidad del capital prestado. Solo una porción menor va a reducir tu deuda real.</span>
+                                        </template>
+                                        <template x-if="selectedMonth > 1 && selectedMonth < termMonths">
+                                            <span><strong>En la Cuota <span x-text="selectedMonth"></span>:</strong> Como la deuda restante ya bajó a <strong x-text="formatCLP(activeMonthData.startBalance)"></strong>, el interés disminuye y más dinero se destina a pagar capital.</span>
+                                        </template>
+                                        <template x-if="selectedMonth === termMonths">
+                                            <span><strong>En la Cuota Final (<span x-text="termMonths"></span>):</strong> Casi la TOTALIDAD de la cuota se destina a extinguir el capital pendiente. ¡Felicidades, liquidaste el crédito!</span>
+                                        </template>
                                     </div>
-                                    <span class="font-bold text-amber-950 text-sm" x-text="formatCLP(results.totalExpenses)"></span>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+
+                    <!-- Charts Area -->
+                    <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-6">
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-base">Evolución de Capital vs Interés (Cuota por Cuota)</h4>
+                            <p class="text-xs text-slate-400">Gráfico que demuestra cómo el interés disminuye mientras la amortización de capital aumenta cada mes.</p>
+                        </div>
+
+                        <!-- Stacked Bar Chart -->
+                        <div class="relative h-64 w-full">
+                            <canvas id="amortizationEvolutionChart"></canvas>
+                        </div>
+
+                        <!-- Donut Summary Chart -->
+                        <div class="border-t border-slate-100 pt-5 grid grid-cols-1 md:grid-cols-12 items-center gap-4">
+                            <div class="md:col-span-5 relative h-48 flex justify-center items-center">
+                                <canvas id="debtDonutChart"></canvas>
+                            </div>
+                            <div class="md:col-span-7 space-y-2 text-xs">
+                                <h5 class="font-bold text-slate-700 text-sm mb-1">Resumen Global del Crédito</h5>
+                                <div class="flex justify-between items-center p-2 rounded-xl bg-indigo-50 border border-indigo-100">
+                                    <span class="flex items-center gap-1.5 font-medium text-indigo-900">
+                                        <span class="w-3 h-3 rounded-full bg-indigo-500 inline-block"></span> Capital Inicial
+                                    </span>
+                                    <span class="font-bold text-indigo-950" x-text="formatCLP(amount)"></span>
+                                </div>
+                                <div class="flex justify-between items-center p-2 rounded-xl bg-rose-50 border border-rose-100">
+                                    <span class="flex items-center gap-1.5 font-medium text-rose-900">
+                                        <span class="w-3 h-3 rounded-full bg-rose-500 inline-block"></span> Total Intereses
+                                    </span>
+                                    <span class="font-bold text-rose-950" x-text="formatCLP(results.totalInterest)"></span>
+                                </div>
+                                <div class="flex justify-between items-center p-2 rounded-xl bg-amber-50 border border-amber-100">
+                                    <span class="flex items-center gap-1.5 font-medium text-amber-900">
+                                        <span class="w-3 h-3 rounded-full bg-amber-500 inline-block"></span> Gastos y Seguros
+                                    </span>
+                                    <span class="font-bold text-amber-950" x-text="formatCLP(results.totalExpenses)"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Toggle Amortization Table Button -->
-                    <div class="pt-2">
-                        <button @click="showTable = !showTable" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3 px-4 rounded-2xl border border-slate-200 transition flex items-center justify-center gap-2 text-xs sm:text-sm">
+                    <!-- Amortization Table Collapsible Trigger -->
+                    <div>
+                        <button @click="showTable = !showTable" class="w-full bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold py-3.5 px-4 rounded-2xl border border-slate-200 transition flex items-center justify-center gap-2 text-xs sm:text-sm shadow-sm">
                             <i class="fa-solid" :class="showTable ? 'fa-chevron-up' : 'fa-table-cells'"></i>
-                            <span x-text="showTable ? 'Ocultar Tabla de Amortización' : 'Ver Tabla de Amortización Mes a Mes (' + termMonths + ' cuotas)'"></span>
+                            <span x-text="showTable ? 'Ocultar Tabla de Amortización' : 'Ver Tabla Completa de Amortización Francesa (' + termMonths + ' cuotas)'"></span>
                         </button>
                     </div>
 
                 </div>
             </div>
 
-            <!-- Amortization Table Collapsible Container -->
-            <div x-show="showTable" x-collapse x-transition class="bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 overflow-hidden">
-                <div class="flex justify-between items-center mb-4">
+            <!-- Amortization Full Table -->
+            <div x-show="showTable" x-collapse x-transition class="bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 overflow-hidden space-y-4">
+                <div class="flex justify-between items-center">
                     <div>
-                        <h4 class="font-bold text-slate-800 text-base">Tabla de Amortización Francesa</h4>
-                        <p class="text-xs text-slate-400">Desglose exacto de cuota, abono a capital e intereses pagados mes a mes.</p>
+                        <h4 class="font-bold text-slate-800 text-base">Tabla de Amortización Francesa (Desglose Porcentual Mes a Mes)</h4>
+                        <p class="text-xs text-slate-400">Observa cómo el % de Capital crece y el % de Interés se reduce hasta la última cuota.</p>
                     </div>
                 </div>
 
-                <div class="overflow-x-auto max-h-80 overflow-y-auto rounded-xl border border-slate-200">
+                <div class="overflow-x-auto max-h-96 overflow-y-auto rounded-xl border border-slate-200">
                     <table class="w-full text-left border-collapse text-xs">
-                        <thead class="bg-slate-100 text-slate-600 sticky top-0 font-bold">
+                        <thead class="bg-slate-900 text-white sticky top-0 font-bold text-[11px]">
                             <tr>
                                 <th class="p-3">N° Cuota</th>
                                 <th class="p-3">Saldo Inicial</th>
                                 <th class="p-3">Cuota Total</th>
-                                <th class="p-3 text-emerald-600">Abono Capital</th>
-                                <th class="p-3 text-rose-600">Pago Interés</th>
-                                <th class="p-3 text-amber-600">Seguro/Gasto</th>
-                                <th class="p-3">Saldo Final</th>
+                                <th class="p-3 text-emerald-300">Abono Capital ($)</th>
+                                <th class="p-3 text-rose-300">Pago Interés ($)</th>
+                                <th class="p-3 text-amber-300">Seguro ($)</th>
+                                <th class="p-3 text-indigo-200">Saldo Insoluto ($)</th>
+                                <th class="p-3 text-emerald-400">% Capital</th>
+                                <th class="p-3 text-rose-400">% Interés</th>
                             </tr>
                         </thead>
-                        <tbody class="divide-y divide-slate-100">
+                        <tbody class="divide-y divide-slate-100 font-mono text-[11px]">
                             <template x-for="row in results.schedule" :key="row.month">
-                                <tr class="hover:bg-slate-50 transition">
-                                    <td class="p-3 font-semibold text-slate-700" x-text="row.month"></td>
+                                <tr class="hover:bg-indigo-50/50 transition" :class="selectedMonth === row.month ? 'bg-amber-50 font-semibold' : ''">
+                                    <td class="p-3 font-bold text-slate-800" x-text="row.month"></td>
                                     <td class="p-3 text-slate-600" x-text="formatCLP(row.startBalance)"></td>
-                                    <td class="p-3 font-bold text-slate-800" x-text="formatCLP(row.payment)"></td>
-                                    <td class="p-3 text-emerald-600 font-medium" x-text="formatCLP(row.principal)"></td>
-                                    <td class="p-3 text-rose-600 font-medium" x-text="formatCLP(row.interest)"></td>
-                                    <td class="p-3 text-amber-600" x-text="formatCLP(row.insurance)"></td>
-                                    <td class="p-3 text-slate-600 font-semibold" x-text="formatCLP(row.endBalance)"></td>
+                                    <td class="p-3 font-bold text-slate-900" x-text="formatCLP(row.payment)"></td>
+                                    <td class="p-3 text-emerald-700 font-semibold" x-text="formatCLP(row.principal)"></td>
+                                    <td class="p-3 text-rose-700 font-semibold" x-text="formatCLP(row.interest)"></td>
+                                    <td class="p-3 text-amber-700" x-text="formatCLP(row.insurance)"></td>
+                                    <td class="p-3 text-indigo-900 font-bold" x-text="formatCLP(row.endBalance)"></td>
+                                    <td class="p-3 text-emerald-600 font-bold" x-text="row.capitalPct + '%'"></td>
+                                    <td class="p-3 text-rose-600 font-bold" x-text="row.interestPct + '%'"></td>
                                 </tr>
                             </template>
                         </tbody>
@@ -422,10 +457,10 @@
         <section x-show="activeTab === 'comparador'" x-transition:enter="transition ease-out duration-300 opacity-0 transform scale-95" class="space-y-8">
             <div class="bg-white rounded-3xl p-6 shadow-md border border-slate-200/80 space-y-4">
                 <div class="max-w-3xl">
-                    <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Herramienta de Decisión</span>
-                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Comparador de Ofertas Bancarias (Banco A vs Banco B)</h2>
+                    <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Toma de Decisiones</span>
+                    <h2 class="text-2xl font-extrabold text-slate-900 mt-2">Comparador de Ofertas Crediticias (Banco A vs Banco B)</h2>
                     <p class="text-xs sm:text-sm text-slate-500 mt-1">
-                        A veces un banco te ofrece una tasa de interés más baja, pero te cobra seguros caros o comisiones ocultas. Usa el <strong>Costo Total (CTC)</strong> y la <strong>CAE</strong> para descubrir cuál conviene de verdad.
+                        Compara dos propuestas bancarias distintas. A menudo, una tasa baja es compensada con seguros obligatorios caros. ¡Usa el <strong>Costo Total (CTC)</strong> para elegir!
                     </p>
                 </div>
 
@@ -440,7 +475,7 @@
                             </h3>
                             <template x-if="compWinner === 'A'">
                                 <span class="bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
-                                    <i class="fa-solid fa-trophy text-amber-300"></i> ¡Opción Más Económica!
+                                    <i class="fa-solid fa-trophy text-amber-300"></i> ¡Opción Más Conveniente!
                                 </span>
                             </template>
                         </div>
@@ -461,12 +496,12 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="text-xs font-semibold text-slate-600">Seguro + Gastos Mensuales ($)</label>
+                                <label class="text-xs font-semibold text-slate-600">Seguros / Comisiones Mensuales ($)</label>
                                 <input type="number" step="500" x-model.number="compA.insurance" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 mt-1 focus:ring-2 focus:ring-indigo-500">
                             </div>
                         </div>
 
-                        <!-- Computed Results Option A -->
+                        <!-- Calculated Output -->
                         <div class="mt-5 pt-4 border-t border-slate-200/80 space-y-2">
                             <div class="flex justify-between text-xs">
                                 <span class="text-slate-500">Cuota Mensual:</span>
@@ -477,7 +512,7 @@
                                 <span class="font-extrabold text-indigo-700" x-text="formatCLP(compACalc.ctc)"></span>
                             </div>
                             <div class="flex justify-between text-xs">
-                                <span class="text-slate-500">CAE Aproximada:</span>
+                                <span class="text-slate-500">CAE Estimada:</span>
                                 <span class="font-bold text-emerald-700" x-text="compACalc.cae.toFixed(2) + '%'"></span>
                             </div>
                         </div>
@@ -491,7 +526,7 @@
                             </h3>
                             <template x-if="compWinner === 'B'">
                                 <span class="bg-emerald-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-sm">
-                                    <i class="fa-solid fa-trophy text-amber-300"></i> ¡Opción Más Económica!
+                                    <i class="fa-solid fa-trophy text-amber-300"></i> ¡Opción Más Conveniente!
                                 </span>
                             </template>
                         </div>
@@ -512,12 +547,12 @@
                                 </div>
                             </div>
                             <div>
-                                <label class="text-xs font-semibold text-slate-600">Seguro + Gastos Mensuales ($)</label>
+                                <label class="text-xs font-semibold text-slate-600">Seguros / Comisiones Mensuales ($)</label>
                                 <input type="number" step="500" x-model.number="compB.insurance" class="w-full px-3 py-2 text-xs rounded-xl border border-slate-200 mt-1 focus:ring-2 focus:ring-purple-500">
                             </div>
                         </div>
 
-                        <!-- Computed Results Option B -->
+                        <!-- Calculated Output -->
                         <div class="mt-5 pt-4 border-t border-slate-200/80 space-y-2">
                             <div class="flex justify-between text-xs">
                                 <span class="text-slate-500">Cuota Mensual:</span>
@@ -528,7 +563,7 @@
                                 <span class="font-extrabold text-purple-700" x-text="formatCLP(compBCalc.ctc)"></span>
                             </div>
                             <div class="flex justify-between text-xs">
-                                <span class="text-slate-500">CAE Aproximada:</span>
+                                <span class="text-slate-500">CAE Estimada:</span>
                                 <span class="font-bold text-emerald-700" x-text="compBCalc.cae.toFixed(2) + '%'"></span>
                             </div>
                         </div>
@@ -536,157 +571,174 @@
 
                 </div>
 
-                <!-- Summary Savings Box -->
+                <!-- Savings Banner -->
                 <div class="bg-indigo-900 text-white rounded-2xl p-5 mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
                     <div class="flex items-center gap-3">
                         <div class="bg-indigo-700 p-3 rounded-xl text-amber-300 text-xl">
                             <i class="fa-solid fa-piggy-bank"></i>
                         </div>
                         <div>
-                            <h4 class="font-bold text-sm">Ahorro Estimado al Elegir Sabiamante:</h4>
+                            <h4 class="font-bold text-sm">Diferencia Final al Comparar:</h4>
                             <p class="text-xs text-indigo-200" x-text="compDifferenceText()"></p>
                         </div>
                     </div>
                     <div class="text-right">
-                        <span class="text-xs text-indigo-300 block">Diferencia Total en Pesos:</span>
+                        <span class="text-xs text-indigo-300 block">Ahorro Estimado:</span>
                         <span class="text-2xl font-extrabold text-amber-400" x-text="formatCLP(Math.abs(compACalc.ctc - compBCalc.ctc))"></span>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- ==================== TAB 3: MÓDULO EDUCATIVO ==================== -->
+        <!-- ==================== TAB 3: MÓDULO EDUCATIVO COMPLETO ==================== -->
         <section x-show="activeTab === 'aprende'" x-transition:enter="transition ease-out duration-300 opacity-0 transform scale-95" class="space-y-8">
             
             <div class="text-center max-w-2xl mx-auto space-y-2">
-                <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Especial 4to Medio</span>
-                <h2 class="text-3xl font-extrabold text-slate-900">Entiende tu Crédito Sin Vueltas</h2>
-                <p class="text-sm text-slate-500">Conceptos esenciales explicados en chileno y sin enredos para preparar tu futuro financiero.</p>
+                <span class="bg-purple-100 text-purple-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Manual de Educación Financiera</span>
+                <h2 class="text-3xl font-extrabold text-slate-900">¿Cómo Funciona la Deuda en Chile?</h2>
+                <p class="text-sm text-slate-500">Guía práctica y directa pensada para alumnos de 4to medio a punto de ingresar al mundo adulto.</p>
+            </div>
+
+            <!-- Deep Dive: French Amortization System -->
+            <div class="bg-white p-6 sm:p-8 rounded-3xl shadow-sm border border-slate-200 space-y-4">
+                <div class="flex items-center gap-3 text-indigo-600">
+                    <div class="w-10 h-10 bg-indigo-50 rounded-xl flex items-center justify-center font-bold text-xl">
+                        💡
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-xl text-slate-900">El Sistema de Amortización Francés (Cuotas Fijas)</h3>
+                        <p class="text-xs text-slate-500">¿Por qué las primeras cuotas sienten que "no pagan nada de deuda"?</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 text-xs leading-relaxed text-slate-600">
+                    <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-slate-800 text-sm text-indigo-600">1. Cálculo de Interés sobre Deuda Restante (Saldo Insoluto)</h4>
+                        <p>
+                            El interés mensual de un crédito no se calcula sobre el total inicial para siempre, sino sobre la <strong>deuda que aún te queda por pagar (Saldo Insoluto)</strong>.
+                        </p>
+                        <p>
+                            En la <strong>Cuota 1</strong>, como debes el 100% de la plata, el monto cobrado por intereses es gigantesco. Por eso gran parte de tu cuota fija se destina sólo a pagar ese "arriendo de dinero".
+                        </p>
+                    </div>
+
+                    <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border border-slate-100">
+                        <h4 class="font-bold text-slate-800 text-sm text-emerald-600">2. El Efecto Bola de Nieve a Tu Favor</h4>
+                        <p>
+                            A medida que avanzan los meses y pagas un poquito de capital, tu deuda restante disminuye. Al mes siguiente, el banco calcula la tasa sobre un saldo menor, produciendo <strong>menos interés</strong>.
+                        </p>
+                        <p>
+                            Como tu cuota mensual es fija, ese dinero sobrante se destina a <strong>amortizar más capital</strong>, acelerando la reducción de tu deuda en las cuotas finales.
+                        </p>
+                    </div>
+                </div>
             </div>
 
             <!-- Concept Flashcards Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 
-                <!-- Card 1: Capital -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:shadow-md transition space-y-3">
-                    <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-2xl flex items-center justify-center text-xl font-bold">
-                        💵
-                    </div>
-                    <h3 class="font-bold text-lg text-slate-800">1. El Capital</h3>
+                <!-- Capital -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-2">
+                    <span class="text-2xl">💵</span>
+                    <h3 class="font-bold text-base text-slate-800">Capital Solicitado</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        Es la plata <strong>bruta que te prestan</strong>. Si pides un crédito de $1.000.000 para comprar una notebook, tu capital inicial es justo $1.000.000. No es plata regalada, es un compromiso de devolución.
+                        Es el monto líquido real que recibes. Si pides $1.000.000 para comprar una notebook, tu capital base es justo $1.000.000.
                     </p>
                 </div>
 
-                <!-- Card 2: Interés -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:shadow-md transition space-y-3">
-                    <div class="w-12 h-12 bg-rose-100 text-rose-600 rounded-2xl flex items-center justify-center text-xl font-bold">
-                        📈
-                    </div>
-                    <h3 class="font-bold text-lg text-slate-800">2. El Interés</h3>
+                <!-- Interés -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-2">
+                    <span class="text-2xl">📈</span>
+                    <h3 class="font-bold text-base text-slate-800">Interés Mensual</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        Es el <strong>"arriendo"</strong> que pagas por usar el dinero de otro. Se mide en un porcentaje mensual (ej: 1,8% al mes). Mientas más tiempo te demores en pagar, más arriendo/interés acumulas.
+                        El precio que cobra la institución por prestarte su dinero durante un periodo. En crédito de consumo suele rondar entre 1.2% y 3.5% mensual.
                     </p>
                 </div>
 
-                <!-- Card 3: CTC -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:shadow-md transition space-y-3">
-                    <div class="w-12 h-12 bg-amber-100 text-amber-600 rounded-2xl flex items-center justify-center text-xl font-bold">
-                        🏷️
-                    </div>
-                    <h3 class="font-bold text-lg text-slate-800">3. CTC (Costo Total del Crédito)</h3>
+                <!-- CTC -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-2">
+                    <span class="text-2xl">🏷️</span>
+                    <h3 class="font-bold text-base text-slate-800">Costo Total (CTC)</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        Es la suma <strong>REAL de todas tus cuotas</strong> al finalizar el plazo. Si pediste $1.000.000 y pagaste 12 cuotas de $100.000, tu CTC fue de $1.200.000. Los $200.000 extra fueron el costo del servicio.
+                        La suma exacta de todas tus cuotas mensuales pagadas. Representa el dinero total real devuelto a la institución.
                     </p>
                 </div>
 
-                <!-- Card 4: CAE -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:shadow-md transition space-y-3">
-                    <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-2xl flex items-center justify-center text-xl font-bold">
-                        🔍
-                    </div>
-                    <h3 class="font-bold text-lg text-slate-800">4. CAE (Carga Anual Equivalente)</h3>
+                <!-- CAE -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-2">
+                    <span class="text-2xl">🔍</span>
+                    <h3 class="font-bold text-base text-slate-800">CAE (Carga Anual Equivalente)</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        Un indicador en % anual obligatorio por ley en Chile. Resume <strong>intereses + seguros + comisiones + impuestos</strong>. <span class="text-emerald-700 font-bold">Regla de oro: A mismo monto y plazo, la entidad con MENOR CAE es la más barata.</span>
+                        Porcentaje anual obligatorio en Chile que integra interés + gastos + seguros. ¡Compara siempre la CAE entre bancos a igual plazo!
                     </p>
                 </div>
 
-                <!-- Card 5: Seguros y Gastos -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:shadow-md transition space-y-3">
-                    <div class="w-12 h-12 bg-purple-100 text-purple-600 rounded-2xl flex items-center justify-center text-xl font-bold">
-                        🛡️
-                    </div>
-                    <h3 class="font-bold text-lg text-slate-800">5. Seguros y Gastos Notariales</h3>
+                <!-- Seguros -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-2">
+                    <span class="text-2xl">🛡️</span>
+                    <h3 class="font-bold text-base text-slate-800">Seguro de Desgravamen</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        Incluyen el <strong>seguro de desgravamen</strong> (cubre la deuda si falleces) y los cobros por firmar ante notario o timbres legales. Siempre pregunta si los seguros son obligatorios u opcionales.
+                        Cubre la deuda en caso de fallecimiento del titular. Se cobra mensualmente dentro de la cuota.
                     </p>
                 </div>
 
-                <!-- Card 6: Amortización -->
-                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 hover:shadow-md transition space-y-3">
-                    <div class="w-12 h-12 bg-sky-100 text-sky-600 rounded-2xl flex items-center justify-center text-xl font-bold">
-                        📊
-                    </div>
-                    <h3 class="font-bold text-lg text-slate-800">6. Sistema de Amortización</h3>
+                <!-- Saldo Insoluto -->
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-slate-200 space-y-2">
+                    <span class="text-2xl">🏦</span>
+                    <h3 class="font-bold text-base text-slate-800">Saldo Insoluto</h3>
                     <p class="text-xs text-slate-600 leading-relaxed">
-                        En Chile se usa el sistema francés (cuota fija). En las primeras cuotas pagas <strong>más intereses que capital</strong>. Hacia el final de la deuda, casi todo tu dinero va a extinguir el capital restante.
+                        Lo que te resta por pagar de la deuda original en un momento determinado, sin contar los intereses futuros.
                     </p>
                 </div>
             </div>
 
-            <!-- Special Comparison Section: CAE Universitario vs Crédito de Consumo -->
+            <!-- CAE Universitario Banner -->
             <div class="bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 text-white shadow-2xl space-y-6">
                 <div class="border-b border-indigo-800/60 pb-4">
                     <span class="bg-amber-400 text-slate-900 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider inline-block mb-2">
-                        Atención Alumnos de 4to Medio
+                        Imprescindible para Egresados de 4to Medio
                     </span>
-                    <h3 class="text-2xl font-extrabold text-white">¿Educación Superior? CAE Universitario vs Crédito Consumo Tradicional</h3>
+                    <h3 class="text-2xl font-extrabold text-white">CAE Universitario vs. Créditos de Consumo Bancarios</h3>
                     <p class="text-xs sm:text-sm text-indigo-200 mt-1">
-                        Muchos estudiantes cometen el error de financiar matrículas o aranceles con tarjetas o créditos de consumo rotativos. ¡Mira las diferencias abismales!
+                        Si planeas estudiar en Universidad o Instituto Profesional, es muy importante comprender las diferencias de financiamiento:
                     </p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    
-                    <!-- CAE Universitario -->
                     <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-emerald-500/40 space-y-3">
                         <div class="flex items-center gap-2 text-emerald-400 font-bold text-lg">
-                            <i class="fa-solid fa-graduation-cap text-2xl"></i> CAE (Crédito Aval del Estado)
+                            <i class="fa-solid fa-graduation-cap text-2xl"></i> Crédito CAE Universitario
                         </div>
                         <ul class="text-xs text-indigo-100 space-y-2 list-disc list-inside">
-                            <li><strong>Tasa Subsidiada:</strong> Tasa fija real del 2% anual (subvencionada por el Estado).</li>
-                            <li><strong>Período de Gracia:</strong> Empiezas a pagar 18 meses después de egresar de la carrera.</li>
-                            <li><strong>Cuota Contingente al Ingreso:</strong> Nunca pagas más del 10% de tu sueldo mensual real.</li>
-                            <li>Si estás desempleado, puedes solicitar suspensión del cobro sin perder tu casa.</li>
+                            <li><strong>Tasa Subsidiada:</strong> Solo 2% real anual fijada por el Estado.</li>
+                            <li><strong>Período de Gracia:</strong> Cobro inicia 18 meses después de egresar.</li>
+                            <li><strong>Tope de Pago:</strong> Las cuotas no pueden superar el 10% de tu sueldo real.</li>
                         </ul>
                     </div>
 
-                    <!-- Crédito Consumo -->
                     <div class="bg-white/10 backdrop-blur-md p-5 rounded-2xl border border-rose-500/40 space-y-3">
                         <div class="flex items-center gap-2 text-rose-400 font-bold text-lg">
-                            <i class="fa-solid fa-credit-card text-2xl"></i> Crédito de Consumo / Banco
+                            <i class="fa-solid fa-credit-card text-2xl"></i> Crédito de Consumo Bancario
                         </div>
                         <ul class="text-xs text-indigo-100 space-y-2 list-disc list-inside">
-                            <li><strong>Tasa Comercial:</strong> Varía entre 15% y 35% anual (¡hasta 15 veces más caro!).</li>
-                            <li><strong>Cobro Inmediato:</strong> La primera cuota vence al mes siguiente de pedirlo.</li>
-                            <li><strong>Sin Tope por Sueldo:</strong> Si ganas el mínimo o te quedas sin trabajo, te cobran igual la cuota entera.</li>
-                            <li>Riesgo de DICOM y embargo acelerado si caes en mora.</li>
+                            <li><strong>Tasa Comercial:</strong> Puede bordear entre 15% y 35% anual.</li>
+                            <li><strong>Cobro Inmediato:</strong> Vence la primera cuota al mes subsiguiente.</li>
+                            <li><strong>Sin Límite por Sueldo:</strong> Debes pagar la cuota completa estés empleado o no.</li>
                         </ul>
                     </div>
-
                 </div>
             </div>
 
         </section>
 
-        <!-- ==================== TAB 4: QUIZ / TRIVIA INTERACTIVA ==================== -->
+        <!-- ==================== TAB 4: QUIZ INTERACTIVO ==================== -->
         <section x-show="activeTab === 'quiz'" x-transition:enter="transition ease-out duration-300 opacity-0 transform scale-95" class="max-w-3xl mx-auto space-y-8">
             
             <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-md border border-slate-200/80 space-y-6">
                 <div class="flex justify-between items-center border-b border-slate-100 pb-4">
                     <div>
-                        <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Desafío Financiero</span>
-                        <h2 class="text-2xl font-extrabold text-slate-900 mt-1">Ponte a Prueba: ¿Sabes manejar una deuda?</h2>
+                        <span class="bg-indigo-100 text-indigo-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">Trivia de Aprendizaje</span>
+                        <h2 class="text-2xl font-extrabold text-slate-900 mt-1">¿Cuánto Aprendiste sobre Créditos y Amortización?</h2>
                     </div>
                     <template x-if="quizSubmitted">
                         <button @click="resetQuiz()" class="text-xs bg-indigo-50 text-indigo-600 font-bold px-3 py-2 rounded-xl hover:bg-indigo-100 transition">
@@ -695,7 +747,7 @@
                     </template>
                 </div>
 
-                <!-- Quiz Questions List -->
+                <!-- Questions List -->
                 <div class="space-y-8">
                     <template x-for="(q, index) in questions" :key="q.id">
                         <div class="space-y-3 p-4 rounded-2xl bg-slate-50 border border-slate-200/60">
@@ -704,7 +756,6 @@
                                 <span x-text="q.title"></span>
                             </h3>
 
-                            <!-- Options -->
                             <div class="space-y-2 pl-7">
                                 <template x-for="(opt, optIdx) in q.options" :key="optIdx">
                                     <label class="flex items-center gap-3 p-3 rounded-xl border text-xs sm:text-sm cursor-pointer transition"
@@ -720,13 +771,12 @@
                                 </template>
                             </div>
 
-                            <!-- Feedback message after submit -->
                             <template x-if="quizSubmitted">
                                 <div class="ml-7 p-3 rounded-xl text-xs font-medium mt-2"
                                      :class="quizAnswers[q.id] === q.correct ? 'bg-emerald-50 text-emerald-800 border border-emerald-200' : 'bg-rose-50 text-rose-800 border border-rose-200'">
                                     <div class="font-bold flex items-center gap-1 mb-1">
                                         <i class="fa-solid" :class="quizAnswers[q.id] === q.correct ? 'fa-circle-check text-emerald-600' : 'fa-circle-xmark text-rose-600'"></i>
-                                        <span x-text="quizAnswers[q.id] === q.correct ? '¡Correcto!' : 'Incorrecto'"></span>
+                                        <span x-text="quizAnswers[q.id] === q.correct ? '¡Respuesta Correcta!' : 'Respuesta Incorrecta'"></span>
                                     </div>
                                     <p x-text="q.explanation"></p>
                                 </div>
@@ -735,20 +785,20 @@
                     </template>
                 </div>
 
-                <!-- Submit Button / Score Header -->
+                <!-- Submit Button / Score Box -->
                 <div class="pt-4 border-t border-slate-100">
                     <template x-if="!quizSubmitted">
                         <button @click="submitQuiz()" :disabled="Object.keys(quizAnswers).length < questions.length" 
                                 class="w-full bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50 text-white font-bold py-3.5 px-6 rounded-2xl transition shadow-lg text-sm">
-                            Verificar Mis Respuestas
+                            Evaluar Mis Respuestas
                         </button>
                     </template>
 
                     <template x-if="quizSubmitted">
                         <div class="bg-gradient-to-r from-indigo-900 to-slate-900 text-white p-6 rounded-2xl text-center space-y-2">
-                            <h4 class="text-xl font-extrabold">Tu Puntaje Final</h4>
+                            <h4 class="text-xl font-extrabold">Resultado Final</h4>
                             <div class="text-4xl font-extrabold text-amber-400" x-text="quizScore + ' / ' + questions.length"></div>
-                            <p class="text-xs text-indigo-200" x-text="quizScore === questions.length ? '🎉 ¡Excelente! Tienes visión financiera de experto.' : '👍 ¡Buen intento! Revisa la guía de conceptos para perfeccionar tus decisiones.'"></p>
+                            <p class="text-xs text-indigo-200" x-text="quizScore === questions.length ? '🎉 ¡Excelente! Dominas perfectamente cómo funciona la amortización y las cuotas.' : '👍 Buen esfuerzo. Revisa el simulador para profundizar en cómo cambia el interés cuota a cuota.'"></p>
                         </div>
                     </template>
                 </div>
@@ -761,24 +811,27 @@
     <!-- Footer -->
     <footer class="bg-slate-900 text-slate-400 text-xs py-6 border-t border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-2">
-            <p class="text-slate-300 font-semibold">Desarrollado para Educación Financiera Escolar - Estudiantes de 4to Medio en Chile</p>
-            <p class="text-slate-500">Los cálculos presentados corresponden a simulaciones bajo amortización francesa y aproximaciones regulatorias CMF/SBN. No constituye oferta vincular de entidades crediticias.</p>
+            <p class="text-slate-300 font-semibold">Plataforma Didáctica de Educación Financiera para Alumnos de 4to Medio en Chile</p>
+            <p class="text-slate-500">Cálculos proyectados mediante la fórmula del sistema de amortización francés. Uso exclusivamente pedagógico.</p>
         </div>
     </footer>
 
-    <!-- Alpine App State & Chart JS Initialization -->
+    <!-- Alpine App State & Chart JS Logic -->
     <script>
         function creditApp() {
             return {
                 activeTab: 'simulador',
                 showTable: false,
 
-                // Input Model Values (Default: $1.000.000 / 1.8% / 24m)
+                // Input Parameters (Default: $1.000.000 / 1.8% / 24m)
                 amount: 1000000,
                 monthlyRate: 1.8,
                 termMonths: 24,
                 initExpenses: 15000,
                 monthlyInsurance: 3500,
+
+                // Selected Month for Inspection (Interactive Slider)
+                selectedMonth: 1,
 
                 // Comparator State
                 compA: { amount: 1000000, rate: 1.8, term: 24, insurance: 3500 },
@@ -791,83 +844,97 @@
                 questions: [
                     {
                         id: 1,
-                        title: "Si pides un crédito de $1.000.000 y el Costo Total del Crédito (CTC) resulta ser de $1.450.000, ¿cuánto dinero terminaste pagando SÓLO por el arriendo/costo del dinero?",
-                        options: ["$1.000.000", "$450.000", "$1.450.000", "$50.000"],
+                        title: "En el Sistema de Amortización Francés, ¿por qué en la PRIMERA cuota pagas más interés que capital?",
+                        options: [
+                            "Porque el banco te cobra una multa por iniciar el crédito",
+                            "Porque el interés del mes se calcula sobre la totalidad del capital que aún debes (Saldo Insoluto)",
+                            "Porque el interés siempre es fijo en pesos todos los meses",
+                            "Porque las leyes obligan a pagar los impuestos en la cuota 1"
+                        ],
                         correct: 1,
-                        explanation: "El costo extra pagado por sobre el dinero inicial entregado es CTC - Capital ($1.450.000 - $1.000.000 = $450.000 entre intereses y seguros)."
+                        explanation: "Al inicio debes todo el dinero prestado, por lo que la tasa de interés aplicada sobre ese saldo total genera la mayor cantidad de interés del crédito."
                     },
                     {
                         id: 2,
-                        title: "¿Para qué sirve principalmente el indicador CAE (Carga Anual Equivalente)?",
+                        title: "¿Qué ocurre con la porción de CAPITAL que pagas en cada cuota a medida que avanzas hacia los últimos meses?",
                         options: [
-                            "Para saber la fecha en que vence la última cuota",
-                            "Para comparar cuál crédito es más barato sumando todos los cobros en un % anual único",
-                            "Para saber cuánto dinero te va a prestar el banco en total",
-                            "Es un impuesto obligatorio que cobra la Municipalidad"
+                            "Disminuye a cero",
+                            "Se mantiene exactamente igual que en el mes 1",
+                            "Aumenta progresivamente, ya que al deber menos saldo, el interés baja y sobra más dinero para amortizar capital",
+                            "El banco congela el pago de capital"
                         ],
-                        correct: 1,
-                        explanation: "La CAE unifica la tasa de interés + comisiones + seguros en un solo indicador. Mientras más baja la CAE, más barato el crédito a igual monto y plazo."
+                        correct: 2,
+                        explanation: "Al reducir la deuda total mes a mes, el interés cobrado disminuye, permitiendo que una parte más grande de la cuota fija vaya directamente a pagar capital."
                     },
                     {
                         id: 3,
-                        title: "Si aumentas el plazo de tu crédito de 12 cuotas a 48 cuotas para pedir la misma cantidad de dinero:",
-                        options: [
-                            "Tu cuota mensual sube significativamente",
-                            "Pagas menos intereses en total al final",
-                            "Tu cuota mensual baja, pero el Costo Total del Crédito (CTC) sube mucho al acumular más meses pagando intereses",
-                            "El banco te perdona el pago de seguros"
-                        ],
-                        correct: 2,
-                        explanation: "A mayor número de cuotas, la cuota mes a mes se hace más pagable, pero el interés total acumulado dispara el costo total del crédito."
+                        title: "Si solicitas un crédito de $1.000.000 y el Costo Total del Crédito (CTC) es de $1.350.000, ¿cuánto pagaste por costo del servicio (intereses + seguros)?",
+                        options: ["$1.000.000", "$350.000", "$1.350.000", "$50.000"],
+                        correct: 1,
+                        explanation: "El sobrepago total es CTC - Capital prestado ($1.350.000 - $1.000.000 = $350.000)."
                     },
                     {
                         id: 4,
-                        title: "Si necesitas financiar tus estudios superiores (Universidad o IP), ¿por qué el CAE universitario es más conveniente que un crédito de consumo?",
+                        title: "¿Cuál es la principal ventaja del Crédito CAE Universitario frente a un Crédito de Consumo tradicional?",
                         options: [
-                            "Porque tiene una tasa subsidiada muy baja (2% real) y la cuota no supera el 10% de tu sueldo",
-                            "Porque el banco te regala un auto si firmas el crédito",
-                            "Porque te permite no pagar nunca si no quieres",
-                            "No hay diferencia, ambos cobran exactamente lo mismo"
+                            "Tiene una tasa fija subsidiada del 2% real y las cuotas no superan el 10% de tus ingresos reales",
+                            "Te permite comprar automóviles o ir de viaje gratis",
+                            "No requiere devolver el dinero bajo ninguna circunstancia",
+                            "No requiere estar matriculado en ninguna institución de educación superior"
                         ],
                         correct: 0,
-                        explanation: "El CAE Universitario tiene garantía estatal con una tasa de interés del 2% real y protección según tu sueldo futuro, a diferencia de los créditos comerciales de alto interés."
+                        explanation: "El CAE Universitario cuenta con tasa subvencionada del 2% y protección según el sueldo del egresado, a diferencia de un crédito de consumo comercial."
                     }
                 ],
 
-                // Chart Reference
-                chartInstance: null,
+                // Chart References
+                evolutionChartInstance: null,
+                donutChartInstance: null,
 
                 initApp() {
-                    // Watch inputs to update chart dynamically
-                    this.$watch('amount', () => this.updateChart());
-                    this.$watch('monthlyRate', () => this.updateChart());
-                    this.$watch('termMonths', () => this.updateChart());
-                    this.$watch('initExpenses', () => this.updateChart());
-                    this.$watch('monthlyInsurance', () => this.updateChart());
+                    this.$watch('amount', () => this.onInputsChange());
+                    this.$watch('monthlyRate', () => this.onInputsChange());
+                    this.$watch('termMonths', () => this.onInputsChange());
+                    this.$watch('initExpenses', () => this.onInputsChange());
+                    this.$watch('monthlyInsurance', () => this.onInputsChange());
 
                     this.$nextTick(() => {
-                        this.initChart();
+                        this.initCharts();
                     });
                 },
 
-                // Preset Loader
+                setTerm(months) {
+                    this.termMonths = months;
+                    if (this.selectedMonth > months) {
+                        this.selectedMonth = months;
+                    }
+                },
+
                 setPreset(monto, tasa, meses, gastos, seguro) {
                     this.amount = monto;
                     this.monthlyRate = tasa;
                     this.termMonths = meses;
                     this.initExpenses = gastos;
                     this.monthlyInsurance = seguro;
+                    this.selectedMonth = 1;
                 },
 
                 resetForm() {
                     this.setPreset(1000000, 1.8, 24, 15000, 3500);
                 },
 
-                // Amortization Math Engine
+                onInputsChange() {
+                    if (this.selectedMonth > this.termMonths) {
+                        this.selectedMonth = this.termMonths;
+                    }
+                    this.updateCharts();
+                },
+
+                // French Amortization Engine
                 get results() {
                     const P_net = this.amount;
                     const G_init = this.initExpenses;
-                    const P_financed = P_net + G_init; // Financed base capital
+                    const P_financed = P_net + G_init;
                     const r = (this.monthlyRate || 0) / 100;
                     const n = this.termMonths || 1;
                     const insMonthly = this.monthlyInsurance || 0;
@@ -882,7 +949,6 @@
                     const monthlyPayment = pmtBase + insMonthly;
                     const ctc = monthlyPayment * n;
 
-                    // Generate Amortization Schedule
                     let balance = P_financed;
                     let totalInterest = 0;
                     let schedule = [];
@@ -895,6 +961,10 @@
 
                         totalInterest += interestPayment;
 
+                        let capPct = ((principalPayment / monthlyPayment) * 100).toFixed(1);
+                        let intPct = ((interestPayment / monthlyPayment) * 100).toFixed(1);
+                        let insPct = ((insMonthly / monthlyPayment) * 100).toFixed(1);
+
                         schedule.push({
                             month: i,
                             startBalance: balance,
@@ -902,7 +972,10 @@
                             principal: principalPayment,
                             interest: interestPayment,
                             insurance: insMonthly,
-                            endBalance: endBalance
+                            endBalance: endBalance,
+                            capitalPct: capPct,
+                            interestPct: intPct,
+                            insurancePct: insPct
                         });
 
                         balance = endBalance;
@@ -910,8 +983,6 @@
 
                     const totalExpenses = G_init + (insMonthly * n);
                     const overpayPercentage = P_net > 0 ? (((ctc - P_net) / P_net) * 100).toFixed(1) : 0;
-                    
-                    // Approximate CAE calculation (IRR annualized)
                     const cae = this.calculateCAE(P_net, monthlyPayment, n);
 
                     return {
@@ -923,6 +994,13 @@
                         cae,
                         schedule
                     };
+                },
+
+                // Active Month Data for Inspector
+                get activeMonthData() {
+                    const sched = this.results.schedule;
+                    const idx = Math.min(Math.max(this.selectedMonth - 1, 0), sched.length - 1);
+                    return sched[idx] || null;
                 },
 
                 // CAE Calculation via Internal Rate of Return (IRR) Binary Search
@@ -941,7 +1019,7 @@
                     return (Math.pow(1 + mid, 12) - 1) * 100;
                 },
 
-                // Comparison Helpers
+                // Comparison Engine
                 get compACalc() {
                     return this.calcGeneric(this.compA.amount, this.compA.rate, this.compA.term, this.compA.insurance);
                 },
@@ -958,9 +1036,9 @@
 
                 compDifferenceText() {
                     if (this.compWinner === 'A') {
-                        return "La Opción A resulta más económica principalmente por tener menor tasa o menores cobros laterales.";
+                        return "La Opción A es más barata en su Costo Total final.";
                     } else if (this.compWinner === 'B') {
-                        return "La Opción B resulta más económica. ¡Incluso si la tasa parecía similar, los cobros finales son menores!";
+                        return "La Opción B resulta más económica en su Costo Total final.";
                     }
                     return "Ambas opciones tienen un costo total idéntico.";
                 },
@@ -976,53 +1054,100 @@
                     return { monthly, ctc, cae };
                 },
 
-                // Chart.js Donut Initialization & Updates
-                initChart() {
-                    const ctx = document.getElementById('debtChart');
-                    if (!ctx) return;
+                // Chart.js Setup
+                initCharts() {
+                    // 1. Amortization Stacked Bar Chart
+                    const ctxEvol = document.getElementById('amortizationEvolutionChart');
+                    if (ctxEvol) {
+                        const schedule = this.results.schedule;
+                        const labels = schedule.map(s => 'M' + s.month);
+                        const capitalData = schedule.map(s => Math.round(s.principal));
+                        const interestData = schedule.map(s => Math.round(s.interest));
+                        const insuranceData = schedule.map(s => Math.round(s.insurance));
 
-                    const data = {
-                        labels: ['Capital Base', 'Intereses Totales', 'Seguros y Gastos'],
-                        datasets: [{
-                            data: [this.amount, this.results.totalInterest, this.results.totalExpenses],
-                            backgroundColor: ['#6366f1', '#f43f5e', '#f59e0b'],
-                            hoverOffset: 6,
-                            borderWidth: 2,
-                            borderColor: '#ffffff'
-                        }]
-                    };
-
-                    this.chartInstance = new Chart(ctx, {
-                        type: 'doughnut',
-                        data: data,
-                        options: {
-                            responsive: true,
-                            maintainAspectRatio: false,
-                            plugins: {
-                                legend: { display: false },
-                                tooltip: {
-                                    callbacks: {
-                                        label: (context) => {
-                                            const label = context.label || '';
-                                            const val = context.parsed || 0;
-                                            return ` ${label}: ${this.formatCLP(val)}`;
+                        this.evolutionChartInstance = new Chart(ctxEvol, {
+                            type: 'bar',
+                            data: {
+                                labels: labels,
+                                datasets: [
+                                    {
+                                        label: 'Abono Capital ($)',
+                                        data: capitalData,
+                                        backgroundColor: '#10b981'
+                                    },
+                                    {
+                                        label: 'Interés ($)',
+                                        data: interestData,
+                                        backgroundColor: '#f43f5e'
+                                    },
+                                    {
+                                        label: 'Seguro ($)',
+                                        data: insuranceData,
+                                        backgroundColor: '#f59e0b'
+                                    }
+                                ]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                scales: {
+                                    x: { stacked: true, grid: { display: false } },
+                                    y: { stacked: true, ticks: { callback: (v) => '$' + v.toLocaleString('es-CL') } }
+                                },
+                                plugins: {
+                                    tooltip: {
+                                        callbacks: {
+                                            label: (ctx) => `${ctx.dataset.label}: ${this.formatCLP(ctx.parsed.y)}`
                                         }
                                     }
                                 }
+                            }
+                        });
+                    }
+
+                    // 2. Total Credit Donut Chart
+                    const ctxDonut = document.getElementById('debtDonutChart');
+                    if (ctxDonut) {
+                        this.donutChartInstance = new Chart(ctxDonut, {
+                            type: 'doughnut',
+                            data: {
+                                labels: ['Capital', 'Intereses', 'Seguros / Gastos'],
+                                datasets: [{
+                                    data: [this.amount, this.results.totalInterest, this.results.totalExpenses],
+                                    backgroundColor: ['#6366f1', '#f43f5e', '#f59e0b'],
+                                    borderWidth: 2
+                                }]
                             },
-                            cutout: '70%'
-                        }
-                    });
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: { display: false }
+                                },
+                                cutout: '70%'
+                            }
+                        });
+                    }
                 },
 
-                updateChart() {
-                    if (this.chartInstance) {
-                        this.chartInstance.data.datasets[0].data = [
+                updateCharts() {
+                    const schedule = this.results.schedule;
+                    
+                    if (this.evolutionChartInstance) {
+                        this.evolutionChartInstance.data.labels = schedule.map(s => 'M' + s.month);
+                        this.evolutionChartInstance.data.datasets[0].data = schedule.map(s => Math.round(s.principal));
+                        this.evolutionChartInstance.data.datasets[1].data = schedule.map(s => Math.round(s.interest));
+                        this.evolutionChartInstance.data.datasets[2].data = schedule.map(s => Math.round(s.insurance));
+                        this.evolutionChartInstance.update();
+                    }
+
+                    if (this.donutChartInstance) {
+                        this.donutChartInstance.data.datasets[0].data = [
                             this.amount,
                             this.results.totalInterest,
                             this.results.totalExpenses
                         ];
-                        this.chartInstance.update();
+                        this.donutChartInstance.update();
                     }
                 },
 
@@ -1044,7 +1169,7 @@
                     this.quizScore = 0;
                 },
 
-                // Chilean CLP Currency Formatter
+                // Currency Formatter
                 formatCLP(val) {
                     if (isNaN(val) || val === null) val = 0;
                     return new Intl.NumberFormat('es-CL', {
